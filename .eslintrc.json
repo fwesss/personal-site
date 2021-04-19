@@ -1,0 +1,75 @@
+{
+	"parser": "@typescript-eslint/parser",
+	"parserOptions": {
+		"project": "./tsconfig.json"
+	},
+	"plugins": [
+		"import",
+		"@typescript-eslint",
+		"@typescript-eslint/eslint-plugin",
+		"react",
+		"react-hooks",
+		"jsx-a11y",
+		"json-format"
+	],
+	"extends": [
+		"eslint:recommended",
+		"plugin:react/recommended",
+		"plugin:@typescript-eslint/recommended",
+		"eslint-config-prettier",
+		"plugin:jsx-a11y/recommended",
+		"airbnb",
+		"airbnb/hooks",
+		"plugin:@typescript-eslint/eslint-recommended",
+		"plugin:@typescript-eslint/recommended-requiring-type-checking",
+		"plugin:import/errors",
+		"plugin:import/warnings",
+		"plugin:import/typescript",
+		// must be last
+		"plugin:prettier/recommended"
+	],
+	"env": {
+		"es6": true,
+		"browser": true,
+		"node": true,
+		"jest": true
+	},
+	"rules": {
+		"import/prefer-default-export": 0,
+		"react/jsx-props-no-spreading": 0,
+		"no-use-before-define": "off",
+		"react/react-in-jsx-scope": 0,
+		"react/jsx-filename-extension": 0,
+		"react/display-name": 0,
+		"react/prop-types": 0,
+		"@typescript-eslint/explicit-function-return-type": 0,
+		"@typescript-eslint/explicit-member-accessibility": 0,
+		"@typescript-eslint/indent": 0,
+		"@typescript-eslint/member-delimiter-style": 0,
+		"@typescript-eslint/no-explicit-any": 0,
+		"@typescript-eslint/no-var-requires": 0,
+		"@typescript-eslint/no-use-before-define": ["error"],
+		"@typescript-eslint/no-unused-vars": [
+			2,
+			{
+				"argsIgnorePattern": "^_"
+			}
+		],
+		"no-console": [
+			2,
+			{
+				"allow": ["warn", "error"]
+			}
+		],
+		"import/extensions": [
+			"error",
+			"ignorePackages",
+			{
+				"js": "never",
+				"jsx": "never",
+				"ts": "never",
+				"tsx": "never"
+			}
+		]
+	}
+}
