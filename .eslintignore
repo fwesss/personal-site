@@ -206,6 +206,7 @@ sketch
 # vercel
 .vercel
 
+package.json
 package-lock.json
 tsconfig.json
 .eslintrc.json

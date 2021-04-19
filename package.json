@@ -21,13 +21,16 @@
 	"lint-staged": {
 		"*.+(js|json|ts|tsx)": [
 			"npm run lint --fix",
-			"npm run format"
+			"npm run format",
+			"git add -A ."
 		],
 		"*.+(md|css|html)": [
-			"npm run format"
+			"npm run format",
+			"git add -A ."
 		],
 		"package.json": [
-			"sort-package-json"
+			"sort-package-json",
+			"git add -A ."
 		]
 	},
 	"config": {
