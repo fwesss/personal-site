@@ -1,7 +1,11 @@
+import { init } from "../utils/sentry"
 import "../styles/globals.css"
 
-function MyApp({ Component, pageProps }) {
-	return <Component {...pageProps} />
-}
+init()
+
+const MyApp = ({ Component, pageProps, err }) => (
+	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+	<Component {...pageProps} err={err} />
+)
 
 export default MyApp
