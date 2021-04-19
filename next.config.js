@@ -75,4 +75,5 @@ module.exports = {
 		return config
 	},
 	basePath,
+	reactStrictMode: true,
 }
