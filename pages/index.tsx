@@ -2,6 +2,10 @@ import Head from "next/head"
 import styles from "../styles/Home.module.css"
 
 export default function Home() {
+	const handleClick = () => {
+		throw new Error("broken")
+	}
+
 	return (
 		<div className={styles.container}>
 			<Head>
@@ -13,6 +17,9 @@ export default function Home() {
 				<h1 className={styles.title}>
 					Welcome to <a href="https://nextjs.org">Next.js!</a>
 				</h1>
+				<button type="button" onClick={handleClick}>
+					Break
+				</button>
 
 				<p className={styles.description}>
 					Get started by editing{" "}
