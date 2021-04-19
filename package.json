@@ -1,63 +1,68 @@
 {
-  "name": "personal-site",
-  "version": "0.1.0",
-  "private": true,
-  "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "commit": "cz",
-    "prepare": "husky install",
-    "check-types": "tsc --pretty --noEmit",
-    "format": "npm run prettier -- --write",
-    "lint": "eslint --ignore-path .eslintignore --ext .js,.ts,.tsx,.json",
-    "prettier": "prettier --ignore-path .prettierignore \"**/*.+(js|json|ts|tsx|css|html|md)\" --write"
-  },
-  "dependencies": {
-    "next": "10.1.3",
-    "react": "17.0.2",
-    "react-dom": "17.0.2"
-  },
-  "lint-staged": {
-    "*.+(js|json|ts|tsx)": [
-      "npm run lint --fix",
-      "npm run format"
-    ],
-    "*.+(md|css|html)": [
-      "npm run format"
-    ],
-    "package.json": [
-      "sort-package-json"
-    ]
-  },
-  "devDependencies": {
-    "@commitlint/cli": "^12.1.1",
-    "@commitlint/config-conventional": "^12.1.1",
-    "@types/react": "^17.0.3",
-    "@typescript-eslint/eslint-plugin": "^4.22.0",
-    "@typescript-eslint/parser": "^4.22.0",
-    "cz-conventional-changelog": "^3.3.0",
-    "eslint": "^7.24.0",
-    "eslint-config-airbnb": "^18.2.1",
-    "eslint-config-prettier": "^8.2.0",
-    "eslint-config-react-app": "^6.0.0",
-    "eslint-import-resolver-root-import": "^1.0.4",
-    "eslint-plugin-eslint-comments": "^3.2.0",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-json-format": "^2.0.1",
-    "eslint-plugin-jsx-a11y": "^6.4.1",
-    "eslint-plugin-prettier": "^3.4.0",
-    "eslint-plugin-react": "^7.23.2",
-    "eslint-plugin-react-hooks": "^4.2.0",
-    "husky": "^6.0.0",
-    "lint-staged": "^10.5.4",
-    "prettier": "^2.2.1",
-    "sort-package-json": "^1.49.0",
-    "typescript": "^4.2.4"
-  },
-  "config": {
-    "commitizen": {
-      "path": "./node_modules/cz-conventional-changelog"
-    }
-  }
+	"name": "personal-site",
+	"version": "0.1.0",
+	"private": true,
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/fwesss/personal-site.git"
+	},
+	"author": "Westley Feller <feller.westley@gmail.com>",
+	"scripts": {
+		"dev": "next dev",
+		"build": "next build",
+		"start": "next start",
+		"commit": "cz",
+		"prepare": "husky install",
+		"check-types": "tsc --pretty --noEmit",
+		"format": "npm run prettier -- --write",
+		"lint": "eslint --ignore-path .eslintignore --ext .js,.ts,.tsx,.json",
+		"prettier": "prettier --ignore-path .prettierignore \"**/*.+(js|json|ts|tsx|css|html|md)\" --write"
+	},
+	"lint-staged": {
+		"*.+(js|json|ts|tsx)": [
+			"npm run lint --fix",
+			"npm run format"
+		],
+		"*.+(md|css|html)": [
+			"npm run format"
+		],
+		"package.json": [
+			"sort-package-json"
+		]
+	},
+	"config": {
+		"commitizen": {
+			"path": "./node_modules/cz-conventional-changelog"
+		}
+	},
+	"dependencies": {
+		"next": "10.1.3",
+		"react": "17.0.2",
+		"react-dom": "17.0.2"
+	},
+	"devDependencies": {
+		"@commitlint/cli": "^12.1.1",
+		"@commitlint/config-conventional": "^12.1.1",
+		"@types/react": "^17.0.3",
+		"@typescript-eslint/eslint-plugin": "^4.22.0",
+		"@typescript-eslint/parser": "^4.22.0",
+		"cz-conventional-changelog": "^3.3.0",
+		"eslint": "^7.24.0",
+		"eslint-config-airbnb": "^18.2.1",
+		"eslint-config-prettier": "^8.2.0",
+		"eslint-config-react-app": "^6.0.0",
+		"eslint-import-resolver-root-import": "^1.0.4",
+		"eslint-plugin-eslint-comments": "^3.2.0",
+		"eslint-plugin-import": "^2.22.1",
+		"eslint-plugin-json-format": "^2.0.1",
+		"eslint-plugin-jsx-a11y": "^6.4.1",
+		"eslint-plugin-prettier": "^3.4.0",
+		"eslint-plugin-react": "^7.23.2",
+		"eslint-plugin-react-hooks": "^4.2.0",
+		"husky": "^6.0.0",
+		"lint-staged": "^10.5.4",
+		"prettier": "^2.2.1",
+		"sort-package-json": "^1.49.0",
+		"typescript": "^4.2.4"
+	}
 }
