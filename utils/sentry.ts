@@ -1,6 +1,6 @@
 import * as Sentry from "@sentry/node"
 import { RewriteFrames } from "@sentry/integrations"
-import {Integrations} from "@sentry/tracing"
+import { Integrations } from "@sentry/tracing"
 
 export const init = () => {
 	if (process.env.NEXT_PUBLIC_SENTRY_DSN) {
@@ -31,7 +31,7 @@ export const init = () => {
 			integrations: [...integrations, new Integrations.BrowserTracing()],
 			dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
 			release: process.env.NEXT_PUBLIC_COMMIT_SHA,
-			tracesSampleRate: 1.0
+			tracesSampleRate: 1.0,
 		})
 	}
 }
