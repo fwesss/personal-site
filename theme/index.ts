@@ -5,8 +5,5 @@ import styles from "./styles"
 
 const overrides = {
 	...styles,
-	config: {
-		useSystemColorMode: true,
-	},
 }
 export default extendTheme(overrides)
