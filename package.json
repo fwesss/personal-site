@@ -12,7 +12,7 @@
 		"cy:open": "cypress open",
 		"dev": "next dev",
 		"build": "npm run build:sanity && pwd && npm run build:web",
-		"build:sanity": "cd studio && sanity build ../public/studio -y && cd ..",
+		"build:sanity": "cd studio && npm run build ../public/studio -y && cd ..",
 		"start:sanity": "cp .env.local ./studio/.env.development && cd studio && sanity start",
 		"build:web": "next build",
 		"start:web": "next start",
@@ -27,7 +27,7 @@
 		"test:e2e:dev": "start-server-and-test dev http://localhost:3000 cy:open",
 		"test:e2e": "is-ci \"test:e2e:run\" \"test:e2e:dev\"",
 		"validate": "npm run test:e2e:run",
-		"postinstall": "lerna bootstrap --ci"
+		"postinstall": "lerna bootstrap"
 	},
 	"lint-staged": {
 		"*.+(js|ts|tsx)": [
