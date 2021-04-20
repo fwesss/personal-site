@@ -209,3 +209,4 @@ _error.tsx
 next.config.js
 sentry.ts
 dist
+public
