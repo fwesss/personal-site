@@ -1,75 +1,52 @@
 /* eslint-disable */
 
-import ErrorPage from "next/error"
-import { useRouter } from "next/router"
-import { groq } from "next-sanity"
-import {
-	getClient,
-	usePreviewSubscription,
-	urlFor,
-	PortableText,
-} from "../../utils/sanity"
+import { createImageUrlBuilder, groq } from "next-sanity"
+import client, { config } from "../../utils/sanity"
 
-const postQuery = groq`
-  *[_type == "post" && slug.current == $slug][0] {
-    _id,
-    title,
-    body,
-    mainImage,
-    categories[]->{
-      _id,
-      title
-    },
-    "slug": slug.current
-  }
-`
+function urlFor(source) {
+	return createImageUrlBuilder(config).image(source)
+}
 
-export default function Post({ data, preview }) {
-	const router = useRouter()
-	if (!router.isFallback && !data.post?.slug) {
-		return <ErrorPage statusCode={404} />
-	}
-
-	const { data: post } = usePreviewSubscription(postQuery, {
-		params: { slug: data.post.slug },
-		initialData: data.post,
-		enabled: preview,
-	})
-
-	const { title, mainImage, body } = post
-
+const Post = props => {
+	const {
+		title = "Missing title",
+		name = "Missing name",
+		categories,
+		authorImage,
+	} = props
 	return (
 		<article>
-			<h2>{title}</h2>
-			<figure>
-				<img alt={`${title} image`} src={urlFor(mainImage).url()} />
-			</figure>
-			<PortableText blocks={body} />
-			<aside />
+			<h1>{title}</h1>
+			<span>By {name}</span>
+			{categories && (
+				<ul>
+					Posted in
+					{categories.map(category => (
+						<li key={category}>{category}</li>
+					))}
+				</ul>
+			)}
+			{authorImage && (
+				<div>
+					<img src={urlFor(authorImage).width(50).url()} />
+				</div>
+			)}
 		</article>
 	)
 }
 
-export async function getStaticProps({ params, preview = false }) {
-	const post = await getClient(preview).fetch(postQuery, {
-		slug: params.slug,
-	})
+const query = groq`*[_type == "post" && slug.current == $slug][0]{
+  title,
+  "name": author->name,
+  "categories": categories[]->title,
+  "authorImage": author->image,
+  body
+}`
 
-	return {
-		props: {
-			preview,
-			data: { post },
-		},
-	}
+Post.getInitialProps = async function (context) {
+	// It's important to default the slug so that it doesn't return "undefined"
+	const { slug = "" } = context.query
+	return await client.fetch(query, { slug })
 }
 
-export async function getStaticPaths() {
-	const paths = await getClient().fetch(
-		groq`*[_type == "post" && defined(slug.current)][].slug.current`
-	)
-
-	return {
-		paths: paths.map(slug => ({ params: { slug } })),
-		fallback: true,
-	}
-}
+export default Post
