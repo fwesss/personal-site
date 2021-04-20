@@ -27,7 +27,7 @@
 		"test:e2e:dev": "start-server-and-test dev http://localhost:3000 cy:open",
 		"test:e2e": "is-ci \"test:e2e:run\" \"test:e2e:dev\"",
 		"validate": "npm run test:e2e:run",
-		"postinstall": "lerna bootstrap --no-ci --loglevel warn"
+		"postinstall": "lerna bootstrap --no-ci --hoist --loglevel warn"
 	},
 	"lint-staged": {
 		"*.+(js|ts|tsx)": [
