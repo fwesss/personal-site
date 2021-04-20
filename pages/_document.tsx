@@ -10,7 +10,6 @@ class MyDocument extends Document {
 		return (
 			<Html lang="en">
 				<Head>
-					<title>Wes Feller | Web Dev</title>
 					<link rel="preconnect" href="https://fonts.gstatic.com" />
 					<link
 						href="https://fonts.googleapis.com/css2?family=Hind&family=Rubik:ital,wght@0,400;0,700;1,400&display=swap"
