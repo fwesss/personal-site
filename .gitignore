@@ -36,3 +36,7 @@ yarn-error.log*
 # IDE
 .vscode
 .idea
+
+# sanity
+**/*/node_modules
+dist

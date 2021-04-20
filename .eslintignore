@@ -205,11 +205,7 @@ sketch
 
 # vercel
 .vercel
-
-package.json
-package-lock.json
-tsconfig.json
-.eslintrc.json
 _error.tsx
 next.config.js
 sentry.ts
+dist
