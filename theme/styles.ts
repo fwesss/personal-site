@@ -1,4 +1,9 @@
 export default {
+	fonts: {
+		body: "Rubik, sans-serif",
+		heading: "Hind, sans-serif",
+		mono: "monospace",
+	},
 	space: {
 		px: "1px",
 		0: "0",

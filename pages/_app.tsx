@@ -1,7 +1,6 @@
 import { ChakraProvider } from "@chakra-ui/react"
 import { init } from "../utils/sentry"
 import theme from "../theme/index"
-import "../styles/globals.css"
 
 init()
 
