@@ -1,11 +1,16 @@
+import { ChakraProvider } from "@chakra-ui/react"
 import { init } from "../utils/sentry"
-import "../styles/globals.css"
+import theme from "../theme/index"
 
 init()
 
-const MyApp = ({ Component, pageProps, err }) => (
-	// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-	<Component {...pageProps} err={err} />
-)
+function MyApp({ Component, pageProps, err }) {
+	return (
+		<ChakraProvider theme={theme}>
+			{/* eslint-disable-next-line @typescript-eslint/no-unsafe-assignment */}
+			<Component {...pageProps} err={err} />
+		</ChakraProvider>
+	)
+}
 
 export default MyApp
