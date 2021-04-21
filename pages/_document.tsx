@@ -1,13 +1,26 @@
-import Document, { Html, Head, Main, NextScript } from "next/document"
+import Document, {
+	Html,
+	Head,
+	Main,
+	NextScript,
+	DocumentContext,
+} from "next/document"
 import { ColorModeScript } from "@chakra-ui/react"
+import { ReactElement, ReactFragment } from "react"
 
 class MyDocument extends Document {
-	static async getInitialProps(ctx: any) {
-		const initialProps = await Document.getInitialProps(ctx)
+	static async getInitialProps(
+		ctx: unknown
+	): Promise<{
+		head?: Array<JSX.Element | null>
+		html: string
+		styles?: ReactElement[] | ReactFragment
+	}> {
+		const initialProps = await Document.getInitialProps(ctx as DocumentContext)
 		return { ...initialProps }
 	}
 
-	render() {
+	render(): JSX.Element {
 		return (
 			<Html lang="en">
 				<Head>

@@ -205,8 +205,6 @@ sketch
 
 # vercel
 .vercel
-_error.tsx
 next.config.js
-sentry.ts
 dist
 public

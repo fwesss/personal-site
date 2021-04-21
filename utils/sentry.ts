@@ -15,10 +15,12 @@ export const init = () => {
 			integrations.push(
 				new RewriteFrames({
 					iteratee: frame => {
+						// eslint-disable-next-line no-param-reassign
 						frame.filename = frame.filename.replace(
 							process.env.NEXT_PUBLIC_SENTRY_SERVER_ROOT_DIR,
 							"app:///"
 						)
+						// eslint-disable-next-line no-param-reassign
 						frame.filename = frame.filename.replace(".next", "_next")
 						return frame
 					},
@@ -28,6 +30,7 @@ export const init = () => {
 
 		Sentry.init({
 			enabled: process.env.NODE_ENV === "production",
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 			integrations: [...integrations, new Integrations.BrowserTracing()],
 			dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
 			release: process.env.NEXT_PUBLIC_COMMIT_SHA,

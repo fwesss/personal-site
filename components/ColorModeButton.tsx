@@ -1,7 +1,7 @@
 import { IconButton, useColorMode } from "@chakra-ui/react"
 import { FaMoon, FaSun } from "react-icons/fa"
 
-function ColorModeButton() {
+const ColorModeButton = (): JSX.Element => {
 	const { colorMode, toggleColorMode } = useColorMode()
 
 	return (

@@ -1,7 +1,16 @@
-import NextErrorComponent from "next/error"
+import NextErrorComponent, { ErrorProps } from "next/error"
 import * as Sentry from "@sentry/node"
+import { NextApiResponse } from "next"
 
-const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
+const MyError = ({
+	statusCode,
+	hasGetInitialPropsRun,
+	err,
+}: {
+	statusCode: number
+	hasGetInitialPropsRun: boolean
+	err: Error
+}) => {
 	if (!hasGetInitialPropsRun && err) {
 		// getInitialProps is not called in case of
 		// https://github.com/vercel/next.js/issues/8592. As a workaround, we pass
@@ -13,18 +22,29 @@ const MyError = ({ statusCode, hasGetInitialPropsRun, err }) => {
 	return <NextErrorComponent statusCode={statusCode} />
 }
 
-MyError.getInitialProps = async ({ res, err, asPath }) => {
-	const errorInitialProps = await NextErrorComponent.getInitialProps({
+interface ErrorPropsRun extends ErrorProps {
+	hasGetInitialPropsRun: boolean
+}
+
+MyError.getInitialProps = async ({
+	res,
+	err,
+	asPath,
+}: {
+	res: NextApiResponse
+	err: Error
+	asPath: string
+}) => {
+	const errorInitialProps = (await NextErrorComponent.getInitialProps({
 		AppTree: undefined,
 		pathname: "",
 		query: undefined,
 		res,
 		err,
-	})
+	})) as ErrorPropsRun
 
 	// Workaround for https://github.com/vercel/next.js/issues/8592, mark when
 	// getInitialProps has run
-	// @ts-ignore
 	errorInitialProps.hasGetInitialPropsRun = true
 
 	// Running on the server, the response object (`res`) is available.

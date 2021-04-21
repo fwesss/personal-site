@@ -1,4 +1,9 @@
-/* eslint-disable */
+interface Selection {
+	title: string
+	subtitle: string
+	author: string
+	media: string
+}
 
 export default {
 	name: "post",
@@ -57,11 +62,10 @@ export default {
 			author: "author.name",
 			media: "mainImage",
 		},
-		prepare(selection) {
+
+		prepare(selection: Selection): Selection {
 			const { author } = selection
-			return Object.assign({}, selection, {
-				subtitle: author && `by ${author}`,
-			})
+			return { ...selection, subtitle: author && `by ${author}` }
 		},
 	},
 }
