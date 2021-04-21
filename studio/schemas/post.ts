@@ -1,6 +1,6 @@
 interface Selection {
 	title: string
-	subtitle: string
+	subtitle?: string
 	author: string
 	media: string
 }
@@ -63,9 +63,10 @@ export default {
 			media: "mainImage",
 		},
 
-		prepare(selection: Selection): Selection {
-			const { author } = selection
-			return { ...selection, subtitle: author && `by ${author}` }
-		},
+		prepare: ({ author, ...selection }: Selection): Selection => ({
+			...selection,
+			author,
+			subtitle: author && `by ${author}`,
+		}),
 	},
 }
