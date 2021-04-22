@@ -16,6 +16,15 @@ export default {
 			validation: (rule: Rule): boolean => rule.required(),
 		},
 		{
+			name: "slug",
+			title: "Slug",
+			type: "slug",
+			options: {
+				source: "title",
+				maxLength: 96,
+			},
+		},
+		{
 			name: "mainImage",
 			title: "Main Image",
 			type: "image",

@@ -27,6 +27,9 @@ export default function Home(): JSX.Element {
 				<Link as={NextLink} href="/posts/test-1">
 					Test Post
 				</Link>
+				<Link as={NextLink} href="/projects/planet-data">
+					Planet Data
+				</Link>
 
 				<div className={styles.grid}>
 					<a href="https://nextjs.org/docs" className={styles.card}>
