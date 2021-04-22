@@ -1,4 +1,5 @@
 import { createImageUrlBuilder, groq } from "next-sanity"
+import Image from "next/image"
 import client, { config } from "../../utils/sanity"
 
 function urlFor(source) {
@@ -33,7 +34,13 @@ const Post = (props: PostProps): JSX.Element => {
 			)}
 			{authorImage && (
 				<div>
-					<img src={urlFor(authorImage).width(50).url()} alt={name} />
+					<Image
+						src={urlFor(authorImage).width(350).url()}
+						alt={name}
+						width={350}
+						height={250}
+						priority
+					/>
 				</div>
 			)}
 		</article>
