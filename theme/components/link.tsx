@@ -1,7 +1,19 @@
-import { mode } from "@chakra-ui/theme-tools"
-
 export default {
-	baseStyle: {
-		_hover: { color: mode("blue.500", "blue.200") },
+	baseStyle: ({ colorMode }) => ({
+		transition: "all 0.2s",
+		_hover: {
+			color: colorMode === "dark" ? "blue.200" : "blue.600",
+		},
+	}),
+	variants: {
+		heading: {
+			display: "inline-flex",
+			borderBottom: "2px",
+			borderBottomColor: "transparent !important",
+			_hover: {
+				textDecoration: "none",
+				borderBottomColor: "currentcolor !important",
+			},
+		},
 	},
 }

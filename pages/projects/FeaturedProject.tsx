@@ -58,7 +58,7 @@ export const FeaturedProject: FC<FeaturedProjectProps> = ({
 				>
 					<NextLink href={`/projects/${slug.current}`} passHref>
 						{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-						<Link>{title}</Link>
+						<Link variant="heading">{title}</Link>
 					</NextLink>
 				</Heading>
 				<Box mt="10">
