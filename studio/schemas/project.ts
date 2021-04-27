@@ -1,6 +1,6 @@
 interface Rule {
-	required: () => boolean
-	unique: () => boolean
+	required?: () => boolean
+	unique?: () => boolean
 }
 
 export default {
@@ -9,10 +9,17 @@ export default {
 	type: "document",
 	fields: [
 		{
+			name: "order",
+			title: "Order",
+			type: "number",
+			hidden: true,
+		},
+		{
 			name: "title",
 			title: "Title",
 			type: "string",
 			description: "The name of the project.",
+			codegen: { required: true },
 			validation: (rule: Rule): boolean => rule.required(),
 		},
 		{
@@ -23,14 +30,48 @@ export default {
 				source: "title",
 				maxLength: 96,
 			},
+			codegen: { required: true },
+			validation: (rule: Rule): boolean => rule.required(),
+		},
+		{
+			name: "featured",
+			title: "Featured",
+			type: "boolean",
+			description: "Should this project have a feature on the projects page?",
+			codegen: { required: true },
+			validation: (rule: Rule): boolean => rule.required(),
 		},
 		{
 			name: "mainImage",
 			title: "Main Image",
 			type: "image",
+			fields: [
+				{
+					name: "caption",
+					title: "Caption",
+					type: "text",
+					options: { isHighlighted: true },
+				},
+				{
+					name: "alt",
+					title: "Alt",
+					type: "string",
+					options: { isHighlighted: true },
+					codegen: { required: true },
+					validation: (rule: Rule): boolean => rule.required(),
+				},
+			],
 			options: {
 				hotspot: true,
 			},
+			codegen: { required: true },
+			validation: (rule: Rule): boolean => rule.required(),
+		},
+		{
+			name: "summary",
+			title: "Summary",
+			type: "text",
+			codegen: { required: true },
 			validation: (rule: Rule): boolean => rule.required(),
 		},
 		{
@@ -38,6 +79,7 @@ export default {
 			title: "Deployed At",
 			type: "url",
 			description: "The URL to the deployed project.",
+			codegen: { required: true },
 			validation: (rule: Rule): boolean => rule.required(),
 		},
 		{
@@ -45,6 +87,7 @@ export default {
 			title: "Repo URL",
 			type: "url",
 			description: "The URL to the repository.",
+			codegen: { required: true },
 			validation: (rule: Rule): boolean => rule.required(),
 		},
 		{
@@ -53,14 +96,35 @@ export default {
 			type: "array",
 			of: [{ type: "block" }],
 			description: "What problem does this project solve?",
+			codegen: { required: true },
 			validation: (rule: Rule): boolean => rule.required(),
 		},
 		{
 			name: "keyFeatures",
 			title: "Key Features",
 			type: "array",
-			of: [{ type: "string" }],
-			description: "List of the top features",
+			of: [
+				{
+					type: "object",
+					fields: [
+						{
+							name: "headline",
+							title: "Headline",
+							type: "string",
+							codegen: { required: true },
+							validation: (rule: Rule): boolean => rule.required(),
+						},
+						{
+							name: "body",
+							title: "Body",
+							type: "text",
+							codegen: { required: true },
+							validation: (rule: Rule): boolean => rule.required(),
+						},
+					],
+				},
+			],
+			description: "List of the top features.",
 			validation: (rule: Rule): boolean => rule.unique(),
 		},
 		{
@@ -123,6 +187,8 @@ export default {
 							title: "Alt",
 							type: "string",
 							options: { isHighlighted: true },
+							codegen: { required: true },
+							validation: (rule: Rule): boolean => rule.required(),
 						},
 					],
 					options: {
