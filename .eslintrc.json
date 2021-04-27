@@ -43,6 +43,7 @@
 		"react/jsx-filename-extension": 0,
 		"react/display-name": 0,
 		"react/prop-types": 0,
+		"react/no-array-index-key": 0,
 		"no-underscore-dangle": 0,
 		"@typescript-eslint/explicit-member-accessibility": 0,
 		"@typescript-eslint/indent": 0,

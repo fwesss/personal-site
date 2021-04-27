@@ -1,46 +1,54 @@
-import { groq } from "next-sanity"
-import { Text, Heading, HStack, Link } from "@chakra-ui/react"
-import { FaExternalLinkAlt } from "react-icons/fa"
-import client, { config } from "../../utils/sanity"
+import { Heading } from "@chakra-ui/react"
+import Image from "next/image"
+import React from "react"
+import sanity, { urlFor } from "../../utils/sanity-client"
+import ExternalLink from "../../components/ExternalLink"
+import { Project as ProjectT } from "../../studio/schema"
+import Block from "../../components/Block"
+import { FadeContainer } from "../../components/MotionContainer"
 
-interface ProjectProps {
-	title: string
-	deployedUrl: string
-}
+type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
+type ProjectProps = UnwrapPromise<ReturnType<typeof getStaticProps>>["props"]
 
-const Project = ({ title, deployedUrl }: ProjectProps): JSX.Element => {
+type Project = (props: ProjectProps) => JSX.Element
+const Project: Project = ({ title, deployedUrl, mainImage, purpose }) => {
 	return (
-		<>
+		<FadeContainer as="main">
 			<Heading>{title}</Heading>
-			<Link href={deployedUrl} isExternal>
-				<HStack>
-					<Text>Demo</Text>
-					<FaExternalLinkAlt />
-				</HStack>
-			</Link>
-		</>
+			<ExternalLink text="Demo" href={deployedUrl} />
+			<Image
+				src={urlFor(mainImage).url()}
+				alt={mainImage.alt}
+				width={960}
+				height={600}
+			/>
+			<Block blocks={purpose} />
+		</FadeContainer>
 	)
 }
 
-const query = groq`*[_type == "project" && slug.current == $slug][0]{
- title,
- mainImage,
- deployedUrl,
- repoUrl,
- purpose,
- keyFeatures,
- techStack,
- devDiary,
- knowledgeGained,
- challenges,
- different,
- screenshots,
- tags 
-}`
+type GetStaticPaths = () => Promise<{
+	paths: { params: { slug: string } }[]
+	fallback: boolean
+}>
+export const getStaticPaths: GetStaticPaths = async () => {
+	const projects = await sanity.getAll("project")
 
-Project.getInitialProps = async (context: { query: { slug?: "" } }) => {
-	const { slug = "" } = context.query
-	return client.fetch(query, { slug })
+	const paths = projects.map(project => ({
+		params: { slug: project.slug.current },
+	}))
+
+	return { paths, fallback: false }
+}
+
+type GetStaticProps = (props: {
+	params: { slug: string }
+}) => Promise<{ props: ProjectT }>
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+	const slug = params?.slug
+	const [project] = await sanity.getAll("project", `slug.current == "${slug}"`)
+
+	return { props: project }
 }
 
 export default Project
