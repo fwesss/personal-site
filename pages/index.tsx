@@ -1,11 +1,20 @@
 import Head from "next/head"
-import { Heading, Link } from "@chakra-ui/react"
+import { Box, Heading, Link, LinkBox, LinkOverlay } from "@chakra-ui/react"
 import NextLink from "next/link"
+import React from "react"
 import styles from "../styles/Home.module.css"
+import sanity from "../utils/sanity-client"
+import { Project as ProjectT } from "../studio/schema"
+import Block from "../components/Block"
+import { FadeContainer } from "../components/MotionContainer"
 
-export default function Home(): JSX.Element {
+type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
+type ProjectProps = UnwrapPromise<ReturnType<typeof getStaticProps>>["props"]
+
+type Home = (props: { projects: ProjectProps }) => JSX.Element
+const Home: Home = ({ projects }) => {
 	return (
-		<div className={styles.container}>
+		<FadeContainer as="main">
 			<Head>
 				<title>Create Next App</title>
 				<link rel="icon" href="/favicon.ico" />
@@ -30,6 +39,27 @@ export default function Home(): JSX.Element {
 				<Link as={NextLink} href="/projects/planet-data">
 					Planet Data
 				</Link>
+
+				{projects.map(project => (
+					<LinkBox
+						key={project._id}
+						as="article"
+						maxW="sm"
+						p="5"
+						borderWidth="1px"
+						rounded="md"
+					>
+						<Box as="time" dateTime="2021-01-15 15:30:00 +0000 UTC">
+							13 days ago
+						</Box>
+						<Heading size="md" my="2">
+							<NextLink href={`/projects/${project.slug.current}`} passHref>
+								<LinkOverlay>{project.title}</LinkOverlay>
+							</NextLink>
+						</Heading>
+						<Block blocks={project.purpose} />
+					</LinkBox>
+				))}
 
 				<div className={styles.grid}>
 					<a href="https://nextjs.org/docs" className={styles.card}>
@@ -72,6 +102,17 @@ export default function Home(): JSX.Element {
 					<img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
 				</a>
 			</footer>
-		</div>
+		</FadeContainer>
 	)
 }
+
+type GetStaticProps = () => Promise<{ props: ProjectT[] }>
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export const getStaticProps: GetStaticProps = async () => {
+	const projects = await sanity.getAll("project")
+
+	return { props: { projects } }
+}
+
+export default Home
