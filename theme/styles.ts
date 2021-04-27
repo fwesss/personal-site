@@ -2,28 +2,14 @@ export default {
 	fonts: {
 		body: "Rubik, sans-serif",
 		heading: "Hind, sans-serif",
-		mono: "monospace",
+		mono: "JetBrains Mono, monospace",
+	},
+	sizes: {
+		container: {
+			md: "75ch",
+		},
 	},
 
-	space: {
-		px: "1px",
-		0: "0",
-		1: "0.25rem",
-		2: "0.5rem",
-		3: "1rem",
-		4: "1.5rem",
-		5: "2rem",
-		6: "3rem",
-		7: "4rem",
-		8: "6rem",
-		9: "8rem",
-		10: "12rem",
-		11: "16rem",
-		12: "24rem",
-		13: "32rem",
-		14: "40rem",
-		15: "48rem",
-	},
 	colors: {
 		gray: {
 			"50": "#f0f2f4",
@@ -144,6 +130,12 @@ export default {
 			"700": "#6b302e",
 			"800": "#47201f",
 			"900": "#24100f",
+		},
+	},
+	//  globals
+	textStyles: {
+		paragraph: {
+			width: "clamp(45ch, 100%, 75ch)",
 		},
 	},
 }
