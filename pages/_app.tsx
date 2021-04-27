@@ -1,4 +1,4 @@
-import { Box, ChakraProvider, Flex, Link } from "@chakra-ui/react"
+import { Box, ChakraProvider, Flex } from "@chakra-ui/react"
 import { AppProps } from "next/app"
 import NextLink from "next/link"
 import { AnimateSharedLayout } from "framer-motion"
@@ -6,6 +6,7 @@ import React from "react"
 import { init } from "../utils/sentry"
 import theme from "../theme/index"
 import { NavContent } from "../components/Navbar/NavContent"
+import { NavLink } from "../components/Navbar/NavLink"
 
 init()
 
@@ -34,9 +35,11 @@ const MyApp = ({ Component, pageProps, err }: AppPropsErr): JSX.Element => {
 							fontFamily="mono"
 							fontSize={{ base: "md", sm: "lg", md: "xl" }}
 						>
-							<Link as={NextLink} href="/">
-								{"wes :: Maybe Task -> Just Success"}
-							</Link>
+							<NextLink href="/" passHref>
+								<NavLink.Desktop h={10}>
+									{"wes :: Maybe Task -> Just Success"}
+								</NavLink.Desktop>
+							</NextLink>
 							<NavContent.Desktop display={{ base: "none", md: "flex" }} />
 							<NavContent.Mobile display={{ base: "flex", md: "none" }} />
 						</Flex>
