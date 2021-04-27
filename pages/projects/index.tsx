@@ -26,6 +26,8 @@ const Projects: Projects = ({ projects }) => {
 								slug,
 								keyFeatures,
 								techStack,
+								deployedUrl,
+								repoUrl,
 							}) => (
 								<FeaturedProject
 									key={_id}
@@ -35,6 +37,8 @@ const Projects: Projects = ({ projects }) => {
 									keyFeatures={keyFeatures}
 									slug={slug}
 									techStack={techStack}
+									deployedUrl={deployedUrl}
+									repoUrl={repoUrl}
 								/>
 							)
 						)}

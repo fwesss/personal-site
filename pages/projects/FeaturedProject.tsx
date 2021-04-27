@@ -12,11 +12,15 @@ import {
 	VStack,
 	Wrap,
 	WrapItem,
+	HStack,
+	Icon,
+	Link,
 } from "@chakra-ui/react"
 import Image from "next/image"
 import * as React from "react"
 import { FC } from "react"
 import NextLink from "next/link"
+import { FaExternalLinkAlt, FaGithub } from "react-icons/fa"
 import { urlFor } from "../../utils/sanity-client"
 import { Project } from "../../studio/schema"
 
@@ -27,6 +31,8 @@ interface FeaturedProjectProps {
 	keyFeatures: Project["keyFeatures"]
 	techStack: Project["techStack"]
 	slug: Project["slug"]
+	deployedUrl: Project["deployedUrl"]
+	repoUrl: Project["repoUrl"]
 }
 
 export const FeaturedProject: FC<FeaturedProjectProps> = ({
@@ -35,6 +41,8 @@ export const FeaturedProject: FC<FeaturedProjectProps> = ({
 	keyFeatures,
 	techStack,
 	slug,
+	deployedUrl,
+	repoUrl,
 }) => {
 	return (
 		<Box as="article" bg={mode("gray.50", "gray.800")} py="8">
@@ -48,7 +56,10 @@ export const FeaturedProject: FC<FeaturedProjectProps> = ({
 					letterSpacing="tight"
 					fontWeight="extrabold"
 				>
-					<NextLink href={`/projects/${slug.current}`}>{title}</NextLink>
+					<NextLink href={`/projects/${slug.current}`} passHref>
+						{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+						<Link>{title}</Link>
+					</NextLink>
 				</Heading>
 				<Box mt="10">
 					<SimpleGrid
@@ -74,13 +85,12 @@ export const FeaturedProject: FC<FeaturedProjectProps> = ({
 							))}
 						</Stack>
 						<VStack spacing={4}>
-							<LinkBox>
+							<LinkBox w="100%">
 								<NextLink href={`/projects/${slug.current}`} passHref>
 									<LinkOverlay>
 										<Center
 											shadow="lg"
 											minH="26rem"
-											w="32rem"
 											pos="relative"
 											overflow="hidden"
 										>
@@ -94,15 +104,25 @@ export const FeaturedProject: FC<FeaturedProjectProps> = ({
 									</LinkOverlay>
 								</NextLink>
 							</LinkBox>
-							<Wrap alignSelf="flex-start">
-								{techStack.map((tag, index) => (
-									<WrapItem key={index}>
-										<Tag variant="solid" colorScheme="blue">
-											{tag}
-										</Tag>
-									</WrapItem>
-								))}
-							</Wrap>
+							<HStack align="flex-start" justify="space-between" w="100%">
+								<Wrap>
+									{techStack.map((tag, index) => (
+										<WrapItem key={index}>
+											<Tag variant="solid" colorScheme="blue">
+												{tag}
+											</Tag>
+										</WrapItem>
+									))}
+								</Wrap>
+								<HStack spacing={2}>
+									<Link href={repoUrl} isExternal>
+										<Icon boxSize="1.25em" as={FaGithub} />
+									</Link>
+									<Link href={deployedUrl} isExternal>
+										<Icon boxSize="1.25em" as={FaExternalLinkAlt} />
+									</Link>
+								</HStack>
+							</HStack>
 						</VStack>
 					</SimpleGrid>
 				</Box>
