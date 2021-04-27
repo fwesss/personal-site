@@ -31,6 +31,10 @@
 		"react-dom": "^17.0",
 		"sanity-plugin-dashboard-widget-vercel": "^1.1.0",
 		"sanity-plugin-mdide": "^1.0.7",
-		"sanity-plugin-order-documents": "^0.0.16"
+		"sanity-plugin-order-documents": "^0.0.16",
+		"sanity-codegen": "^0.9.3"
+	},
+	"devDependencies": {
+		"prettier": "^2.2.1"
 	}
 }

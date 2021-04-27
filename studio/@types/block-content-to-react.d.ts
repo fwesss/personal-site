@@ -1,5 +1,32 @@
 declare module "@sanity/block-content-to-react" {
 	import * as React from "react"
+	import { ReactNode } from "react"
+
+	interface Block {
+		_key: string
+		_type: string
+		children?: {
+			_key: string
+			_type: string
+			marks: []
+			text: string
+		}[]
+		markDefs?: {
+			_key: string
+			_type: string
+			href?: string
+		}[]
+		level?: number
+		listItem?: string
+		style?: string
+		span?: {
+			_type: string
+			marks: string[]
+			text: string
+		}[]
+	}
+
+	export type WrappedComponent = (props: { children: ReactNode }) => JSX.Element
 
 	export interface BlockContentProps {
 		/**
@@ -7,7 +34,7 @@ declare module "@sanity/block-content-to-react" {
 		 *
 		 * *This is the only required prop*
 		 */
-		blocks: any[] | any
+		blocks: Block[] | Block
 		/**
 		 * When more than one block is given, a container node has to be created. Passing a className will pass it on to the container.
 		 * @note see `renderContainerOnSingleChild`
@@ -92,16 +119,16 @@ declare module "@sanity/block-content-to-react" {
 			 */
 			marks?: Record<string, (props: any) => JSX.Element | null>
 			/** React component to use when rendering a list node */
-			list?: React.Component
+			list?: WrappedComponent
 			/** React component to use when rendering a list item node */
-			listItem?: React.Component
+			listItem?: WrappedComponent
 			/**
 			 * React component to use when transforming newline characters
 			 * to a hard break (<br/> by default, pass false to render newline character)
 			 */
 			hardBreak?: React.Component
 			/** Serializer for the container wrapping the blocks */
-			container?: React.Component
+			container?: WrappedComponent
 		}
 		/**
 		 * When encountering image blocks,
