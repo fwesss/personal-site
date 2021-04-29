@@ -1,4 +1,3 @@
-// theme.js
 import { extendTheme } from "@chakra-ui/react"
 import Link from "./components/link"
 // Global style overrides
