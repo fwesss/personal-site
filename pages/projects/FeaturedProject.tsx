@@ -45,7 +45,7 @@ export const FeaturedProject: FC<FeaturedProjectProps> = ({
 	repoUrl,
 }) => {
 	return (
-		<Box as="article" bg={mode("gray.50", "gray.800")} py="8">
+		<Box as="article" bg={mode("gray.50", "gray.800")} py="8" w="100%">
 			<Box
 				maxW={{ base: "xl", md: "7xl" }}
 				mx="auto"
@@ -63,12 +63,12 @@ export const FeaturedProject: FC<FeaturedProjectProps> = ({
 				</Heading>
 				<Box mt="10">
 					<SimpleGrid
-						columns={{ base: 1, md: 2 }}
+						columns={{ base: 1, lg: 2 }}
 						spacing={{ base: "16", md: "8" }}
 					>
 						<Stack spacing="12" maxW="lg">
 							{keyFeatures.map(({ _key, headline, body }) => (
-								<Stack key={_key} direction="row" w="100%" spacing="6">
+								<Stack key={_key} direction="row" spacing="6">
 									<Stack>
 										<Text as="h3" fontSize="xl" fontWeight="extrabold">
 											{headline}
@@ -77,6 +77,7 @@ export const FeaturedProject: FC<FeaturedProjectProps> = ({
 											pr="6"
 											color={mode("gray.600", "gray.400")}
 											lineHeight="tall"
+											textStyle="paragraph"
 										>
 											{body}
 										</Text>
@@ -84,13 +85,14 @@ export const FeaturedProject: FC<FeaturedProjectProps> = ({
 								</Stack>
 							))}
 						</Stack>
-						<VStack spacing={4}>
+						<VStack w="100%" spacing={4}>
 							<LinkBox w="100%">
 								<NextLink href={`/projects/${slug.current}`} passHref>
 									<LinkOverlay>
 										<Center
 											shadow="lg"
 											minH="26rem"
+											// minW="35rem"
 											pos="relative"
 											overflow="hidden"
 										>

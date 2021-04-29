@@ -5,7 +5,6 @@ import BlockContent, {
 import {
 	As,
 	Code,
-	Container,
 	Heading,
 	Text,
 	Link,
@@ -14,6 +13,7 @@ import {
 	StylesProvider,
 	UnorderedList,
 	useMultiStyleConfig,
+	Box,
 } from "@chakra-ui/react"
 import React, { ReactNode } from "react"
 import ExternalLink from "./ExternalLink"
@@ -61,7 +61,7 @@ const WrappedContainer: WrappedComponent = ({ children }) => {
 
 	return (
 		<StylesProvider value={styles}>
-			<Container maxW="container.md">{children}</Container>
+			<Box>{children}</Box>
 		</StylesProvider>
 	)
 }

@@ -1,12 +1,10 @@
 import Head from "next/head"
-import { Box, Heading, Link, LinkBox, LinkOverlay } from "@chakra-ui/react"
-import NextLink from "next/link"
+import { Box, Flex, Heading, Text } from "@chakra-ui/react"
 import React from "react"
-import styles from "../styles/Home.module.css"
 import sanity from "../utils/sanity-client"
 import { Project as ProjectT } from "../studio/schema"
-import Block from "../components/Block"
 import { FadeContainer } from "../components/MotionContainer"
+import { Projects } from "./projects/Projects"
 
 type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
 type ProjectProps = UnwrapPromise<ReturnType<typeof getStaticProps>>["props"]
@@ -14,95 +12,66 @@ type ProjectProps = UnwrapPromise<ReturnType<typeof getStaticProps>>["props"]
 type Home = (props: { projects: ProjectProps }) => JSX.Element
 const Home: Home = ({ projects }) => {
 	return (
-		<FadeContainer as="main">
+		<>
 			<Head>
-				<title>Create Next App</title>
+				<title>Wes Feller | Web Dev</title>
 				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
-			<main className={styles.main}>
-				<Heading as="h1" size="4xl">
-					Welcome to{" "}
-					<Link href="https://nextjs.org" isExternal>
-						Next.js!
-					</Link>
-				</Heading>
-
-				<p className={styles.description}>
-					Get started by editing{" "}
-					<code className={styles.code}>pages/index.js</code>
-				</p>
-
-				<Link as={NextLink} href="/posts/test-1">
-					Test Post
-				</Link>
-				<Link as={NextLink} href="/projects/planet-data">
-					Planet Data
-				</Link>
-
-				{projects.map(project => (
-					<LinkBox
-						key={project._id}
-						as="article"
-						maxW="sm"
-						p="5"
-						borderWidth="1px"
-						rounded="md"
+			<FadeContainer as="main" maxW="100vw">
+				<main>
+					<Flex
+						h="calc(100vh - 4rem)"
+						align="center"
+						bottom="4rem"
+						position="relative"
+						ps={{ base: "2", md: "24", lg: "32", xl: "48" }}
+						pe={{ base: "7", md: "6", lg: "12", xl: "24" }}
 					>
-						<Box as="time" dateTime="2021-01-15 15:30:00 +0000 UTC">
-							13 days ago
+						<Box>
+							<Text
+								mb={0}
+								fontSize={{
+									base: "lg",
+									sm: "xl",
+									md: "2xl",
+									lg: "3xl",
+									xl: "4xl",
+								}}
+							>
+								Hi, I&apos;m
+							</Text>
+							<Heading
+								as="h1"
+								fontSize={{ base: "12vw", md: "10vw", lg: "9vw", xl: "8vw" }}
+							>
+								Wes Feller
+							</Heading>
+							<Text
+								width={{
+									base: "clamp(30ch, 100%, 40ch)",
+									sm: "clamp(45ch, 100%, 75ch)",
+								}}
+								lineHeight="1.35"
+								fontSize={{
+									base: "md",
+									sm: "lg",
+									md: "xl",
+									lg: "2xl",
+									xl: "3xl",
+								}}
+							>
+								Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+								eiusmod tempor incididunt ut labore et dolore magna aliqua. Amet
+								mauris commodo quis imperdiet massa.
+							</Text>
 						</Box>
-						<Heading size="md" my="2">
-							<NextLink href={`/projects/${project.slug.current}`} passHref>
-								<LinkOverlay>{project.title}</LinkOverlay>
-							</NextLink>
-						</Heading>
-						<Block blocks={project.purpose} />
-					</LinkBox>
-				))}
+					</Flex>
 
-				<div className={styles.grid}>
-					<a href="https://nextjs.org/docs" className={styles.card}>
-						<h3>Documentation &rarr;</h3>
-						<p>Find in-depth information about Next.js features and API.</p>
-					</a>
-
-					<a href="https://nextjs.org/learn" className={styles.card}>
-						<h3>Learn &rarr;</h3>
-						<p>Learn about Next.js in an interactive course with quizzes!</p>
-					</a>
-
-					<a
-						href="https://github.com/vercel/next.js/tree/master/examples"
-						className={styles.card}
-					>
-						<h3>Examples &rarr;</h3>
-						<p>Discover and deploy boilerplate example Next.js projects.</p>
-					</a>
-
-					<a
-						href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-						className={styles.card}
-					>
-						<h3>Deploy &rarr;</h3>
-						<p>
-							Instantly deploy your Next.js site to a public URL with Vercel.
-						</p>
-					</a>
-				</div>
-			</main>
-
-			<footer className={styles.footer}>
-				<a
-					href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer"
-				>
-					Powered by{" "}
-					<img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-				</a>
-			</footer>
-		</FadeContainer>
+					<Projects projects={projects} />
+				</main>
+			</FadeContainer>
+		</>
 	)
 }
 
@@ -112,7 +81,11 @@ type GetStaticProps = () => Promise<{ props: ProjectT[] }>
 export const getStaticProps: GetStaticProps = async () => {
 	const projects = await sanity.getAll("project")
 
-	return { props: { projects } }
+	type SortProjects = (projectsToSort: ProjectT[]) => ProjectT[]
+	const sortProjects: SortProjects = projectsToSort =>
+		projectsToSort.sort((a, b) => a.order - b.order)
+
+	return { props: { projects: sortProjects(projects) } }
 }
 
 export default Home

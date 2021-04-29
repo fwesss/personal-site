@@ -1,28 +1,126 @@
-import { Heading } from "@chakra-ui/react"
+import {
+	Box,
+	Center,
+	Flex,
+	Heading,
+	HStack,
+	Icon,
+	Link,
+	SimpleGrid,
+	Tag,
+	Text,
+	VStack,
+	Wrap,
+	WrapItem,
+} from "@chakra-ui/react"
 import Image from "next/image"
 import React from "react"
+import { FaExternalLinkAlt, FaGithub } from "react-icons/fa"
 import sanity, { urlFor } from "../../utils/sanity-client"
-import ExternalLink from "../../components/ExternalLink"
 import { Project as ProjectT } from "../../studio/schema"
 import Block from "../../components/Block"
 import { FadeContainer } from "../../components/MotionContainer"
+import { Section } from "./Section"
 
 type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
 type ProjectProps = UnwrapPromise<ReturnType<typeof getStaticProps>>["props"]
 
 type Project = (props: ProjectProps) => JSX.Element
-const Project: Project = ({ title, deployedUrl, mainImage, purpose }) => {
+const Project: Project = ({
+	title,
+	summary,
+	deployedUrl,
+	repoUrl,
+	mainImage,
+	purpose,
+	keyFeatures,
+	techStack,
+	knowledgeGained,
+	challenges,
+	different,
+	screenshots,
+}) => {
 	return (
-		<FadeContainer as="main">
+		<FadeContainer as="main" maxW="container.md">
 			<Heading>{title}</Heading>
-			<ExternalLink text="Demo" href={deployedUrl} />
-			<Image
-				src={urlFor(mainImage).url()}
-				alt={mainImage.alt}
-				width={960}
-				height={600}
-			/>
-			<Block blocks={purpose} />
+
+			<Center minH="20vh" pos="relative">
+				<Image
+					objectFit="cover"
+					layout="fill"
+					src={urlFor(mainImage).url()}
+					alt={mainImage.alt}
+				/>
+			</Center>
+
+			<HStack align="flex-start" justify="space-between" spacing={2} my={4}>
+				<HStack spacing={2}>
+					<Link href={repoUrl} isExternal>
+						<Icon boxSize="1.25em" as={FaGithub} />
+					</Link>
+					<Link href={deployedUrl} isExternal>
+						<Icon boxSize="1.25em" as={FaExternalLinkAlt} />
+					</Link>
+				</HStack>
+				<Wrap>
+					{techStack.map((tech, index) => (
+						<WrapItem key={index}>
+							<Tag variant="solid" colorScheme="blue">
+								{tech}
+							</Tag>
+						</WrapItem>
+					))}
+				</Wrap>
+			</HStack>
+
+			<Section section="Summary">
+				<Text textStyle="paragraph">{summary}</Text>
+			</Section>
+
+			<Section section="Purpose">
+				<Block blocks={purpose} />
+			</Section>
+
+			<Section section="Features">
+				{keyFeatures.map(({ _key, headline, body }) => (
+					<VStack key={_key}>
+						<Box>
+							<Heading as="h3" size="md">
+								{headline}
+							</Heading>
+							<Text>{body}</Text>
+						</Box>
+					</VStack>
+				))}
+			</Section>
+
+			<Section section="Knowledge Gained">
+				<Block blocks={knowledgeGained} />
+			</Section>
+
+			<Section section="Challenges">
+				<Block blocks={challenges} />
+			</Section>
+
+			<Section section="What Could Have Been Different?">
+				<Block blocks={different} />
+			</Section>
+
+			<Section section="Screenshots">
+				<SimpleGrid minChildWidth="350px" spacing={4}>
+					{screenshots.map((screenshot, index) => (
+						<Image
+							key={index}
+							src={urlFor(screenshot).url()}
+							alt={screenshot.alt}
+							// layout="fill"
+							objectFit="cover"
+							width={960}
+							height={600}
+						/>
+					))}
+				</SimpleGrid>
+			</Section>
 		</FadeContainer>
 	)
 }
@@ -34,8 +132,8 @@ type GetStaticPaths = () => Promise<{
 export const getStaticPaths: GetStaticPaths = async () => {
 	const projects = await sanity.getAll("project")
 
-	const paths = projects.map(project => ({
-		params: { slug: project.slug.current },
+	const paths = projects.map(({ slug }) => ({
+		params: { slug: slug.current },
 	}))
 
 	return { paths, fallback: false }

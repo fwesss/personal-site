@@ -1,18 +1,17 @@
 import { Grid, SimpleGrid, StackDivider, VStack } from "@chakra-ui/react"
-import React from "react"
-import { Project as ProjectT } from "../../studio/schema"
-import sanity from "../../utils/sanity-client"
+import React, { FC } from "react"
 import { FadeContainer } from "../../components/MotionContainer"
 import { FeaturedProject } from "./FeaturedProject"
 import { RegularProject } from "./RegularProject"
+import { Project } from "../../studio/schema"
 
-type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
-type ProjectProps = UnwrapPromise<ReturnType<typeof getStaticProps>>["props"]
+interface ProjectsProps {
+	projects: Project[]
+}
 
-type Projects = (props: { projects: ProjectProps }) => JSX.Element
-const Projects: Projects = ({ projects }) => {
+export const Projects: FC<ProjectsProps> = ({ projects }) => {
 	return (
-		<FadeContainer as="main" maxW="6xl">
+		<FadeContainer id="projects" maxW="8xl">
 			<Grid>
 				<VStack divider={<StackDivider />} spacing={6}>
 					{projects
@@ -61,18 +60,3 @@ const Projects: Projects = ({ projects }) => {
 		</FadeContainer>
 	)
 }
-
-type GetStaticProps = () => Promise<{ props: ProjectT[] }>
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-export const getStaticProps: GetStaticProps = async () => {
-	const projects = await sanity.getAll("project")
-
-	type SortProjects = (projectsToSort: ProjectT[]) => ProjectT[]
-	const sortProjects: SortProjects = projectsToSort =>
-		projectsToSort.sort((a, b) => a.order - b.order)
-
-	return { props: { projects: sortProjects(projects) } }
-}
-
-export default Projects
