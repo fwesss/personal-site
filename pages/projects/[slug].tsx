@@ -53,6 +53,13 @@ const Project: Project = ({
 			</Center>
 
 			<HStack align="flex-start" justify="space-between" spacing={2} my={4}>
+				<Wrap>
+					{techStack.map((tech, index) => (
+						<WrapItem key={index}>
+							<TechTag tech={tech} />
+						</WrapItem>
+					))}
+				</Wrap>
 				<HStack spacing={2}>
 					<Link href={repoUrl} isExternal>
 						<Icon boxSize="1.25em" as={FaGithub} />
@@ -61,13 +68,6 @@ const Project: Project = ({
 						<Icon boxSize="1.25em" as={FaExternalLinkAlt} />
 					</Link>
 				</HStack>
-				<Wrap>
-					{techStack.map((tech, index) => (
-						<WrapItem key={index}>
-							<TechTag tech={tech} />
-						</WrapItem>
-					))}
-				</Wrap>
 			</HStack>
 
 			<Section section="Summary">
