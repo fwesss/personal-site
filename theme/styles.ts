@@ -141,7 +141,8 @@ export default {
 	textStyles: {
 		paragraph: {
 			width: { base: "clamp(30ch, 100%, 40ch)", sm: "clamp(45ch, 100%, 75ch)" },
-			lineHeight: "1.65",
+			lineHeight: "1.5",
+			fontSize: { base: "1rem", md: "1.125rem" },
 		},
 	},
 
