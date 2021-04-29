@@ -6,7 +6,6 @@ import {
 	Icon,
 	Link,
 	SimpleGrid,
-	Tag,
 	Text,
 	VStack,
 	Wrap,
@@ -20,6 +19,7 @@ import { Project as ProjectT } from "../../studio/schema"
 import Block from "../../components/Block"
 import { FadeContainer } from "../../components/MotionContainer"
 import { Section } from "../../components/Projects/Section"
+import { TechTag } from "../../components/TechTag"
 
 type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
 type ProjectProps = UnwrapPromise<ReturnType<typeof getStaticProps>>["props"]
@@ -64,9 +64,7 @@ const Project: Project = ({
 				<Wrap>
 					{techStack.map((tech, index) => (
 						<WrapItem key={index}>
-							<Tag variant="solid" colorScheme="blue">
-								{tech}
-							</Tag>
+							<TechTag tech={tech} />
 						</WrapItem>
 					))}
 				</Wrap>

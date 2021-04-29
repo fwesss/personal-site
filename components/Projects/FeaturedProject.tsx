@@ -8,7 +8,6 @@ import {
 	Stack,
 	Text,
 	useColorModeValue as mode,
-	Tag,
 	VStack,
 	Wrap,
 	WrapItem,
@@ -23,6 +22,7 @@ import NextLink from "next/link"
 import { FaExternalLinkAlt, FaGithub } from "react-icons/fa"
 import { urlFor } from "../../utils/sanity-client"
 import { Project } from "../../studio/schema"
+import { TechTag } from "../TechTag"
 
 interface FeaturedProjectProps {
 	title: Project["title"]
@@ -116,9 +116,7 @@ export const FeaturedProject: FC<FeaturedProjectProps> = ({
 								<Wrap>
 									{techStack.map((tag, index) => (
 										<WrapItem key={index}>
-											<Tag variant="solid" colorScheme="blue">
-												{tag}
-											</Tag>
+											<TechTag tech={tag} />
 										</WrapItem>
 									))}
 								</Wrap>

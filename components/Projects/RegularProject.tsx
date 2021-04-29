@@ -4,7 +4,6 @@ import {
 	HStack,
 	Stack,
 	StackDivider,
-	Tag,
 	Text,
 	useColorModeValue as mode,
 	Wrap,
@@ -15,6 +14,7 @@ import { FC } from "react"
 import { urlFor } from "../../utils/sanity-client"
 import { Project } from "../../studio/schema"
 import styles from "../../styles/Global.module.css"
+import { TechTag } from "../TechTag"
 
 interface RegularProjectProps {
 	title: Project["title"]
@@ -64,9 +64,7 @@ export const RegularProject: FC<RegularProjectProps> = ({
 						<Wrap>
 							{techStack.map((tech, index) => (
 								<WrapItem key={index}>
-									<Tag variant="subtle" colorScheme="blue" size="sm">
-										{tech}
-									</Tag>
+									<TechTag tech={tech} variant="subtle" size="sm" />
 								</WrapItem>
 							))}
 						</Wrap>
