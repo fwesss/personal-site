@@ -2,7 +2,7 @@ import { Box, ChakraProvider, Flex } from "@chakra-ui/react"
 import { AppProps } from "next/app"
 import NextLink from "next/link"
 import { AnimateSharedLayout } from "framer-motion"
-import React from "react"
+import React, { FC } from "react"
 import { init } from "../utils/sentry"
 import theme from "../theme/index"
 import { NavContent } from "../components/Navbar/NavContent"
@@ -14,14 +14,21 @@ interface AppPropsErr extends AppProps {
 	err: Error
 }
 
-const MyApp = ({ Component, pageProps, err }: AppPropsErr): JSX.Element => {
+const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
 	return (
 		<ChakraProvider theme={theme}>
 			<AnimateSharedLayout>
-				<Box as="header" height="16" position="relative">
+				<Box
+					as="header"
+					h="16"
+					w="100%"
+					position="sticky"
+					top={0}
+					zIndex={1000}
+					pointerEvents="none"
+				>
 					<Box
 						height="100%"
-						maxW="7xl"
 						mx="auto"
 						ps={{ base: "6", md: "8" }}
 						pe={{ base: "5", md: "4" }}
@@ -36,9 +43,7 @@ const MyApp = ({ Component, pageProps, err }: AppPropsErr): JSX.Element => {
 							fontSize={{ base: "md", sm: "lg", md: "xl" }}
 						>
 							<NextLink href="/" passHref>
-								<NavLink.Desktop h={10}>
-									{"wes :: Maybe Task -> Just Success"}
-								</NavLink.Desktop>
+								<NavLink.Desktop h={10}>WF</NavLink.Desktop>
 							</NextLink>
 							<NavContent.Desktop display={{ base: "none", md: "flex" }} />
 							<NavContent.Mobile display={{ base: "flex", md: "none" }} />

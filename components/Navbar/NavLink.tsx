@@ -15,6 +15,7 @@ const DesktopNavLink = (props: HTMLChakraProps<"a">) => {
 				borderColor: "currentcolor",
 				color: useColorModeValue("blue.600", "blue.200"),
 			}}
+			pointerEvents="all"
 			{...props}
 		/>
 	)
@@ -33,6 +34,7 @@ const MobileNavLink = (props: HTMLChakraProps<"a">) => {
 			_hover={{
 				bg: "blackAlpha.200",
 			}}
+			pointerEvents="all"
 			{...props}
 		/>
 	)
