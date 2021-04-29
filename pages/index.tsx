@@ -4,7 +4,7 @@ import React from "react"
 import sanity from "../utils/sanity-client"
 import { Project as ProjectT } from "../studio/schema"
 import { FadeContainer } from "../components/MotionContainer"
-import { Projects } from "./projects/Projects"
+import { Projects } from "../components/Projects/Projects"
 
 type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
 type ProjectProps = UnwrapPromise<ReturnType<typeof getStaticProps>>["props"]

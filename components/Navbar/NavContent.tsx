@@ -14,7 +14,7 @@ import { NavLink } from "./NavLink"
 import { NavItemTransition, NavListTransition } from "./Transition"
 import ColorModeButton from "../ColorModeButton"
 
-const links = [{ label: "Projects", href: "#projects" }]
+const links = [{ label: "Projects", href: "/#projects" }]
 
 const MobileNavContent = (props: BoxProps) => {
 	const { isOpen, onToggle } = useDisclosure()
