@@ -1,9 +1,14 @@
 export default {
 	fonts: {
-		body: "Rubik, sans-serif",
-		heading: "Hind, sans-serif",
+		body: "Inter, sans-serif",
+		heading: "Inter, sans-serif",
 		mono: "JetBrains Mono, monospace",
 	},
+
+	lineHeights: {
+		base: 1.75,
+	},
+
 	sizes: {
 		container: {
 			md: "75ch",
@@ -132,10 +137,26 @@ export default {
 			"900": "#24100f",
 		},
 	},
-	//  globals
+
 	textStyles: {
 		paragraph: {
-			width: "clamp(45ch, 100%, 75ch)",
+			width: { base: "clamp(30ch, 100%, 40ch)", sm: "clamp(45ch, 100%, 75ch)" },
+			lineHeight: "1.65",
+		},
+	},
+
+	//  globals
+	styles: {
+		global: {
+			html: {
+				scrollBehavior: "smooth",
+			},
+			"html body": {
+				fontFeatureSettings: '"ss03", "zero", "cv08", "cv11", "kern"',
+			},
+			"p, ul, ol": {
+				marginBottom: "1.5rem",
+			},
 		},
 	},
 }
