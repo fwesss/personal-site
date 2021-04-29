@@ -1,6 +1,6 @@
 import { Box, Heading } from "@chakra-ui/react"
 import { FC, ReactNode } from "react"
-import Block from "../../components/Block"
+import Block from "../Block"
 
 interface SectionProps {
 	children: ReactNode

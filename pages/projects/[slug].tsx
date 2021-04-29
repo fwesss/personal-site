@@ -1,7 +1,6 @@
 import {
 	Box,
 	Center,
-	Flex,
 	Heading,
 	HStack,
 	Icon,
@@ -20,7 +19,7 @@ import sanity, { urlFor } from "../../utils/sanity-client"
 import { Project as ProjectT } from "../../studio/schema"
 import Block from "../../components/Block"
 import { FadeContainer } from "../../components/MotionContainer"
-import { Section } from "./Section"
+import { Section } from "../../components/Projects/Section"
 
 type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
 type ProjectProps = UnwrapPromise<ReturnType<typeof getStaticProps>>["props"]

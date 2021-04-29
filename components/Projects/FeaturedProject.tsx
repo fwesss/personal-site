@@ -49,7 +49,7 @@ export const FeaturedProject: FC<FeaturedProjectProps> = ({
 			<Box
 				maxW={{ base: "xl", md: "7xl" }}
 				mx="auto"
-				px={{ base: "6", md: "8" }}
+				px={{ base: "0", md: "8" }}
 			>
 				<Heading
 					textAlign="center"
@@ -78,6 +78,12 @@ export const FeaturedProject: FC<FeaturedProjectProps> = ({
 											color={mode("gray.600", "gray.400")}
 											lineHeight="tall"
 											textStyle="paragraph"
+											fontSize={{
+												base: "1rem",
+												md: "1.375rem",
+												lg: "1rem",
+												xl: "1.25rem",
+											}}
 										>
 											{body}
 										</Text>
@@ -91,7 +97,7 @@ export const FeaturedProject: FC<FeaturedProjectProps> = ({
 									<LinkOverlay>
 										<Center
 											shadow="lg"
-											minH="26rem"
+											minH="28rem"
 											// minW="35rem"
 											pos="relative"
 											overflow="hidden"

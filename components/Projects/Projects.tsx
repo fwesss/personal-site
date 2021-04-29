@@ -1,6 +1,6 @@
 import { Grid, SimpleGrid, StackDivider, VStack } from "@chakra-ui/react"
 import React, { FC } from "react"
-import { FadeContainer } from "../../components/MotionContainer"
+import { FadeContainer } from "../MotionContainer"
 import { FeaturedProject } from "./FeaturedProject"
 import { RegularProject } from "./RegularProject"
 import { Project } from "../../studio/schema"
