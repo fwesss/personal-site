@@ -1,9 +1,12 @@
-import { chakra, HTMLChakraProps, useColorModeValue } from "@chakra-ui/react"
+import { Link, HTMLChakraProps, useColorModeValue } from "@chakra-ui/react"
 import * as React from "react"
 
-const DesktopNavLink = (props: HTMLChakraProps<"a">) => {
+type Ref = HTMLAnchorElement
+type Props = HTMLChakraProps<"a">
+
+const DesktopNavLink = React.forwardRef<Ref, Props>((props, ref) => {
 	return (
-		<chakra.a
+		<Link
 			fontWeight="medium"
 			display="flex"
 			alignItems="center"
@@ -17,13 +20,14 @@ const DesktopNavLink = (props: HTMLChakraProps<"a">) => {
 			}}
 			pointerEvents="all"
 			{...props}
+			ref={ref}
 		/>
 	)
-}
+})
 
-const MobileNavLink = (props: HTMLChakraProps<"a">) => {
+const MobileNavLink = React.forwardRef<Ref, Props>((props, ref) => {
 	return (
-		<chakra.a
+		<Link
 			display="block"
 			textAlign="center"
 			fontWeight="bold"
@@ -36,9 +40,10 @@ const MobileNavLink = (props: HTMLChakraProps<"a">) => {
 			}}
 			pointerEvents="all"
 			{...props}
+			ref={ref}
 		/>
 	)
-}
+})
 
 export const NavLink = {
 	Mobile: MobileNavLink,
