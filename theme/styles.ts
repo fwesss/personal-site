@@ -1,3 +1,5 @@
+import { mode } from "@chakra-ui/theme-tools"
+
 export default {
 	fonts: {
 		body: "Inter, sans-serif",
@@ -140,7 +142,19 @@ export default {
 
 	textStyles: {
 		paragraph: {
-			width: { base: "clamp(30ch, 100%, 40ch)", sm: "clamp(45ch, 100%, 75ch)" },
+			width: {
+				base: "clamp(30ch, 100%, 40ch)",
+				md: "clamp(45ch, 100%, 75ch)",
+			},
+			lineHeight: "1.5",
+			fontSize: { base: "1rem", md: "1.125rem" },
+		},
+		feature: {
+			width: {
+				base: "clamp(30ch, 100%, 40ch)",
+				sm: "clamp(38ch, 100%, 75ch)",
+				// md: "clamp(45ch, 100%, 75ch)",
+			},
 			lineHeight: "1.5",
 			fontSize: { base: "1rem", md: "1.125rem" },
 		},
@@ -148,16 +162,20 @@ export default {
 
 	//  globals
 	styles: {
-		global: {
+		global: props => ({
 			html: {
 				scrollBehavior: "smooth",
 			},
 			"html body": {
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+				background: mode("gray.50", "gray.900")(props),
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+				color: mode("gray.800", "gray.50")(props),
 				fontFeatureSettings: '"ss03", "zero", "cv08", "cv11", "kern"',
 			},
 			"p, ul, ol": {
 				marginBottom: "1.5rem",
 			},
-		},
+		}),
 	},
 }
