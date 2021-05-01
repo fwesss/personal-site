@@ -17,7 +17,7 @@ import { FaExternalLinkAlt, FaGithub } from "react-icons/fa"
 import sanity, { urlFor } from "../../utils/sanity-client"
 import { Project as ProjectT } from "../../studio/schema"
 import Block from "../../components/Block"
-import { FadeContainer } from "../../components/MotionContainer"
+import { FadeContainer } from "../../components/MotionComponents"
 import { Section } from "../../components/Projects/Section"
 import { TechTag } from "../../components/TechTag"
 
@@ -40,19 +40,26 @@ const Project: Project = ({
 	screenshots,
 }) => {
 	return (
-		<FadeContainer as="main" maxW="container.md">
-			<Heading>{title}</Heading>
+		<FadeContainer as="main" maxW="3xl">
+			<Heading letterSpacing="tight" fontWeight="extrabold" fontSize="7xl">
+				{title}
+			</Heading>
 
-			<Center minH="20vh" pos="relative">
-				<Image
-					objectFit="cover"
-					layout="fill"
-					src={urlFor(mainImage).url()}
-					alt={mainImage.alt}
-				/>
-			</Center>
+			<Box as="figure">
+				<Center minH="45vh" pos="relative">
+					<Image
+						objectFit="cover"
+						layout="fill"
+						src={urlFor(mainImage).url()}
+						alt={mainImage.alt}
+						quality={100}
+						priority
+					/>
+				</Center>
+				<figcaption>{mainImage.caption}</figcaption>
+			</Box>
 
-			<HStack align="flex-start" justify="space-between" spacing={2} my={4}>
+			<HStack align="baseline" justify="space-between" spacing={2} my={4}>
 				<Wrap>
 					{techStack.map((tech, index) => (
 						<WrapItem key={index}>
@@ -60,12 +67,13 @@ const Project: Project = ({
 						</WrapItem>
 					))}
 				</Wrap>
+
 				<HStack spacing={2}>
-					<Link href={repoUrl} isExternal>
-						<Icon boxSize="1.25em" as={FaGithub} />
+					<Link href={repoUrl} isExternal variant="nonButton">
+						<Icon boxSize="1.375rem" as={FaGithub} />
 					</Link>
-					<Link href={deployedUrl} isExternal>
-						<Icon boxSize="1.25em" as={FaExternalLinkAlt} />
+					<Link href={deployedUrl} isExternal variant="nonButton">
+						<Icon boxSize="1.375rem" as={FaExternalLinkAlt} />
 					</Link>
 				</HStack>
 			</HStack>
@@ -85,7 +93,7 @@ const Project: Project = ({
 							<Heading as="h3" size="md">
 								{headline}
 							</Heading>
-							<Text>{body}</Text>
+							<Text textStyle="paragraph">{body}</Text>
 						</Box>
 					</VStack>
 				))}
