@@ -1,11 +1,6 @@
 export default {
-	baseStyle({ colorMode }) {
-		return {
-			transition: "all 0.2s",
-			_hover: {
-				color: colorMode === "dark" ? "blue.200" : "blue.600",
-			},
-		}
+	baseStyle: {
+		transition: "all 0.2s",
 	},
 	variants: {
 		heading: {
@@ -16,6 +11,14 @@ export default {
 				textDecoration: "none",
 				borderBottomColor: "currentcolor !important",
 			},
+		},
+		nonButton({ colorMode }) {
+			return {
+				_hover: {
+					color: colorMode === "dark" ? "blue.200" : "blue.600",
+					textDecoration: "none",
+				},
+			}
 		},
 	},
 }
