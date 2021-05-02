@@ -36,7 +36,8 @@ export const urlFor = (source: {
 	asset: SanityAsset
 	crop?: SanityImageCrop
 	hotspot?: SanityImageHotspot
-}): ImageUrlBuilder => createImageUrlBuilder(config).image(source)
+}): ImageUrlBuilder =>
+	createImageUrlBuilder(config).image(source).auto("format").format("webp")
 
 // This type parameter enables the client to be aware of your generated types
 //                           👇👇👇
