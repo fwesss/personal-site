@@ -14,7 +14,7 @@ export const LinkButton: FC<LinkButtonProps> = ({ href, size }) => (
 		<Button
 			as={Link}
 			w={{ base: "40%", sm: "30%" }}
-			colorScheme="blue"
+			colorScheme="teal"
 			className={styles.link}
 			size={size}
 			fontSize={{ base: "sm" }}

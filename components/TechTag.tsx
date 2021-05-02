@@ -45,8 +45,8 @@ export const TechTag: FC<TechTagProps> = ({
 	}
 
 	return (
-		<Tag variant={variant} size={size} colorScheme="blue">
-			<TagLeftIcon as={icons[tech] || DiCode} />
+		<Tag variant={variant} size={size} colorScheme="teal">
+			<TagLeftIcon as={icons[tech] || DiCode} title={`${tech} logo`} />
 			<TagLabel>{tech}</TagLabel>
 		</Tag>
 	)

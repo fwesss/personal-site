@@ -15,7 +15,7 @@ export default {
 		nonButton({ colorMode }) {
 			return {
 				_hover: {
-					color: colorMode === "dark" ? "blue.200" : "blue.600",
+					color: colorMode === "dark" ? "teal.200" : "teal.600",
 					textDecoration: "none",
 				},
 			}
