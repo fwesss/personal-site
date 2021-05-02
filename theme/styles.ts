@@ -1,29 +1,22 @@
+import { mode } from "@chakra-ui/theme-tools"
+
 export default {
 	fonts: {
-		body: "Rubik, sans-serif",
-		heading: "Hind, sans-serif",
-		mono: "monospace",
+		body: "Inter, sans-serif",
+		heading: "Inter, sans-serif",
+		mono: "JetBrains Mono, monospace",
 	},
 
-	space: {
-		px: "1px",
-		0: "0",
-		1: "0.25rem",
-		2: "0.5rem",
-		3: "1rem",
-		4: "1.5rem",
-		5: "2rem",
-		6: "3rem",
-		7: "4rem",
-		8: "6rem",
-		9: "8rem",
-		10: "12rem",
-		11: "16rem",
-		12: "24rem",
-		13: "32rem",
-		14: "40rem",
-		15: "48rem",
+	lineHeights: {
+		base: 1.75,
 	},
+
+	sizes: {
+		container: {
+			md: "75ch",
+		},
+	},
+
 	colors: {
 		gray: {
 			"50": "#f0f2f4",
@@ -145,5 +138,52 @@ export default {
 			"800": "#47201f",
 			"900": "#24100f",
 		},
+	},
+
+	textStyles: {
+		paragraph: {
+			width: {
+				base: "clamp(30ch, 100%, 40ch)",
+				sm: "clamp(45ch, 100%, 75ch)",
+			},
+			lineHeight: "1.5",
+			fontSize: { base: "1rem", md: "1.125rem" },
+		},
+		feature: {
+			width: {
+				base: "clamp(30ch, 100%, 40ch)",
+				sm: "clamp(38ch, 100%, 75ch)",
+			},
+			lineHeight: { base: "base", xl: "short" },
+			fontSize: { base: "1rem", md: "1.125rem" },
+		},
+	},
+
+	//  globals
+	styles: {
+		global: props => ({
+			html: {
+				scrollBehavior: "smooth",
+			},
+			"html body": {
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+				background: mode("gray.50", "gray.900")(props),
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+				color: mode("gray.700", "gray.100")(props),
+				fontFeatureSettings: '"ss03", "zero", "cv08", "cv11", "kern"',
+			},
+			"p, ul, ol": {
+				marginBottom: "1rem",
+			},
+			"p + p": {
+				marginTop: "1.5rem",
+			},
+			li: {
+				lineHeight: "1.4",
+			},
+			"li::marker": {
+				color: "gray.400",
+			},
+		}),
 	},
 }

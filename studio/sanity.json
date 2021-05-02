@@ -13,7 +13,11 @@
 		"@sanity/components",
 		"@sanity/default-layout",
 		"@sanity/default-login",
-		"@sanity/desk-tool"
+		"@sanity/desk-tool",
+		"mdide",
+		"dashboard-widget-vercel",
+		"@sanity/dashboard",
+		"order-documents"
 	],
 	"env": {
 		"development": {
@@ -24,6 +28,10 @@
 		{
 			"name": "part:@sanity/base/schema",
 			"path": "./schemas/schema"
+		},
+		{
+			"implements": "part:@sanity/dashboard/config",
+			"path": "dashboardConfig.ts"
 		}
 	]
 }

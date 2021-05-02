@@ -16,5 +16,6 @@
 		"jsx": "preserve"
 	},
 	"include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
-	"exclude": ["node_modules", ".next", "out", "cypress"]
+	"exclude": ["node_modules", ".next", "out", "cypress"],
+	"files": ["./studio/@types/block-content-to-react.d.ts"]
 }

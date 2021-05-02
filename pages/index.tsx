@@ -1,74 +1,88 @@
 import Head from "next/head"
-import { Heading, Link } from "@chakra-ui/react"
-import NextLink from "next/link"
-import styles from "../styles/Home.module.css"
+import { Box, Flex, Heading, Text } from "@chakra-ui/react"
+import React from "react"
+import sanity from "../utils/sanity-client"
+import { Project as ProjectT } from "../studio/schema"
+import { Projects } from "../components/Projects/Projects"
+import { FadeBox } from "../components/MotionComponents"
 
-export default function Home(): JSX.Element {
+type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
+type ProjectProps = UnwrapPromise<ReturnType<typeof getStaticProps>>["props"]
+
+type Home = (props: { projects: ProjectProps }) => JSX.Element
+const Home: Home = ({ projects }) => {
 	return (
-		<div className={styles.container}>
+		<>
 			<Head>
-				<title>Create Next App</title>
-				<link rel="icon" href="/favicon.ico" />
+				<title>Wes Feller | Web Dev</title>
 			</Head>
 
-			<main className={styles.main}>
-				<Heading as="h1" size="4xl">
-					Welcome to{" "}
-					<Link href="https://nextjs.org" isExternal>
-						Next.js!
-					</Link>
-				</Heading>
-
-				<p className={styles.description}>
-					Get started by editing{" "}
-					<code className={styles.code}>pages/index.js</code>
-				</p>
-
-				<Link as={NextLink} href="/posts/test-1">
-					Test Post
-				</Link>
-
-				<div className={styles.grid}>
-					<a href="https://nextjs.org/docs" className={styles.card}>
-						<h3>Documentation &rarr;</h3>
-						<p>Find in-depth information about Next.js features and API.</p>
-					</a>
-
-					<a href="https://nextjs.org/learn" className={styles.card}>
-						<h3>Learn &rarr;</h3>
-						<p>Learn about Next.js in an interactive course with quizzes!</p>
-					</a>
-
-					<a
-						href="https://github.com/vercel/next.js/tree/master/examples"
-						className={styles.card}
-					>
-						<h3>Examples &rarr;</h3>
-						<p>Discover and deploy boilerplate example Next.js projects.</p>
-					</a>
-
-					<a
-						href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-						className={styles.card}
-					>
-						<h3>Deploy &rarr;</h3>
-						<p>
-							Instantly deploy your Next.js site to a public URL with Vercel.
-						</p>
-					</a>
-				</div>
-			</main>
-
-			<footer className={styles.footer}>
-				<a
-					href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-					target="_blank"
-					rel="noopener noreferrer"
+			<FadeBox as="main">
+				<Flex
+					h="calc(100vh - 4rem)"
+					align="center"
+					bottom="4rem"
+					position="relative"
+					ps={{ base: "2", md: "24", lg: "32", xl: "48" }}
+					pe={{ base: "7", md: "6", lg: "12", xl: "24" }}
 				>
-					Powered by{" "}
-					<img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-				</a>
-			</footer>
-		</div>
+					<Box>
+						<Text
+							mb={0}
+							fontSize={{
+								base: "lg",
+								sm: "xl",
+								md: "2xl",
+								lg: "3xl",
+								xl: "4xl",
+							}}
+						>
+							Hi, I&apos;m
+						</Text>
+						<Heading
+							as="h1"
+							fontSize={{ base: "12vw", md: "10vw", lg: "9vw", xl: "8vw" }}
+						>
+							Wes Feller
+						</Heading>
+						<Text
+							width={{
+								base: "clamp(30ch, 100%, 40ch)",
+								sm: "clamp(45ch, 100%, 75ch)",
+							}}
+							lineHeight="1.35"
+							fontSize={{
+								base: "md",
+								sm: "lg",
+								md: "xl",
+								lg: "2xl",
+								xl: "3xl",
+							}}
+						>
+							Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
+							eiusmod tempor incididunt ut labore et dolore magna aliqua. Amet
+							mauris commodo quis imperdiet massa.
+						</Text>
+					</Box>
+				</Flex>
+
+				<Projects projects={projects} />
+			</FadeBox>
+		</>
 	)
 }
+
+type GetStaticProps = () => Promise<{ props: ProjectT[] }>
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export const getStaticProps: GetStaticProps = async () => {
+	const projects = await sanity.getAll("project")
+
+	type SortProjects = (projectsToSort: ProjectT[]) => ProjectT[]
+	const sortProjects: SortProjects = projectsToSort =>
+		projectsToSort.sort((a, b) => a.order - b.order)
+
+	return { props: { projects: sortProjects(projects) } }
+}
+
+export default Home

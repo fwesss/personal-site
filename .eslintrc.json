@@ -25,6 +25,7 @@
 		"plugin:import/errors",
 		"plugin:import/warnings",
 		"plugin:import/typescript",
+		"plugin:@asbjorn/groq/recommended",
 		// must be last
 		"plugin:prettier/recommended"
 	],
@@ -42,6 +43,8 @@
 		"react/jsx-filename-extension": 0,
 		"react/display-name": 0,
 		"react/prop-types": 0,
+		"react/no-array-index-key": 0,
+		"no-underscore-dangle": 0,
 		"@typescript-eslint/explicit-member-accessibility": 0,
 		"@typescript-eslint/indent": 0,
 		"@typescript-eslint/member-delimiter-style": 0,

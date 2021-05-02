@@ -40,3 +40,4 @@ yarn-error.log*
 # sanity
 **/*/node_modules
 dist
+public/studio
