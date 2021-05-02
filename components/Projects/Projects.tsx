@@ -6,7 +6,6 @@ import {
 	SimpleGrid,
 	VStack,
 	Container,
-	useColorModeValue as mode,
 	Box,
 } from "@chakra-ui/react"
 import React, { FC } from "react"
@@ -36,7 +35,7 @@ export const Projects: FC<ProjectsProps> = ({ projects }) => {
 			</Flex>
 
 			<Grid>
-				<Container maxW="7xl" shadow="xl" rounded="lg">
+				<Container maxW="7xl">
 					<VStack spacing={8}>
 						{projects
 							.filter(project => project.featured)
@@ -71,7 +70,7 @@ export const Projects: FC<ProjectsProps> = ({ projects }) => {
 							)}
 					</VStack>
 				</Container>
-				<Container maxW="7xl" bg={mode("gray.50", "gray.900")} px={8}>
+				<Container maxW="7xl" variant="secondary" px={8}>
 					<SimpleGrid mt="14" columns={{ base: 1, lg: 2, xl: 3 }} spacing="4">
 						{projects
 							.filter(project => !project.featured)
