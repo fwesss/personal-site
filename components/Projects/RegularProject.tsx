@@ -92,10 +92,20 @@ export const RegularProject: FC<RegularProjectProps> = ({
 							))}
 						</Wrap>
 						<HStack spacing={2}>
-							<Link href={repoUrl} isExternal variant="nonButton">
+							<Link
+								href={repoUrl}
+								isExternal
+								variant="nonButton"
+								title={`Github for ${title}`}
+							>
 								<Icon boxSize="1.25rem" as={FaGithub} />
 							</Link>
-							<Link href={deployedUrl} isExternal variant="nonButton">
+							<Link
+								href={deployedUrl}
+								isExternal
+								variant="nonButton"
+								title={`Demo for ${title}`}
+							>
 								<Icon boxSize="1.25rem" as={FaExternalLinkAlt} />
 							</Link>
 						</HStack>
@@ -107,7 +117,7 @@ export const RegularProject: FC<RegularProjectProps> = ({
 							<LinkOverlay>{title}</LinkOverlay>
 						</NextLink>
 					</Heading>
-					<Text color={mode("gray.600", "gray.400")} lineHeight="tall">
+					<Text color={mode("gray.600", "gray.300")} lineHeight="tall">
 						{summary}
 					</Text>
 				</Box>

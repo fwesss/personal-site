@@ -48,8 +48,7 @@ const Content: FC<ContentProps> = ({ summary, keyFeatures, slug }) => (
 						{headline}
 					</Text>
 					<Text
-						color={mode("gray.600", "gray.400")}
-						lineHeight="tall"
+						color={mode("gray.600", "gray.300")}
 						textStyle="feature"
 						fontSize={{
 							base: "1rem",
@@ -67,6 +66,7 @@ const Content: FC<ContentProps> = ({ summary, keyFeatures, slug }) => (
 )
 
 interface ImageContentProps {
+	title: Project["title"]
 	mainImage: Project["mainImage"]
 	techStack: Project["techStack"]
 	deployedUrl: Project["deployedUrl"]
@@ -75,6 +75,7 @@ interface ImageContentProps {
 }
 
 const ImageContent: FC<ImageContentProps> = ({
+	title,
 	mainImage,
 	techStack,
 	repoUrl,
@@ -95,7 +96,7 @@ const ImageContent: FC<ImageContentProps> = ({
 			pos="relative"
 			overflow="hidden"
 			className={styles.group}
-			rounded={{ sm: "md" }}
+			rounded="xl"
 		>
 			<Image
 				objectFit="cover"
@@ -115,17 +116,27 @@ const ImageContent: FC<ImageContentProps> = ({
 			{!reversed ? (
 				<>
 					<HStack spacing={2}>
-						<Link href={repoUrl} isExternal variant="nonButton">
+						<Link
+							href={repoUrl}
+							isExternal
+							variant="nonButton"
+							title={`Github for ${title}`}
+						>
 							<Icon boxSize="1.375rem" as={FaGithub} />
 						</Link>
-						<Link href={deployedUrl} isExternal variant="nonButton">
+						<Link
+							href={deployedUrl}
+							isExternal
+							variant="nonButton"
+							title={`Demo for ${title}`}
+						>
 							<Icon boxSize="1.375rem" as={FaExternalLinkAlt} />
 						</Link>
 					</HStack>
 					<Wrap>
 						{techStack.map((tag, index) => (
 							<WrapItem key={index}>
-								<TechTag tech={tag} />
+								<TechTag tech={tag} variant="subtle" />
 							</WrapItem>
 						))}
 					</Wrap>
@@ -135,15 +146,25 @@ const ImageContent: FC<ImageContentProps> = ({
 					<Wrap>
 						{techStack.map((tag, index) => (
 							<WrapItem key={index}>
-								<TechTag tech={tag} />
+								<TechTag tech={tag} variant="subtle" />
 							</WrapItem>
 						))}
 					</Wrap>
 					<HStack spacing={2}>
-						<Link href={repoUrl} isExternal variant="nonButton">
+						<Link
+							href={repoUrl}
+							isExternal
+							variant="nonButton"
+							title={`Github for ${title}`}
+						>
 							<Icon boxSize="1.375rem" as={FaGithub} />
 						</Link>
-						<Link href={deployedUrl} isExternal variant="nonButton">
+						<Link
+							href={deployedUrl}
+							isExternal
+							variant="nonButton"
+							title={`Demo for ${title}`}
+						>
 							<Icon boxSize="1.375rem" as={FaExternalLinkAlt} />
 						</Link>
 					</HStack>
@@ -174,56 +195,53 @@ export const FeaturedProject: FC<FeaturedProjectProps> = ({
 	deployedUrl,
 	repoUrl,
 	reversed = false,
-}) => {
-	return (
-		<Box
-			as="article"
-			py="8"
-			w={{
-				base: "clamp(30ch, 100%, 40ch)",
-				md: "clamp(45ch, 100%, 75ch)",
-				xl: "100%",
-			}}
-		>
-			<HStack spacing={{ base: "0", xl: "10" }}>
-				{reversed && <Box w={{ base: "0", xl: "50%" }} h="1px" />}
-				<Heading
-					w={{ base: "100%", xl: "50%" }}
-					letterSpacing="tight"
-					fontWeight="extrabold"
-					as="h3"
-					fontSize="7xl"
-				>
-					{title}
-				</Heading>
-			</HStack>
-			<SimpleGrid
-				columns={{ base: 1, xl: 2 }}
-				spacing={{ base: "8", xl: "12" }}
+}) => (
+	<Box
+		as="article"
+		py="8"
+		w={{
+			base: "clamp(30ch, 100%, 40ch)",
+			md: "clamp(45ch, 100%, 75ch)",
+			xl: "100%",
+		}}
+	>
+		<HStack spacing={{ base: "0", xl: "10" }}>
+			{reversed && <Box w={{ base: "0", xl: "50%" }} h="1px" />}
+			<Heading
+				w={{ base: "100%", xl: "50%" }}
+				letterSpacing="tight"
+				fontWeight="extrabold"
+				as="h3"
+				fontSize="7xl"
 			>
-				{reversed ? (
-					<>
-						<ImageContent
-							mainImage={mainImage}
-							techStack={techStack}
-							deployedUrl={deployedUrl}
-							repoUrl={repoUrl}
-							reversed={reversed}
-						/>
-						<Content summary={summary} keyFeatures={keyFeatures} slug={slug} />
-					</>
-				) : (
-					<>
-						<Content summary={summary} keyFeatures={keyFeatures} slug={slug} />
-						<ImageContent
-							mainImage={mainImage}
-							techStack={techStack}
-							deployedUrl={deployedUrl}
-							repoUrl={repoUrl}
-						/>
-					</>
-				)}
-			</SimpleGrid>
-		</Box>
-	)
-}
+				{title}
+			</Heading>
+		</HStack>
+		<SimpleGrid columns={{ base: 1, xl: 2 }} spacing={{ base: "8", xl: "12" }}>
+			{reversed ? (
+				<>
+					<ImageContent
+						title={title}
+						mainImage={mainImage}
+						techStack={techStack}
+						deployedUrl={deployedUrl}
+						repoUrl={repoUrl}
+						reversed={reversed}
+					/>
+					<Content summary={summary} keyFeatures={keyFeatures} slug={slug} />
+				</>
+			) : (
+				<>
+					<Content summary={summary} keyFeatures={keyFeatures} slug={slug} />
+					<ImageContent
+						title={title}
+						mainImage={mainImage}
+						techStack={techStack}
+						deployedUrl={deployedUrl}
+						repoUrl={repoUrl}
+					/>
+				</>
+			)}
+		</SimpleGrid>
+	</Box>
+)
