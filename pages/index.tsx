@@ -15,7 +15,6 @@ const Home: Home = ({ projects }) => {
 		<>
 			<Head>
 				<title>Wes Feller | Web Dev</title>
-				<link rel="icon" href="/favicon.ico" />
 			</Head>
 
 			<FadeBox as="main">
