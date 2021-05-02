@@ -1,6 +1,5 @@
 import {
-	Box,
-	Center,
+	Container,
 	Heading,
 	HStack,
 	Icon,
@@ -11,15 +10,16 @@ import {
 	Wrap,
 	WrapItem,
 } from "@chakra-ui/react"
-import Image from "next/image"
 import React from "react"
 import { FaExternalLinkAlt, FaGithub } from "react-icons/fa"
-import sanity, { urlFor } from "../../utils/sanity-client"
+import Head from "next/head"
+import sanity from "../../utils/sanity-client"
 import { Project as ProjectT } from "../../studio/schema"
 import Block from "../../components/Block"
-import { FadeContainer } from "../../components/MotionComponents"
+import { FadeBox } from "../../components/MotionComponents"
 import { Section } from "../../components/Projects/Section"
 import { TechTag } from "../../components/TechTag"
+import { ImageWithCaption } from "../../components/ImageWithCaption"
 
 type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
 type ProjectProps = UnwrapPromise<ReturnType<typeof getStaticProps>>["props"]
@@ -40,93 +40,91 @@ const Project: Project = ({
 	screenshots,
 }) => {
 	return (
-		<FadeContainer as="main" maxW="3xl">
-			<Heading letterSpacing="tight" fontWeight="extrabold" fontSize="7xl">
-				{title}
-			</Heading>
+		<>
+			<Head>
+				<title>Wes Feller | {title}</title>
+			</Head>
 
-			<Box as="figure">
-				<Center minH="45vh" pos="relative">
-					<Image
-						objectFit="cover"
-						layout="fill"
-						src={urlFor(mainImage).url()}
-						alt={mainImage.alt}
-						quality={100}
-						priority
-					/>
-				</Center>
-				<figcaption>{mainImage.caption}</figcaption>
-			</Box>
+			<FadeBox>
+				<Container as="header" variant="secondary" maxW="7xl">
+					<Heading as="h1" fontWeight="bold" lineHeight="1" fontSize="7xl">
+						{title}
+					</Heading>
+					<Text textStyle="paragraph">{summary}</Text>
+					<HStack align="baseline" spacing={4} my={4}>
+						<Wrap>
+							{techStack.map((tech, index) => (
+								<WrapItem key={index}>
+									<TechTag tech={tech} variant="subtle" />
+								</WrapItem>
+							))}
+						</Wrap>
 
-			<HStack align="baseline" justify="space-between" spacing={2} my={4}>
-				<Wrap>
-					{techStack.map((tech, index) => (
-						<WrapItem key={index}>
-							<TechTag tech={tech} />
-						</WrapItem>
-					))}
-				</Wrap>
+						<HStack spacing={2}>
+							<Link
+								href={repoUrl}
+								isExternal
+								variant="nonButton"
+								title={`Github for ${title}`}
+							>
+								<Icon boxSize="1.375rem" as={FaGithub} />
+							</Link>
+							<Link
+								href={deployedUrl}
+								isExternal
+								variant="nonButton"
+								title={`Demo for ${title}`}
+							>
+								<Icon boxSize="1.375rem" as={FaExternalLinkAlt} />
+							</Link>
+						</HStack>
+					</HStack>
+				</Container>
 
-				<HStack spacing={2}>
-					<Link href={repoUrl} isExternal variant="nonButton">
-						<Icon boxSize="1.375rem" as={FaGithub} />
-					</Link>
-					<Link href={deployedUrl} isExternal variant="nonButton">
-						<Icon boxSize="1.375rem" as={FaExternalLinkAlt} />
-					</Link>
-				</HStack>
-			</HStack>
+				<Container
+					as="main"
+					maxW="7xl"
+					py={20}
+					rounded={{ base: "0", xl: "xl" }}
+				>
+					<VStack maxW="clamp(45ch, 100%, 75ch)" mx="auto" spacing={6}>
+						<ImageWithCaption image={mainImage} size="lg" />
 
-			<Section section="Summary">
-				<Text textStyle="paragraph">{summary}</Text>
-			</Section>
+						<Section section="Purpose">
+							<Block blocks={purpose} />
+						</Section>
 
-			<Section section="Purpose">
-				<Block blocks={purpose} />
-			</Section>
+						<Section section="Features">
+							{keyFeatures.map(({ _key, body }) => (
+								<VStack key={_key}>
+									<Text textStyle="paragraph">{body}</Text>
+								</VStack>
+							))}
+						</Section>
 
-			<Section section="Features">
-				{keyFeatures.map(({ _key, headline, body }) => (
-					<VStack key={_key}>
-						<Box>
-							<Heading as="h3" size="md">
-								{headline}
-							</Heading>
-							<Text textStyle="paragraph">{body}</Text>
-						</Box>
+						<Section section="Knowledge Gained">
+							<Block blocks={knowledgeGained} />
+						</Section>
+
+						<Section section="Challenges">
+							<Block blocks={challenges} />
+						</Section>
+
+						<Section section="What Could Have Been Different?">
+							<Block blocks={different} />
+						</Section>
+
+						<Section section="Screenshots">
+							<SimpleGrid minChildWidth="350px" spacing={4}>
+								{screenshots.map((screenshot, index) => (
+									<ImageWithCaption key={index} image={screenshot} size="sm" />
+								))}
+							</SimpleGrid>
+						</Section>
 					</VStack>
-				))}
-			</Section>
-
-			<Section section="Knowledge Gained">
-				<Block blocks={knowledgeGained} />
-			</Section>
-
-			<Section section="Challenges">
-				<Block blocks={challenges} />
-			</Section>
-
-			<Section section="What Could Have Been Different?">
-				<Block blocks={different} />
-			</Section>
-
-			<Section section="Screenshots">
-				<SimpleGrid minChildWidth="350px" spacing={4}>
-					{screenshots.map((screenshot, index) => (
-						<Image
-							key={index}
-							src={urlFor(screenshot).url()}
-							alt={screenshot.alt}
-							// layout="fill"
-							objectFit="cover"
-							width={960}
-							height={600}
-						/>
-					))}
-				</SimpleGrid>
-			</Section>
-		</FadeContainer>
+				</Container>
+			</FadeBox>
+		</>
 	)
 }
 
