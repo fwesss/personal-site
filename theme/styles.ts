@@ -144,7 +144,7 @@ export default {
 		paragraph: {
 			width: {
 				base: "clamp(30ch, 100%, 40ch)",
-				md: "clamp(45ch, 100%, 75ch)",
+				sm: "clamp(45ch, 100%, 75ch)",
 			},
 			lineHeight: "1.5",
 			fontSize: { base: "1rem", md: "1.125rem" },
@@ -153,9 +153,8 @@ export default {
 			width: {
 				base: "clamp(30ch, 100%, 40ch)",
 				sm: "clamp(38ch, 100%, 75ch)",
-				// md: "clamp(45ch, 100%, 75ch)",
 			},
-			lineHeight: "1.5",
+			lineHeight: { base: "base", xl: "short" },
 			fontSize: { base: "1rem", md: "1.125rem" },
 		},
 	},
@@ -170,11 +169,20 @@ export default {
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
 				background: mode("gray.50", "gray.900")(props),
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-				color: mode("gray.800", "gray.50")(props),
+				color: mode("gray.700", "gray.100")(props),
 				fontFeatureSettings: '"ss03", "zero", "cv08", "cv11", "kern"',
 			},
 			"p, ul, ol": {
-				marginBottom: "1.5rem",
+				marginBottom: "1rem",
+			},
+			"p + p": {
+				marginTop: "1.5rem",
+			},
+			li: {
+				lineHeight: "1.4",
+			},
+			"li::marker": {
+				color: "gray.400",
 			},
 		}),
 	},

@@ -51,7 +51,7 @@ const WrappedListItem: WrappedComponent = ({ children }) => {
 
 	return (
 		<StylesProvider value={styles}>
-			<ListItem>{children}</ListItem>
+			<ListItem fontSize="lg">{children}</ListItem>
 		</StylesProvider>
 	)
 }

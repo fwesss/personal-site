@@ -10,7 +10,9 @@ interface SectionProps {
 export const Section: FC<SectionProps> = ({ children, section }) => {
 	return (
 		<Box as="section">
-			<Heading>{section}</Heading>
+			<Heading size="2xl" mb={4}>
+				{section}
+			</Heading>
 			{children}
 		</Box>
 	)
