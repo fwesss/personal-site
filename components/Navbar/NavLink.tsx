@@ -16,7 +16,7 @@ const DesktopNavLink = React.forwardRef<Ref, Props>((props, ref) => {
 			transition="all 0.2s"
 			_hover={{
 				borderColor: "currentcolor",
-				color: useColorModeValue("blue.600", "blue.200"),
+				color: useColorModeValue("teal.600", "teal.200"),
 			}}
 			pointerEvents="all"
 			{...props}
