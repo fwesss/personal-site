@@ -10,6 +10,7 @@ import {
 } from "@chakra-ui/react"
 import * as React from "react"
 import { HiOutlineMenu, HiX } from "react-icons/hi"
+import NextLink from "next/link"
 import { NavLink } from "./NavLink"
 import { NavItemTransition, NavListTransition } from "./Transition"
 import ColorModeButton from "../ColorModeButton"
@@ -63,9 +64,9 @@ const DesktopNavContent = (props: StackProps) => {
 	return (
 		<HStack spacing="4" align="stretch" {...props}>
 			{links.map(link => (
-				<NavLink.Desktop key={link.href} href={link.href}>
-					{link.label}
-				</NavLink.Desktop>
+				<NextLink href={link.href} key={link.href} passHref>
+					<NavLink.Desktop>{link.label}</NavLink.Desktop>
+				</NextLink>
 			))}
 			<ColorModeButton />
 		</HStack>
