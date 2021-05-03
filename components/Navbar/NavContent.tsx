@@ -7,6 +7,7 @@ import {
 	StackDivider,
 	StackProps,
 	useDisclosure,
+	useColorModeValue as mode,
 } from "@chakra-ui/react"
 import * as React from "react"
 import { HiOutlineMenu, HiX } from "react-icons/hi"
@@ -15,7 +16,10 @@ import { NavLink } from "./NavLink"
 import { NavItemTransition, NavListTransition } from "./Transition"
 import ColorModeButton from "../ColorModeButton"
 
-const links = [{ label: "Projects", href: "/#projects" }]
+const links = [
+	{ label: "Projects", href: "/#projects" },
+	{ label: "Contact", href: "/#contact" },
+]
 
 const MobileNavContent = (props: BoxProps) => {
 	const { isOpen, onToggle } = useDisclosure()
@@ -33,7 +37,7 @@ const MobileNavContent = (props: BoxProps) => {
 			<NavListTransition
 				pos="absolute"
 				insetX="0"
-				bg="blue.600"
+				bg={mode("teal.300", "teal.600")}
 				zIndex="1"
 				top="64px"
 				animate={isOpen ? "enter" : "exit"}
@@ -62,7 +66,7 @@ const MobileNavContent = (props: BoxProps) => {
 
 const DesktopNavContent = (props: StackProps) => {
 	return (
-		<HStack spacing="4" align="stretch" {...props}>
+		<HStack spacing={8} align="stretch" {...props}>
 			{links.map(link => (
 				<NextLink href={link.href} key={link.href} passHref>
 					<NavLink.Desktop>{link.label}</NavLink.Desktop>
