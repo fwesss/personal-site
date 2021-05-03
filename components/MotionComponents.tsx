@@ -26,7 +26,6 @@ export const FadeContainer: FC<MotionContainerProps> = ({
 )
 
 type MotionBoxProps = Merge<HTMLChakraProps<"div">, HTMLMotionProps<"div">>
-
 const MotionBox: FC<MotionBoxProps> = motion(Box)
 
 export const FadeBox: FC<MotionBoxProps> = ({ children, ...rest }) => (
