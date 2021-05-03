@@ -10,14 +10,13 @@ export default {
 		background: mode("white", "gray.800")(props),
 	}),
 	variants: {
-		secondary: props => ({
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-			background: mode("gray.50", "gray.900")(props),
+		secondary: {
+			background: "transparent",
 			borderRadius: "0",
 			boxShadow: "0",
 			my: 10,
 			py: { base: 2, md: 3, lg: 4 },
 			transition: "background-color 0.2s ease",
-		}),
+		},
 	},
 }
