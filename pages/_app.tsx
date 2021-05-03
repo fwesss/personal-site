@@ -8,6 +8,7 @@ import { init } from "../utils/sentry"
 import theme from "../theme/index"
 import { NavContent } from "../components/Navbar/NavContent"
 import { NavLink } from "../components/Navbar/NavLink"
+import { Visualization } from "../components/Intro/Visualization"
 
 init()
 
@@ -65,6 +66,8 @@ const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
 						</Flex>
 					</Box>
 				</Box>
+
+				<Visualization />
 
 				<AnimatePresence exitBeforeEnter onExitComplete={handleExitComplete}>
 					<Component {...pageProps} err={err} key={router.route} />
