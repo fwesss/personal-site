@@ -1,4 +1,9 @@
-import { Link, HTMLChakraProps, useColorModeValue } from "@chakra-ui/react"
+import {
+	Link,
+	HTMLChakraProps,
+	useColorModeValue,
+	useColorModeValue as mode,
+} from "@chakra-ui/react"
 import * as React from "react"
 
 type Ref = HTMLAnchorElement
@@ -28,12 +33,12 @@ const DesktopNavLink = React.forwardRef<Ref, Props>((props, ref) => {
 const MobileNavLink = React.forwardRef<Ref, Props>((props, ref) => {
 	return (
 		<Link
+			color={mode("gray.900", "gray.50")}
 			display="block"
 			textAlign="center"
 			fontWeight="bold"
 			py="5"
 			fontSize="lg"
-			color="white"
 			w="full"
 			_hover={{
 				bg: "blackAlpha.200",

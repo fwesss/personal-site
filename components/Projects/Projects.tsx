@@ -1,38 +1,19 @@
-import {
-	Divider,
-	Flex,
-	Grid,
-	Heading,
-	SimpleGrid,
-	VStack,
-	Container,
-	Box,
-} from "@chakra-ui/react"
+import { Grid, SimpleGrid, VStack, Container, Box } from "@chakra-ui/react"
 import React, { FC } from "react"
 import { FeaturedProject } from "./FeaturedProject"
 import { RegularProject } from "./RegularProject"
 import { Project } from "../../studio/schema"
+import { SectionDivider } from "../SectionDivider"
 
 interface ProjectsProps {
 	projects: Project[]
+	sectionName: string
 }
 
-export const Projects: FC<ProjectsProps> = ({ projects }) => {
+export const Projects: FC<ProjectsProps> = ({ projects, sectionName }) => {
 	return (
-		<Box id="projects">
-			<Flex align="center" px={{ base: "0", md: "8" }} mb={4}>
-				<Divider />
-				<Heading
-					px={6}
-					py={12}
-					fontWeight="hairline"
-					fontFamily="mono"
-					fontSize="5xl"
-				>
-					Projects
-				</Heading>
-				<Divider />
-			</Flex>
+		<Box id={sectionName.toLowerCase()}>
+			<SectionDivider sectionName={sectionName} />
 
 			<Grid>
 				<Container maxW="7xl">
