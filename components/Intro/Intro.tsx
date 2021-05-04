@@ -62,8 +62,8 @@ export const Intro: FC = () => (
 						xl: "3xl",
 					}}
 				>
-					When I&apos;m not at my desk, I&apos;m rocking climbing, backpacking
-					in the Sierra Nevada, playing bass and guitar, and spending a bit too
+					When I&apos;m not at my desk, I&apos;m rock climbing, backpacking in
+					the Sierra Nevada, playing bass and guitar, and spending a bit too
 					much time brewing the perfect cup of coffee.
 				</Text>
 			</Box>
