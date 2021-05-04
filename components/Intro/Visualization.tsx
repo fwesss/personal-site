@@ -1,4 +1,4 @@
-import { Box, useInterval } from "@chakra-ui/react"
+import { Box } from "@chakra-ui/react"
 import {
 	forceLink,
 	forceSimulation,
@@ -37,7 +37,6 @@ export const Visualization: FC = () => {
 	const density = (factor = 1) => factor * 200000
 
 	const [nodes, setNodes] = useState(undefined as Node[])
-	const [reLink, setReLink] = useState(false)
 	const [{ width, height }, setSize] = useState({
 		width: undefined as number,
 		height: undefined as number,
@@ -80,7 +79,6 @@ export const Visualization: FC = () => {
 				})
 
 			links = genLinks(Math.floor((width * height) / density(1)))
-			setReLink(false)
 
 			const colors = (scaleQuantize()
 				.domain([minRadius, maxRadius])
@@ -119,8 +117,8 @@ export const Visualization: FC = () => {
 					context.fillStyle = colors(node.r)
 					context.fill()
 					context.strokeStyle = colors(node.r)
-					context.stroke()
 				})
+				context.stroke()
 			}
 
 			const simulation = forceSimulation(nodes)
@@ -133,15 +131,12 @@ export const Visualization: FC = () => {
 				.force("collide", forceCollide().strength(0.1).iterations(1).radius(50))
 				.force("charge", forceManyBody().strength(-2))
 				.force("bound", forceBound(0.1, 50, 0, width, 0, height))
+				.velocityDecay(0.2)
 				.alphaDecay(0)
 
 			simulation.on("tick", ticked)
 		}
-	}, [height, nodes, reLink, width])
-
-	useInterval(() => {
-		setReLink(true)
-	}, 7500)
+	}, [height, nodes, width])
 
 	return (
 		<Box
