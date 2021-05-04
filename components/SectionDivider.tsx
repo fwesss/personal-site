@@ -1,4 +1,4 @@
-import { Divider, Flex, Heading } from "@chakra-ui/react"
+import { Center, Heading } from "@chakra-ui/react"
 import { FC } from "react"
 
 interface SectionDividerProps {
@@ -6,8 +6,7 @@ interface SectionDividerProps {
 }
 
 export const SectionDivider: FC<SectionDividerProps> = ({ sectionName }) => (
-	<Flex align="center" px={{ base: "0", md: "8" }} mb={4}>
-		<Divider />
+	<Center mb={4}>
 		<Heading
 			px={6}
 			py={12}
@@ -17,6 +16,5 @@ export const SectionDivider: FC<SectionDividerProps> = ({ sectionName }) => (
 		>
 			{sectionName}
 		</Heading>
-		<Divider />
-	</Flex>
+	</Center>
 )

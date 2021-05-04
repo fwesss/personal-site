@@ -1,14 +1,5 @@
 import { FC } from "react"
-import {
-	Box,
-	Button,
-	Divider,
-	HStack,
-	Icon,
-	Link,
-	Text,
-	VStack,
-} from "@chakra-ui/react"
+import { Box, Button, HStack, Icon, Link, Text, VStack } from "@chakra-ui/react"
 import {
 	AiOutlineLinkedin,
 	AiOutlineMail,
@@ -56,7 +47,6 @@ export const Contact: FC<ContactProps> = ({ sectionName }) => (
 			</VStack>
 
 			<HStack justifyContent="center" w="60vw">
-				<Divider />
 				<Link
 					href="https://github.com/fwesss/"
 					isExternal
@@ -74,7 +64,6 @@ export const Contact: FC<ContactProps> = ({ sectionName }) => (
 				>
 					<Icon boxSize="2rem" as={AiOutlineLinkedin} />
 				</Link>
-				<Divider />
 			</HStack>
 
 			<HStack>
