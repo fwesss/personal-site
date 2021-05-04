@@ -5,9 +5,8 @@ import {
 	forceSimulation,
 	scaleQuantize,
 	svg,
-	forceManyBody,
-	forceCenter,
 	forceCollide,
+	forceManyBody,
 } from "d3"
 import { FC, MutableRefObject, useEffect, useRef, useState } from "react"
 import theme from "../../theme/index"
@@ -38,21 +37,13 @@ export const Visualization: FC = () => {
 	const maxRadius = 35
 	const density = (factor = 1) => factor * 200000
 
-	const [nodes, setnodes] = useState(undefined as Node[])
-	const [links, setLinks] = useState(undefined as Link[])
-	const [gravity, setGravity] = useState(-20)
-
-	const colors = scaleQuantize()
-		.domain([minRadius, maxRadius])
-		.range(
-			(Object.values(theme.colors.teal)
-				.reverse()
-				.slice(2, 8) as unknown) as number[]
-		)
+	const [nodes, setNodes] = useState(undefined as Node[])
+	const [reLink, setReLink] = useState(false)
 
 	useEffect(() => {
-		type GenNodes = (amount: number, width: number, height: number) => Node[]
-		const genNodes: GenNodes = (amount, width, height) =>
+		const { offsetWidth: width, offsetHeight: height } = parentRef.current
+		type GenNodes = (amount: number) => Node[]
+		const genNodes: GenNodes = amount =>
 			Array.from(Array(amount).keys()).map((_, i) => ({
 				x: getRandomInt(1, width),
 				y: getRandomInt(1, height),
@@ -60,37 +51,35 @@ export const Visualization: FC = () => {
 				id: i,
 			}))
 
-		if (parentRef.current) {
-			const { offsetWidth: width, offsetHeight: height } = parentRef.current
-			setnodes(
-				genNodes(Math.floor((width * height) / density(0.7)), width, height)
-			)
-		}
-	}, [parentRef])
+		setNodes(genNodes(Math.floor((width * height) / density(0.35))))
+	}, [])
 
 	useEffect(() => {
-		type GenLinks = (amount: number, nodesToConnect: Node[]) => Link[]
-		const genLinks: GenLinks = (amount, nodesToConnect) =>
-			Array.from(Array(amount).keys()).map(() => {
-				const source =
-					nodesToConnect[Math.floor(Math.random() * nodesToConnect.length)]
-				const target =
-					nodesToConnect[Math.floor(Math.random() * nodesToConnect.length)]
-				const distance = getRandomInt(500, 750)
-
-				return { source, target, distance }
-			})
-
-		if (parentRef.current && nodes) {
+		if (nodes) {
 			const { offsetWidth: width, offsetHeight: height } = parentRef.current
-			setLinks(genLinks(Math.floor((width * height) / density(1)), nodes))
-		}
-	}, [nodes, parentRef])
+			let links: Link[] = []
 
-	useEffect(() => {
-		const { offsetWidth: width, offsetHeight: height } = parentRef.current
+			type GenLinks = (amount: number) => Link[]
+			const genLinks: GenLinks = amount =>
+				Array.from(Array(amount).keys()).map(() => {
+					const source = nodes[Math.floor(Math.random() * nodes.length)]
+					const target = nodes[Math.floor(Math.random() * nodes.length)]
+					const distance = getRandomInt(150, width * 0.6)
 
-		if (nodes && links) {
+					return { source, target, distance }
+				})
+
+			links = genLinks(Math.floor((width * height) / density(1)))
+			setReLink(false)
+
+			const colors = scaleQuantize()
+				.domain([minRadius, maxRadius])
+				.range(
+					(Object.values(theme.colors.teal)
+						.reverse()
+						.slice(2, 8) as unknown) as number[]
+				)
+
 			const svgElement = select(svgRef.current)
 
 			const simulation = forceSimulation(nodes)
@@ -98,18 +87,14 @@ export const Visualization: FC = () => {
 					"link",
 					forceLink(links)
 						.distance(d => d.distance)
-						.strength(1)
+						.strength(0.006)
 				)
-				.force("charge", forceManyBody().strength(gravity))
-				.force("collide", forceCollide().strength(1).iterations(1).radius(50))
-				.force("bound", forceBound(1, 50, 0, width, 0, height))
 				.force(
-					"center",
-					forceCenter()
-						.x(width / 2)
-						.y(height / 2)
-						.strength(1)
+					"collide",
+					forceCollide().strength(0.5).iterations(1).radius(100)
 				)
+				.force("charge", forceManyBody().strength(-20))
+				.force("bound", forceBound(0.1, 25, 0, width, 0, height))
 				.alphaDecay(0)
 
 			const link = svgElement
@@ -138,19 +123,19 @@ export const Visualization: FC = () => {
 			link.transition().duration(1400).attr("opacity", 0.5)
 
 			simulation.on("tick", () => {
+				node.attr("cx", d => d.x).attr("cy", d => d.y)
+
 				link
 					.attr("x1", d => d.source.x)
 					.attr("y1", d => d.source.y)
 					.attr("x2", d => d.target.x)
 					.attr("y2", d => d.target.y)
-
-				node.attr("cx", d => d.x).attr("cy", d => d.y)
 			})
 		}
-	}, [colors, gravity, links, nodes])
+	}, [nodes, reLink])
 
 	useInterval(() => {
-		setGravity(gravity < 0 ? getRandomInt(20, 40) : getRandomInt(-40, -20))
+		setReLink(true)
 	}, 7500)
 
 	return (
