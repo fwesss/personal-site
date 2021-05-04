@@ -1,13 +1,11 @@
 import { Box, useInterval } from "@chakra-ui/react"
 import {
-	select,
 	forceLink,
 	forceSimulation,
 	scaleQuantize,
-	svg,
-	forceManyBody,
-	forceCenter,
 	forceCollide,
+	forceManyBody,
+	ScaleQuantize,
 } from "d3"
 import { FC, MutableRefObject, useEffect, useRef, useState } from "react"
 import theme from "../../theme/index"
@@ -15,7 +13,7 @@ import forceBound from "./forceBound"
 
 export const Visualization: FC = () => {
 	const parentRef = useRef(null) as MutableRefObject<null | HTMLDivElement>
-	const svgRef = useRef()
+	const canvasRef = useRef(null) as MutableRefObject<null | HTMLCanvasElement>
 
 	const getRandomInt = (min, max) =>
 		Math.floor(
@@ -38,119 +36,111 @@ export const Visualization: FC = () => {
 	const maxRadius = 35
 	const density = (factor = 1) => factor * 200000
 
-	const [nodes, setnodes] = useState(undefined as Node[])
-	const [links, setLinks] = useState(undefined as Link[])
-	const [gravity, setGravity] = useState(-20)
-
-	const colors = scaleQuantize()
-		.domain([minRadius, maxRadius])
-		.range(
-			(Object.values(theme.colors.teal)
-				.reverse()
-				.slice(2, 8) as unknown) as number[]
-		)
+	const [nodes, setNodes] = useState(undefined as Node[])
+	const [reLink, setReLink] = useState(false)
+	const [{ width, height }, setSize] = useState({
+		width: undefined as number,
+		height: undefined as number,
+	})
 
 	useEffect(() => {
-		type GenNodes = (amount: number, width: number, height: number) => Node[]
-		const genNodes: GenNodes = (amount, width, height) =>
-			Array.from(Array(amount).keys()).map((_, i) => ({
-				x: getRandomInt(1, width),
-				y: getRandomInt(1, height),
-				r: getRandomInt(minRadius, maxRadius),
-				id: i,
-			}))
+		setSize({
+			width: parentRef.current.offsetWidth,
+			height: parentRef.current.offsetHeight,
+		})
+	}, [])
 
-		if (parentRef.current) {
-			const { offsetWidth: width, offsetHeight: height } = parentRef.current
-			setnodes(
-				genNodes(Math.floor((width * height) / density(0.7)), width, height)
-			)
+	useEffect(() => {
+		if (width && height) {
+			type GenNodes = (amount: number) => Node[]
+			const genNodes: GenNodes = amount =>
+				Array.from(Array(amount).keys()).map((_, i) => ({
+					x: getRandomInt(1, width),
+					y: getRandomInt(1, height),
+					r: getRandomInt(minRadius, maxRadius),
+					id: i,
+				}))
+
+			setNodes(genNodes(Math.floor((width * height) / density(0.35))))
 		}
-	}, [parentRef])
+	}, [height, width])
 
 	useEffect(() => {
-		type GenLinks = (amount: number, nodesToConnect: Node[]) => Link[]
-		const genLinks: GenLinks = (amount, nodesToConnect) =>
-			Array.from(Array(amount).keys()).map(() => {
-				const source =
-					nodesToConnect[Math.floor(Math.random() * nodesToConnect.length)]
-				const target =
-					nodesToConnect[Math.floor(Math.random() * nodesToConnect.length)]
-				const distance = getRandomInt(500, 750)
+		if (nodes) {
+			let links: Link[] = []
 
-				return { source, target, distance }
-			})
+			type GenLinks = (amount: number) => Link[]
+			const genLinks: GenLinks = amount =>
+				Array.from(Array(amount).keys()).map(() => {
+					const source = nodes[Math.floor(Math.random() * nodes.length)]
+					const target = nodes[Math.floor(Math.random() * nodes.length)]
+					const distance = getRandomInt(150, width * 0.6)
 
-		if (parentRef.current && nodes) {
-			const { offsetWidth: width, offsetHeight: height } = parentRef.current
-			setLinks(genLinks(Math.floor((width * height) / density(1)), nodes))
-		}
-	}, [nodes, parentRef])
+					return { source, target, distance }
+				})
 
-	useEffect(() => {
-		const { offsetWidth: width, offsetHeight: height } = parentRef.current
+			links = genLinks(Math.floor((width * height) / density(1)))
+			setReLink(false)
 
-		if (nodes && links) {
-			const svgElement = select(svgRef.current)
+			const colors = (scaleQuantize()
+				.domain([minRadius, maxRadius])
+				.range(
+					(Object.values(theme.colors.teal)
+						.reverse()
+						.slice(2, 8) as unknown) as number[]
+				) as unknown) as ScaleQuantize<string | never>
+
+			const canvas = canvasRef.current
+			const context = canvas.getContext("2d")
+
+			type DrawLink = (d: Link) => void
+			const drawLink: DrawLink = d => {
+				context.moveTo(d.source.x, d.source.y)
+				context.lineTo(d.target.x, d.target.y)
+			}
+
+			type DrawNode = (d: Node) => void
+			const drawNode: DrawNode = d => {
+				context.moveTo(d.x + d.r, d.y)
+				context.arc(d.x, d.y, d.r, 0, 2 * Math.PI)
+			}
+
+			const ticked = () => {
+				context.clearRect(0, 0, width, height)
+
+				context.beginPath()
+				links.forEach(drawLink)
+				context.strokeStyle = `${theme.colors.gray["200"]}88`
+				context.stroke()
+
+				nodes.forEach(node => {
+					context.beginPath()
+					drawNode(node)
+					context.fillStyle = colors(node.r)
+					context.fill()
+					context.strokeStyle = colors(node.r)
+					context.stroke()
+				})
+			}
 
 			const simulation = forceSimulation(nodes)
 				.force(
 					"link",
 					forceLink(links)
 						.distance(d => d.distance)
-						.strength(1)
+						.strength(0.0004)
 				)
-				.force("charge", forceManyBody().strength(gravity))
-				.force("collide", forceCollide().strength(1).iterations(1).radius(50))
-				.force("bound", forceBound(1, 50, 0, width, 0, height))
-				.force(
-					"center",
-					forceCenter()
-						.x(width / 2)
-						.y(height / 2)
-						.strength(1)
-				)
+				.force("collide", forceCollide().strength(0.1).iterations(1).radius(50))
+				.force("charge", forceManyBody().strength(-2))
+				.force("bound", forceBound(0.1, 50, 0, width, 0, height))
 				.alphaDecay(0)
 
-			const link = svgElement
-				.selectAll("line")
-				.data(links)
-				.join("line")
-				.attr("stroke", theme.colors.gray["200"])
-				.attr("opacity", 0)
-
-			const node = svgElement
-				.selectAll("circle")
-				.data(nodes)
-				.enter()
-				.append("circle")
-				.attr("r", 0)
-				.attr("cx", d => d.x)
-				.attr("cy", d => d.y)
-				.attr("fill", d => colors(d.r))
-
-			node
-				.transition()
-				.duration(400)
-				.delay(() => Math.random() * 400)
-				.attr("r", d => d.r)
-
-			link.transition().duration(1400).attr("opacity", 0.5)
-
-			simulation.on("tick", () => {
-				link
-					.attr("x1", d => d.source.x)
-					.attr("y1", d => d.source.y)
-					.attr("x2", d => d.target.x)
-					.attr("y2", d => d.target.y)
-
-				node.attr("cx", d => d.x).attr("cy", d => d.y)
-			})
+			simulation.on("tick", ticked)
 		}
-	}, [colors, gravity, links, nodes])
+	}, [height, nodes, reLink, width])
 
 	useInterval(() => {
-		setGravity(gravity < 0 ? getRandomInt(20, 40) : getRandomInt(-40, -20))
+		setReLink(true)
 	}, 7500)
 
 	return (
@@ -162,7 +152,7 @@ export const Visualization: FC = () => {
 			top={0}
 			zIndex={-1}
 		>
-			<svg width="100%" height="100%" ref={svgRef} />
+			<canvas id="vis" width={width} height={height} ref={canvasRef} />
 		</Box>
 	)
 }
