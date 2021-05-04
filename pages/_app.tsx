@@ -59,10 +59,9 @@ const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
 							fontSize={{ base: "md", sm: "lg", md: "xl" }}
 						>
 							<NextLink href="/" passHref>
-								<NavLink.Desktop h={10}>WF</NavLink.Desktop>
+								<NavLink h={10}>WF</NavLink>
 							</NextLink>
-							<NavContent.Desktop display={{ base: "none", md: "flex" }} />
-							<NavContent.Mobile display={{ base: "flex", md: "none" }} />
+							<NavContent display="flex" />
 						</Flex>
 					</Box>
 				</Box>
