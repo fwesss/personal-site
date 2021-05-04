@@ -18,7 +18,7 @@ export const FadeContainer: FC<MotionContainerProps> = ({
 		exit={{ opacity: 0 }}
 		initial={{ opacity: 0 }}
 		animate={{ opacity: 1 }}
-		transition={{ delay: 0.2 }}
+		transition={{ duration: 0.175 }}
 		{...rest}
 	>
 		{children}
@@ -33,7 +33,7 @@ export const FadeBox: FC<MotionBoxProps> = ({ children, ...rest }) => (
 		exit={{ opacity: 0 }}
 		initial={{ opacity: 0 }}
 		animate={{ opacity: 1 }}
-		transition={{ delay: 0.2 }}
+		transition={{ duration: 0.175 }}
 		{...rest}
 	>
 		{children}
