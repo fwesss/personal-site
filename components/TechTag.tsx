@@ -12,6 +12,7 @@ import {
 	SiJest,
 	SiPython,
 	SiMapbox,
+	SiWebgl,
 } from "react-icons/si"
 import { DiCode } from "react-icons/di"
 import { IoLogoVercel } from "react-icons/io5"
@@ -42,6 +43,7 @@ export const TechTag: FC<TechTagProps> = ({
 		Python: SiPython,
 		Mapbox: SiMapbox,
 		Vercel: IoLogoVercel,
+		WebGL: SiWebgl,
 	}
 
 	return (

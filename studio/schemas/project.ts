@@ -146,6 +146,7 @@ export default {
 					{ title: "D3", value: "D3" },
 					{ title: "Jest", value: "Jest" },
 					{ title: "Vercel", value: "Vercel" },
+					{ title: "WebGL", value: "WebGL" },
 				],
 			},
 			description: "List of technologies used to build.",
