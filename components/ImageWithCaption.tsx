@@ -20,11 +20,13 @@ import { Project } from "../studio/schema"
 interface ImageWithCaptionProps {
 	image: Project["mainImage"] | Project["screenshots"][0]
 	size: string
+	priority?: boolean
 }
 
 export const ImageWithCaption: FC<ImageWithCaptionProps> = ({
 	image,
 	size,
+	priority = false,
 }) => {
 	const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -60,6 +62,7 @@ export const ImageWithCaption: FC<ImageWithCaptionProps> = ({
 										xl: "32rem",
 								  }
 						}
+						w="100%"
 						bg="gray.900"
 						zIndex={1}
 						opacity={0}
@@ -75,8 +78,13 @@ export const ImageWithCaption: FC<ImageWithCaptionProps> = ({
 							textStyle="paragraph"
 							color="gray.50"
 							as="figcaption"
-							fontSize={{ base: "0.75rem", sm: "1rem" }}
-							px={size === "sm" && { base: 0, sm: 4, lg: 16 }}
+							fontSize={{
+								base: "0.75rem",
+								sm: "1rem",
+								md: "0.875rem",
+								lg: "1rem",
+							}}
+							px={size === "sm" && { base: 0, sm: 4, md: 16 }}
 						>
 							{image.caption}
 						</Text>
@@ -96,6 +104,7 @@ export const ImageWithCaption: FC<ImageWithCaptionProps> = ({
 						layout="fill"
 						src={urlFor(image).url()}
 						alt={image.alt}
+						priority={priority}
 					/>
 				</Center>
 			</Box>

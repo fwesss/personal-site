@@ -98,8 +98,21 @@ const block: BlockRenderer = ({
 			}
 		}
 
+		const convertTag = inTag => {
+			switch (inTag) {
+				case "h1":
+					return "h3"
+				case "h2":
+					return "h4"
+				case "h3":
+					return "h5"
+				default:
+					return "h6"
+			}
+		}
+
 		return (
-			<Heading as={tag} size={size || getSize(tag[1])}>
+			<Heading as={convertTag(tag)} size={size || getSize(convertTag(tag)[1])}>
 				{children}
 			</Heading>
 		)

@@ -88,7 +88,7 @@ const Project: Project = ({
 					rounded={{ base: "0", xl: "xl" }}
 				>
 					<VStack maxW="clamp(45ch, 100%, 75ch)" mx="auto" spacing={6}>
-						<ImageWithCaption image={mainImage} size="lg" />
+						<ImageWithCaption image={mainImage} size="lg" priority />
 
 						<Section section="Purpose">
 							<Block blocks={purpose} />
@@ -115,7 +115,7 @@ const Project: Project = ({
 						</Section>
 
 						<Section section="Screenshots">
-							<SimpleGrid minChildWidth="350px" spacing={4}>
+							<SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
 								{screenshots.map((screenshot, index) => (
 									<ImageWithCaption key={index} image={screenshot} size="sm" />
 								))}
