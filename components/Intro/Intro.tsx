@@ -8,7 +8,7 @@ export const Intro: FC = () => (
 			align="center"
 			bottom="4rem"
 			position="relative"
-			ps={{ base: "2", md: "24", lg: "32", xl: "48" }}
+			ps={{ base: "8", md: "24", lg: "32", xl: "48" }}
 			pe={{ base: "7", md: "6", lg: "12", xl: "24" }}
 		>
 			<Box>
