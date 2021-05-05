@@ -2861,6 +2861,15 @@
   resolved "https://registry.yarnpkg.com/@types/prop-types/-/prop-types-15.7.3.tgz#2ab0d5da2e5815f94b0b9d4b95d1e5f243ab2ca7"
   integrity sha512-KfRL3PuHmqQLOG+2tGpRO26Ctg+Cq1E01D2DMriKEATHgWLfeNDmq9e29Q9WIky0dQ3NPkd1mzYH8Lm936Z9qw==
 
+"@types/react@*":
+  version "17.0.5"
+  resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.5.tgz#3d887570c4489011f75a3fc8f965bf87d09a1bea"
+  integrity sha512-bj4biDB9ZJmGAYTWSKJly6bMr4BLUiBrx9ujiJEoP9XIDY9CTaPGxE5QWN/1WjpPLzYF7/jRNnV2nNxNe970sw==
+  dependencies:
+    "@types/prop-types" "*"
+    "@types/scheduler" "*"
+    csstype "^3.0.2"
+
 "@types/react@^17.0.0", "@types/react@^17.0.3":
   version "17.0.3"
   resolved "https://registry.yarnpkg.com/@types/react/-/react-17.0.3.tgz#ba6e215368501ac3826951eef2904574c262cc79"
@@ -2894,6 +2903,13 @@
   version "1.4.2"
   resolved "https://registry.yarnpkg.com/@types/tinycolor2/-/tinycolor2-1.4.2.tgz#721ca5c5d1a2988b4a886e35c2ffc5735b6afbdf"
   integrity sha512-PeHg/AtdW6aaIO2a+98Xj7rWY4KC1E6yOy7AFknJQ7VXUGNrMlyxDFxJo7HqLtjQms/ZhhQX52mLVW/EX3JGOw==
+
+"@types/use-resize-observer@^6.0.0":
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/@types/use-resize-observer/-/use-resize-observer-6.0.0.tgz#d1b162b2733b22225908a7877ca7115c67f3752e"
+  integrity sha512-8RD06szR+wzHpfCBFbcTEQ0OCoogoSWCyyUmWyqc5qGG2fa1sOUdwNte5dwoJWG/sh5sBU0QVZ1+9zcQGLUSVg==
+  dependencies:
+    "@types/react" "*"
 
 "@types/warning@^3.0.0":
   version "3.0.0"
@@ -10332,6 +10348,11 @@ reselect@^4.0.0:
   resolved "https://registry.yarnpkg.com/reselect/-/reselect-4.0.0.tgz#f2529830e5d3d0e021408b246a206ef4ea4437f7"
   integrity sha512-qUgANli03jjAyGlnbYVAV5vvnOmJnODyABz51RdBN7M4WaVu8mecZWgyQNkG8Yqe3KRGRt0l4K4B3XVEULC4CA==
 
+resize-observer-polyfill@^1.5.1:
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/resize-observer-polyfill/-/resize-observer-polyfill-1.5.1.tgz#0e9020dd3d21024458d4ebd27e23e40269810464"
+  integrity sha512-LwZrotdHOo12nQuZlHEmtuXdqGoOD0OhaxopaNFxWzInpEgaLWoVuAMbTzixuosCx2nEG58ngzW3vxdWoxIgdg==
+
 resolve-cwd@^3.0.0:
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/resolve-cwd/-/resolve-cwd-3.0.0.tgz#0f0075f1bb2544766cf73ba6a6e2adfebcb13f2d"
@@ -11833,6 +11854,13 @@ use-deep-compare-effect@^1.6.1:
     "@babel/runtime" "^7.12.5"
     "@types/react" "^17.0.0"
     dequal "^2.0.2"
+
+use-resize-observer@^7.0.0:
+  version "7.0.0"
+  resolved "https://registry.yarnpkg.com/use-resize-observer/-/use-resize-observer-7.0.0.tgz#15f0efbd5a4e08a8cc51901f21a89ba836f2116e"
+  integrity sha512-+RjrQsk/mL8aKy4TGBDiPkUv6whyeoGDMIZYk0gOGHOlnrsjImC+jG6lfAFcBCKAG9epGRL419adhDNdkDCQkA==
+  dependencies:
+    resize-observer-polyfill "^1.5.1"
 
 use-sidecar@^1.0.1:
   version "1.0.5"

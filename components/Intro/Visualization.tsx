@@ -1,4 +1,3 @@
-import { Box } from "@chakra-ui/react"
 import {
 	forceLink,
 	forceSimulation,
@@ -8,11 +7,14 @@ import {
 	ScaleQuantize,
 } from "d3"
 import { FC, MutableRefObject, useEffect, useRef, useState } from "react"
+import useResizeObserver from "use-resize-observer"
+import { Box } from "@chakra-ui/react"
+import { motion } from "framer-motion"
 import theme from "../../theme/index"
 import forceBound from "./forceBound"
 
 export const Visualization: FC = () => {
-	const parentRef = useRef(null) as MutableRefObject<null | HTMLDivElement>
+	// const parentRef = useRef(null) as MutableRefObject<null | HTMLDivElement>
 	const canvasRef = useRef(null) as MutableRefObject<null | HTMLCanvasElement>
 
 	const getRandomInt = (min, max) =>
@@ -37,17 +39,11 @@ export const Visualization: FC = () => {
 	const density = (factor = 1) => factor * 200000
 
 	const [nodes, setNodes] = useState(undefined as Node[])
-	const [{ width, height }, setSize] = useState({
-		width: undefined as number,
-		height: undefined as number,
-	})
-
-	useEffect(() => {
-		setSize({
-			width: parentRef.current.offsetWidth,
-			height: parentRef.current.offsetHeight,
-		})
-	}, [])
+	const {
+		ref: parentRef,
+		width = 1000,
+		height = 1000,
+	} = useResizeObserver<HTMLDivElement>()
 
 	useEffect(() => {
 		if (width && height) {
@@ -147,7 +143,16 @@ export const Visualization: FC = () => {
 			top={0}
 			zIndex={-1}
 		>
-			<canvas id="vis" width={width} height={height} ref={canvasRef} />
+			<motion.canvas
+				id="vis"
+				width={width}
+				height={height}
+				ref={canvasRef}
+				exit={{ opacity: 0 }}
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				transition={{ duration: 0.175 }}
+			/>
 		</Box>
 	)
 }
