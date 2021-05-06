@@ -1,7 +1,7 @@
 import { Box, ChakraProvider, Flex } from "@chakra-ui/react"
 import { AppProps } from "next/app"
 import NextLink from "next/link"
-import { AnimatePresence } from "framer-motion"
+import { AnimatePresence, AnimateSharedLayout } from "framer-motion"
 import React, { FC } from "react"
 import { useRouter } from "next/router"
 import { init } from "../utils/sentry"
@@ -66,11 +66,13 @@ const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
 					</Box>
 				</Box>
 
-				<Visualization />
+				<AnimateSharedLayout type="crossfade">
+					<Visualization />
 
-				<AnimatePresence exitBeforeEnter onExitComplete={handleExitComplete}>
-					<Component {...pageProps} err={err} key={router.route} />
-				</AnimatePresence>
+					<AnimatePresence exitBeforeEnter onExitComplete={handleExitComplete}>
+						<Component {...pageProps} err={err} key={router.route} />
+					</AnimatePresence>
+				</AnimateSharedLayout>
 			</Box>
 		</ChakraProvider>
 	)
