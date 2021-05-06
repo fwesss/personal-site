@@ -1,37 +1,118 @@
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![Release](https://github.com/fwesss/personal-site/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/fwesss/personal-site/actions/workflows/main.yml)
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Portfolio
 
-## Getting Started
+This is the site for my portfolio where I can showcase my work and provide some
+information about myself and how to contact me.
 
-First, run the development server:
+I had put off making a portfolio for a long time but it felt like a disservice
+to myself. It's hard to sell oneself as a web developer when there's personal
+website to point to and pointing to Github profile isn't necessarily what
+everyone is looking for. This site serves as a place to show my work.
 
-```bash
-npm run dev
-# or
-yarn dev
-```
+## Demo
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+https://www.wesfeller.dev/
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+## Features
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+- Light/dark mode toggle
+- D3 Visualization
+- Responsive
+- Accessible
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+## Tech Stack
 
-## Learn More
+TypeScript, Next.js, React, Chakra-UI, D3, Sanity.io
 
-To learn more about Next.js, take a look at the following resources:
+## Lessons Learned
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### D3 Force + React
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+This challenge is back again. It was much easier this time but I ran into a
+performance issue that took longer than it should have to fix.
 
-## Deploy on Vercel
+#### How The Bubbles Work
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+I wanted a visualization that was purely decorative, but not distracting. The
+original idea was bubbles connected to each other by links they move around
+somehow. They should not leave the boundaries of the page and the simulation
+should avoid becoming stale.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+A number of nodes are generated based on the size of the page (not viewport). A
+random size and coordinate are assigned to each node. A linking function will
+then generate a random number of links based on the size of the page. Not every
+node will be linked and some nodes may have many links. The linking function
+randomly assigns a node to each end of the link.
+
+##### Forces
+
+There are number of forces at work in the simulation.
+
+###### Link
+
+The linking force is the pull between nodes connected by a link. Links nodes
+will either move away or closer to each other until the distance between them
+matches the links' assigned distance.
+
+###### Collide
+
+The bubbles will not overlap and have an invisible barrier around them that
+pushes other nodes away.
+
+###### Many Body
+
+All nodes will push each other away. Larger bodies of nodes will have more push
+force.
+
+###### Boundary
+
+Nodes will not leave the canvas. There is a barrier just shy of the screen edge
+that they will not pass.
+
+##### Avoiding Entropy
+
+To avoid nodes wandering their way to edges and laying themselves out in a
+border along the screen, nodes are randomly re-linked every 7.5 seconds. This
+keeps them all moving away or towards each other in different directions and
+keeps everything moving along.
+
+This is where we our bug comes from.
+
+#### The Memory Leak
+
+I had pushed the branch to production and showed my wife before I realized that
+something wasn't right. It worked perfectly when I had been testing it but when
+I had left the tab open for a few minutes, I found that the site had slowed to a
+crawl and I was running at about 5fps. I refreshed and it was back to 60fps like
+it was when I tested it.
+
+I pulled up the performance tab in Firefox and saw predictable drops in
+performance every 7.5 seconds. This had to be my re-linking function. I pulled
+up the memory tab in Chrome and took a snapshot of the heap after a while and
+could see dozens of allocations for timers which must have been due to the D3's
+simulation.
+
+Every 7.5 seconds, a reLink flag switched to true and because it was a
+dependency in my useEffect running the simulation, the simulation would re-run,
+then set flag back to false. This is exactly what I wanted to happen.
+
+What I did not understand was that every time the simulation ran, it actually
+created a new instance of the simulation. Those timers were all internal to the
+force functions it was calling.
+
+#### Clean Up Your Listeners
+
+The solution to this problem was to clean up the simulation in the useEffect
+return. I don't use the return in a useEffect often so it wasn't immediately
+obvious. As soon as I added, performance shot back up and I felt like I knew
+what I was doing once again.
+
+## Acknowledgements
+
+This is my favorite website and her articles on D3 are extremely helpful and
+easy to follow. I highly recommend anyone who has an interest in D3 or
+visualizations to check out her site and book.
+
+- [Amelia Wattenberger's Blog](https://wattenberger.com/blog)
