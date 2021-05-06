@@ -8,7 +8,7 @@ import {
 } from "d3"
 import { FC, MutableRefObject, useEffect, useRef, useState } from "react"
 import useResizeObserver from "use-resize-observer"
-import { Box } from "@chakra-ui/react"
+import { Box, useInterval } from "@chakra-ui/react"
 import { motion } from "framer-motion"
 import theme from "../../theme/index"
 import forceBound from "./forceBound"
@@ -44,6 +44,7 @@ export const Visualization: FC = () => {
 		width = 1000,
 		height = 1000,
 	} = useResizeObserver<HTMLDivElement>()
+	const [relink, setRelink] = useState(false)
 
 	useEffect(() => {
 		if (width && height) {
@@ -60,6 +61,7 @@ export const Visualization: FC = () => {
 		}
 	}, [height, width])
 
+	// eslint-disable-next-line consistent-return
 	useEffect(() => {
 		if (nodes) {
 			let links: Link[] = []
@@ -75,6 +77,7 @@ export const Visualization: FC = () => {
 				})
 
 			links = genLinks(Math.floor((width * height) / density(1)))
+			setRelink(false)
 
 			const colors = (scaleQuantize()
 				.domain([minRadius, maxRadius])
@@ -131,8 +134,17 @@ export const Visualization: FC = () => {
 				.alphaDecay(0)
 
 			simulation.on("tick", ticked)
+
+			return () => {
+				simulation.on("tick", null)
+				simulation.stop()
+			}
 		}
-	}, [height, nodes, width])
+	}, [height, nodes, relink, width])
+
+	useInterval(() => {
+		setRelink(true)
+	}, 7500)
 
 	return (
 		<Box
@@ -151,7 +163,7 @@ export const Visualization: FC = () => {
 				exit={{ opacity: 0 }}
 				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
-				transition={{ duration: 0.175 }}
+				transition={{ duration: 0.125 }}
 			/>
 		</Box>
 	)
