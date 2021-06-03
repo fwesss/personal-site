@@ -1,9 +1,11 @@
 import { Grid, SimpleGrid, VStack, Container, Box } from "@chakra-ui/react"
 import React, { FC } from "react"
-import { FeaturedProject } from "./FeaturedProject"
-import { RegularProject } from "./RegularProject"
+
 import { Project } from "../../studio/schema"
 import { SectionDivider } from "../SectionDivider"
+
+import { FeaturedProject } from "./FeaturedProject"
+import { RegularProject } from "./RegularProject"
 
 interface ProjectsProps {
 	projects: Project[]
@@ -37,22 +39,22 @@ export const Projects: FC<ProjectsProps> = ({ projects, sectionName }) => {
 								) => (
 									<FeaturedProject
 										key={_id}
-										title={title}
-										summary={summary}
-										mainImage={mainImage}
-										keyFeatures={keyFeatures}
-										slug={slug}
-										techStack={techStack}
 										deployedUrl={deployedUrl}
+										keyFeatures={keyFeatures}
+										mainImage={mainImage}
 										repoUrl={repoUrl}
 										reversed={index % 2 === 1}
+										slug={slug}
+										summary={summary}
+										techStack={techStack}
+										title={title}
 									/>
 								)
 							)}
 					</VStack>
 				</Container>
-				<Container maxW="7xl" variant="secondary" px={8}>
-					<SimpleGrid mt="14" columns={{ base: 1, lg: 2, xl: 3 }} spacing="4">
+				<Container maxW="7xl" px={8} variant="secondary">
+					<SimpleGrid columns={{ base: 1, lg: 2, xl: 3 }} mt="14" spacing="4">
 						{projects
 							.filter(project => !project.featured)
 							.map(
@@ -68,13 +70,13 @@ export const Projects: FC<ProjectsProps> = ({ projects, sectionName }) => {
 								}) => (
 									<RegularProject
 										key={_id}
-										title={title}
+										deployedUrl={deployedUrl}
 										mainImage={mainImage}
+										repoUrl={repoUrl}
+										slug={slug}
 										summary={summary}
 										techStack={techStack}
-										slug={slug}
-										repoUrl={repoUrl}
-										deployedUrl={deployedUrl}
+										title={title}
 									/>
 								)
 							)}

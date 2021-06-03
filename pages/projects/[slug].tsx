@@ -10,16 +10,17 @@ import {
 	Wrap,
 	WrapItem,
 } from "@chakra-ui/react"
+import Head from "next/head"
 import React from "react"
 import { FaExternalLinkAlt, FaGithub } from "react-icons/fa"
-import Head from "next/head"
-import sanity from "../../utils/sanity-client"
-import { Project as ProjectT } from "../../studio/schema"
+
 import Block from "../../components/Block"
+import { ImageWithCaption } from "../../components/ImageWithCaption"
 import { FadeBox } from "../../components/MotionComponents"
 import { Section } from "../../components/Projects/Section"
 import { TechTag } from "../../components/TechTag"
-import { ImageWithCaption } from "../../components/ImageWithCaption"
+import { Project as ProjectT } from "../../studio/schema"
+import sanity from "../../utils/sanity-client"
 
 type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
 type ProjectProps = UnwrapPromise<ReturnType<typeof getStaticProps>>["props"]
@@ -46,12 +47,12 @@ const Project: Project = ({
 			</Head>
 
 			<FadeBox>
-				<Container as="header" variant="secondary" maxW="7xl">
-					<Heading as="h1" fontWeight="bold" lineHeight="1" fontSize="7xl">
+				<Container as="header" maxW="7xl" variant="secondary">
+					<Heading as="h1" fontSize="7xl" fontWeight="bold" lineHeight="1">
 						{title}
 					</Heading>
 					<Text textStyle="paragraph">{summary}</Text>
-					<HStack align="baseline" spacing={4} my={4}>
+					<HStack align="baseline" my={4} spacing={4}>
 						<Wrap>
 							{techStack.map((tech, index) => (
 								<WrapItem key={index}>
@@ -63,19 +64,19 @@ const Project: Project = ({
 						<HStack spacing={2}>
 							<Link
 								href={repoUrl}
-								isExternal
-								variant="nonButton"
 								title={`Github for ${title}`}
+								variant="nonButton"
+								isExternal
 							>
-								<Icon boxSize="1.375rem" as={FaGithub} />
+								<Icon as={FaGithub} boxSize="1.375rem" />
 							</Link>
 							<Link
 								href={deployedUrl}
-								isExternal
-								variant="nonButton"
 								title={`Demo for ${title}`}
+								variant="nonButton"
+								isExternal
 							>
-								<Icon boxSize="1.375rem" as={FaExternalLinkAlt} />
+								<Icon as={FaExternalLinkAlt} boxSize="1.375rem" />
 							</Link>
 						</HStack>
 					</HStack>

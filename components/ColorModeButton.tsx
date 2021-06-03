@@ -1,6 +1,6 @@
 import { IconButton, useColorMode, useColorModeValue } from "@chakra-ui/react"
-import { FaMoon, FaSun } from "react-icons/fa"
 import * as React from "react"
+import { FaMoon, FaSun } from "react-icons/fa"
 
 const ColorModeButton = (): JSX.Element => {
 	const { toggleColorMode } = useColorMode()
@@ -9,12 +9,12 @@ const ColorModeButton = (): JSX.Element => {
 
 	return (
 		<IconButton
-			onClick={toggleColorMode}
 			aria-label={`Switch to ${text} mode`}
 			icon={<SwitchIcon />}
+			pointerEvents="all"
 			variant="ghost"
 			isRound
-			pointerEvents="all"
+			onClick={toggleColorMode}
 		/>
 	)
 }

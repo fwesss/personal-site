@@ -17,11 +17,12 @@ import Image from "next/image"
 import * as React from "react"
 import { FC } from "react"
 import { FaExternalLinkAlt, FaGithub } from "react-icons/fa"
-import { urlFor } from "../../utils/sanity-client"
+
 import { Project } from "../../studio/schema"
-import { TechTag } from "../TechTag"
 import styles from "../../styles/Global.module.css"
+import { urlFor } from "../../utils/sanity-client"
 import { LinkButton } from "../LinkButton"
+import { TechTag } from "../TechTag"
 
 interface ContentProps {
 	summary: Project["summary"]
@@ -30,14 +31,14 @@ interface ContentProps {
 }
 
 const Content: FC<ContentProps> = ({ summary, keyFeatures, slug }) => (
-	<Stack spacing={4} mx="auto">
+	<Stack mx="auto" spacing={4}>
 		<Text
-			textStyle="feature"
 			fontSize={{
 				base: "1rem",
 				md: "1.125rem",
 			}}
 			mb={1}
+			textStyle="feature"
 		>
 			{summary}
 		</Text>
@@ -49,12 +50,12 @@ const Content: FC<ContentProps> = ({ summary, keyFeatures, slug }) => (
 					</Text>
 					<Text
 						color={mode("gray.600", "gray.300")}
-						textStyle="feature"
 						fontSize={{
 							base: "1rem",
 							md: "1.125rem",
 						}}
 						m="0 auto"
+						textStyle="feature"
 					>
 						{body}
 					</Text>
@@ -83,54 +84,54 @@ const ImageContent: FC<ImageContentProps> = ({
 	reversed,
 }) => (
 	<VStack
-		w={{ base: "clamp(30ch, 100%, 40ch)", md: "clamp(45ch, 100%, 75ch)" }}
+		align={reversed ? "flex-end" : "flex-start"}
 		mx="auto"
 		spacing={4}
-		align={reversed ? "flex-end" : "flex-start"}
+		w={{ base: "clamp(30ch, 100%, 40ch)", md: "clamp(45ch, 100%, 75ch)" }}
 	>
 		<Center
-			maxW="56rem"
-			w={{ base: "100%", xl: "45vw" }}
-			h={{ base: "14rem", sm: "16rem", md: "20rem", xl: "100%" }}
-			shadow="dark-lg"
-			pos="relative"
-			overflow="hidden"
 			className={styles.group}
+			h={{ base: "14rem", sm: "16rem", md: "20rem", xl: "100%" }}
+			maxW="56rem"
+			overflow="hidden"
+			pos="relative"
 			rounded="xl"
+			shadow="dark-lg"
+			w={{ base: "100%", xl: "45vw" }}
 		>
 			<Image
-				objectFit="cover"
-				layout="fill"
-				src={urlFor(mainImage).url()}
 				alt={mainImage.alt}
 				className={styles.zoom}
+				layout="fill"
+				objectFit="cover"
+				src={urlFor(mainImage).url()}
 			/>
 		</Center>
 		<HStack
-			pt={2}
 			align="baseline"
 			justify={reversed ? "flex-end" : "flex-start"}
-			w="100%"
+			pt={2}
 			spacing={6}
+			w="100%"
 		>
 			{!reversed ? (
 				<>
 					<HStack spacing={2}>
 						<Link
 							href={repoUrl}
-							isExternal
-							variant="nonButton"
 							title={`Github for ${title}`}
+							variant="nonButton"
+							isExternal
 						>
-							<Icon boxSize="1.375rem" as={FaGithub} />
+							<Icon as={FaGithub} boxSize="1.375rem" />
 						</Link>
 						<Link
 							href={deployedUrl}
-							isExternal
-							variant="nonButton"
 							title={`Demo for ${title}`}
+							variant="nonButton"
+							isExternal
 						>
-							<Icon boxSize="1.375rem" as={FaExternalLinkAlt} />
+							<Icon as={FaExternalLinkAlt} boxSize="1.375rem" />
 						</Link>
 					</HStack>
 					<Wrap>
@@ -153,19 +154,19 @@ const ImageContent: FC<ImageContentProps> = ({
 					<HStack spacing={2}>
 						<Link
 							href={repoUrl}
-							isExternal
-							variant="nonButton"
 							title={`Github for ${title}`}
+							variant="nonButton"
+							isExternal
 						>
-							<Icon boxSize="1.375rem" as={FaGithub} />
+							<Icon as={FaGithub} boxSize="1.375rem" />
 						</Link>
 						<Link
 							href={deployedUrl}
-							isExternal
-							variant="nonButton"
 							title={`Demo for ${title}`}
+							variant="nonButton"
+							isExternal
 						>
-							<Icon boxSize="1.375rem" as={FaExternalLinkAlt} />
+							<Icon as={FaExternalLinkAlt} boxSize="1.375rem" />
 						</Link>
 					</HStack>
 				</>
@@ -206,13 +207,13 @@ export const FeaturedProject: FC<FeaturedProjectProps> = ({
 		}}
 	>
 		<HStack spacing={{ base: "0", xl: "10" }}>
-			{reversed && <Box w={{ base: "0", xl: "50%" }} h="1px" />}
+			{reversed && <Box h="1px" w={{ base: "0", xl: "50%" }} />}
 			<Heading
-				w={{ base: "100%", xl: "50%" }}
-				letterSpacing="tight"
-				fontWeight="extrabold"
 				as="h3"
 				fontSize="7xl"
+				fontWeight="extrabold"
+				letterSpacing="tight"
+				w={{ base: "100%", xl: "50%" }}
 			>
 				{title}
 			</Heading>
@@ -221,24 +222,24 @@ export const FeaturedProject: FC<FeaturedProjectProps> = ({
 			{reversed ? (
 				<>
 					<ImageContent
-						title={title}
-						mainImage={mainImage}
-						techStack={techStack}
 						deployedUrl={deployedUrl}
+						mainImage={mainImage}
 						repoUrl={repoUrl}
 						reversed={reversed}
+						techStack={techStack}
+						title={title}
 					/>
-					<Content summary={summary} keyFeatures={keyFeatures} slug={slug} />
+					<Content keyFeatures={keyFeatures} slug={slug} summary={summary} />
 				</>
 			) : (
 				<>
-					<Content summary={summary} keyFeatures={keyFeatures} slug={slug} />
+					<Content keyFeatures={keyFeatures} slug={slug} summary={summary} />
 					<ImageContent
-						title={title}
-						mainImage={mainImage}
-						techStack={techStack}
 						deployedUrl={deployedUrl}
+						mainImage={mainImage}
 						repoUrl={repoUrl}
+						techStack={techStack}
+						title={title}
 					/>
 				</>
 			)}

@@ -1,7 +1,3 @@
-import BlockContent, {
-	BlockContentProps,
-	WrappedComponent,
-} from "@sanity/block-content-to-react"
 import {
 	As,
 	Code,
@@ -15,7 +11,12 @@ import {
 	useMultiStyleConfig,
 	Box,
 } from "@chakra-ui/react"
+import BlockContent, {
+	BlockContentProps,
+	WrappedComponent,
+} from "@sanity/block-content-to-react"
 import React, { ReactNode } from "react"
+
 import ExternalLink from "./ExternalLink"
 
 const WrappedUnorderedList: WrappedComponent = ({ children }) => {
@@ -129,7 +130,7 @@ type Link = (props: {
 }) => JSX.Element
 const link: Link = ({ children, mark }) =>
 	mark._type === "link" && (
-		<ExternalLink href={mark.href} text={children} display="inline-flex" />
+		<ExternalLink display="inline-flex" href={mark.href} text={children} />
 	)
 
 type Block = (props: BlockContentProps) => JSX.Element

@@ -8,11 +8,11 @@ interface SectionDividerProps {
 export const SectionDivider: FC<SectionDividerProps> = ({ sectionName }) => (
 	<Center mb={4}>
 		<Heading
-			px={6}
-			py={12}
-			fontWeight="hairline"
 			fontFamily="mono"
 			fontSize="5xl"
+			fontWeight="hairline"
+			px={6}
+			py={12}
 		>
 			{sectionName}
 		</Heading>

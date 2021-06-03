@@ -1,6 +1,9 @@
 import { Tag, TagLabel, TagLeftIcon } from "@chakra-ui/react"
 import * as React from "react"
 import { FC } from "react"
+import { IconBaseProps } from "react-icons"
+import { DiCode } from "react-icons/di"
+import { IoLogoVercel } from "react-icons/io5"
 import {
 	SiTypescript,
 	SiJavascript,
@@ -14,9 +17,6 @@ import {
 	SiMapbox,
 	SiWebgl,
 } from "react-icons/si"
-import { DiCode } from "react-icons/di"
-import { IoLogoVercel } from "react-icons/io5"
-import { IconBaseProps } from "react-icons"
 
 interface TechTagProps {
 	tech: string
@@ -47,7 +47,7 @@ export const TechTag: FC<TechTagProps> = ({
 	}
 
 	return (
-		<Tag variant={variant} size={size} colorScheme="teal">
+		<Tag colorScheme="teal" size={size} variant={variant}>
 			<TagLeftIcon as={icons[tech] || DiCode} title={`${tech} logo`} />
 			<TagLabel>{tech}</TagLabel>
 		</Tag>

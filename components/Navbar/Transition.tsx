@@ -33,7 +33,7 @@ type ListProps = HTMLChakraProps<"ul"> & HTMLMotionProps<"ul">
 export const MotionList = motion(chakra.ul as React.ElementType<ListProps>)
 
 export const NavListTransition = (props: ListProps) => (
-	<MotionList opacity="0" initial="init" variants={navListMotion} {...props} />
+	<MotionList initial="init" opacity="0" variants={navListMotion} {...props} />
 )
 
 const navItemMotion: Variants = {

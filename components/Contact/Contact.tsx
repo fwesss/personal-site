@@ -1,13 +1,14 @@
-import { FC } from "react"
 import { Box, Button, HStack, Icon, Link, Text, VStack } from "@chakra-ui/react"
+import { FC } from "react"
+import * as React from "react"
 import {
 	AiOutlineLinkedin,
 	AiOutlineMail,
 	AiOutlinePhone,
 	AiOutlineGithub,
 } from "react-icons/ai"
-import * as React from "react"
 import { IoLocationOutline } from "react-icons/io5"
+
 import { SectionDivider } from "../SectionDivider"
 
 interface ContactProps {
@@ -18,29 +19,29 @@ export const Contact: FC<ContactProps> = ({ sectionName }) => (
 	<Box id={sectionName.toLowerCase()}>
 		<SectionDivider sectionName={sectionName} />
 
-		<VStack spacing={6} mb={8}>
+		<VStack mb={8} spacing={6}>
 			<VStack align="flex-start" spacing={4}>
 				<Button
+					aria-label="Email Wes Feller"
 					as={Link}
 					colorScheme="teal"
-					size="lg"
-					leftIcon={<AiOutlineMail />}
 					href="mailto:wes@wesfeller.dev"
-					aria-label="Email Wes Feller"
-					isExternal
+					leftIcon={<AiOutlineMail />}
+					size="lg"
 					variant="link"
+					isExternal
 				>
 					wes@wesfeller.dev
 				</Button>
 				<Button
+					aria-label="Call Wes Feller"
 					as={Link}
 					colorScheme="teal"
-					size="lg"
-					leftIcon={<AiOutlinePhone />}
 					href="tel:19095537529"
-					aria-label="Call Wes Feller"
-					isExternal
+					leftIcon={<AiOutlinePhone />}
+					size="lg"
 					variant="link"
+					isExternal
 				>
 					(909) 553-7529
 				</Button>
@@ -49,20 +50,20 @@ export const Contact: FC<ContactProps> = ({ sectionName }) => (
 			<HStack justifyContent="center" w="60vw">
 				<Link
 					href="https://github.com/fwesss/"
-					isExternal
-					variant="nonButton"
 					title="Github"
+					variant="nonButton"
+					isExternal
 				>
-					<Icon boxSize="2rem" as={AiOutlineGithub} />
+					<Icon as={AiOutlineGithub} boxSize="2rem" />
 				</Link>
 
 				<Link
 					href="https://www.linkedin.com/in/westley-feller/"
-					isExternal
-					variant="nonButton"
 					title="Linkedin"
+					variant="nonButton"
+					isExternal
 				>
-					<Icon boxSize="2rem" as={AiOutlineLinkedin} />
+					<Icon as={AiOutlineLinkedin} boxSize="2rem" />
 				</Link>
 			</HStack>
 

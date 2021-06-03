@@ -27,6 +27,59 @@ export type {
 }
 
 /**
+ * Adventure
+ *
+ *
+ */
+export interface Adventure extends SanityDocument {
+	_type: "adventure"
+
+	/**
+	 * Title — `string`
+	 *
+	 * The name of the project.
+	 */
+	title: string
+
+	/**
+	 * GPX File — `file`
+	 *
+	 * GPX file for adventure.
+	 */
+	gpx: { _type: "file"; asset: SanityAsset }
+
+	/**
+	 * Initial View — `string`
+	 *
+	 * Initial view of the trail. Get position from Mapbox Studio. [zoom bearing pitch lon lat]
+	 */
+	initialView: string
+
+	/**
+	 * Stories — `array`
+	 *
+	 * Story for different points in the adventure. There should be 1 for each waypoint in the GPX file.
+	 */
+	stories?: Array<
+		SanityKeyed<{
+			/**
+			 * Headline — `string`
+			 *
+			 *
+			 */
+			headline: string
+
+			/**
+			 * Body — `text`
+			 *
+			 *
+			 */
+			body: string
+		}>
+	>
+}
+
+/**
  * Project
  *
  *
@@ -348,4 +401,4 @@ export type BlockContent = Array<
 	  }>
 >
 
-export type Documents = Project | Post | Author | Category
+export type Documents = Adventure | Project | Post | Author | Category

@@ -1,37 +1,39 @@
 {
-	"root": true,
-	"project": {
-		"name": "Personal",
-		"basePath": "/studio"
-	},
-	"api": {
-		"projectId": "w2lm4lte",
-		"dataset": "production"
-	},
-	"plugins": [
-		"@sanity/base",
-		"@sanity/components",
-		"@sanity/default-layout",
-		"@sanity/default-login",
-		"@sanity/desk-tool",
-		"mdide",
-		"dashboard-widget-vercel",
-		"@sanity/dashboard",
-		"order-documents"
-	],
-	"env": {
-		"development": {
-			"plugins": ["@sanity/vision"]
-		}
-	},
-	"parts": [
-		{
-			"name": "part:@sanity/base/schema",
-			"path": "./schemas/schema"
-		},
-		{
-			"implements": "part:@sanity/dashboard/config",
-			"path": "dashboardConfig.ts"
-		}
-	]
+  "root": true,
+  "project": {
+    "name": "Personal",
+    "basePath": "/studio"
+  },
+  "api": {
+    "projectId": "w2lm4lte",
+    "dataset": "production"
+  },
+  "plugins": [
+    "@sanity/base",
+    "@sanity/components",
+    "@sanity/default-layout",
+    "@sanity/default-login",
+    "@sanity/desk-tool",
+    "mdide",
+    "dashboard-widget-vercel",
+    "@sanity/dashboard",
+    "order-documents"
+  ],
+  "env": {
+    "development": {
+      "plugins": [
+        "@sanity/vision"
+      ]
+    }
+  },
+  "parts": [
+    {
+      "name": "part:@sanity/base/schema",
+      "path": "./schemas/schema"
+    },
+    {
+      "implements": "part:@sanity/dashboard/config",
+      "path": "dashboardConfig.ts"
+    }
+  ]
 }

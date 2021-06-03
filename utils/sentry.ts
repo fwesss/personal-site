@@ -1,5 +1,5 @@
-import * as Sentry from "@sentry/node"
 import { RewriteFrames } from "@sentry/integrations"
+import * as Sentry from "@sentry/node"
 import { Integrations } from "@sentry/tracing"
 
 export const init = () => {

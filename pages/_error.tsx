@@ -1,6 +1,6 @@
-import NextErrorComponent, { ErrorProps } from "next/error"
 import * as Sentry from "@sentry/node"
 import { NextApiResponse } from "next"
+import NextErrorComponent, { ErrorProps } from "next/error"
 
 const MyError = ({
 	statusCode,

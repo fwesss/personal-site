@@ -1,7 +1,7 @@
 import { Icon, Link } from "@chakra-ui/react"
 import NextLink from "next/link"
-import { FaExternalLinkAlt } from "react-icons/fa"
 import { FC } from "react"
+import { FaExternalLinkAlt } from "react-icons/fa"
 
 interface ExternalLinkProps {
 	text: string
@@ -12,13 +12,13 @@ interface ExternalLinkProps {
 const ExternalLink: FC<ExternalLinkProps> = ({ text, href, display }) => (
 	<NextLink href={href} passHref>
 		{/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-		<Link display={display || "flex"} alignItems="baseline" isExternal>
+		<Link alignItems="baseline" display={display || "flex"} isExternal>
 			{text}
 			<Icon
 				as={FaExternalLinkAlt}
-				verticalAlign="baseline"
-				mx={1}
 				boxSize="0.85em"
+				mx={1}
+				verticalAlign="baseline"
 			/>
 		</Link>
 	</NextLink>
