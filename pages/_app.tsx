@@ -1,14 +1,15 @@
 import { Box, ChakraProvider, Flex } from "@chakra-ui/react"
+import { AnimatePresence, AnimateSharedLayout } from "framer-motion"
 import { AppProps } from "next/app"
 import NextLink from "next/link"
-import { AnimatePresence, AnimateSharedLayout } from "framer-motion"
-import React, { FC } from "react"
 import { useRouter } from "next/router"
-import { init } from "../utils/sentry"
-import theme from "../theme/index"
+import React, { FC } from "react"
+
+import { Visualization } from "../components/Intro/Visualization"
 import { NavContent } from "../components/Navbar/NavContent"
 import { NavLink } from "../components/Navbar/NavLink"
-import { Visualization } from "../components/Intro/Visualization"
+import theme from "../theme/index"
+import { init } from "../utils/sentry"
 
 init()
 
@@ -33,30 +34,30 @@ const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
 
 	return (
 		<ChakraProvider theme={theme}>
-			<Box pb={50}>
+			<Flex direction="column" pb={router.pathname !== "/adventures" && 50}>
 				<Box
-					h="16"
-					w="100%"
+					background="transparent"
+					minHeight="16"
+					pointerEvents="none"
 					position="sticky"
 					top={0}
+					w="100%"
 					zIndex={1000}
-					pointerEvents="none"
-					background="transparent"
 				>
 					<Box
-						height="100%"
+						height="16"
 						mx="auto"
-						ps={{ base: "6", md: "8" }}
 						pe={{ base: "5", md: "4" }}
+						ps={{ base: "6", md: "8" }}
 					>
 						<Flex
-							as="nav"
-							aria-label="Site navigation"
 							align="center"
-							justify="space-between"
-							height="100%"
+							aria-label="Site navigation"
+							as="nav"
 							fontFamily="mono"
 							fontSize={{ base: "md", sm: "lg", md: "xl" }}
+							height="100%"
+							justify="space-between"
 						>
 							<NextLink href="/" passHref>
 								<NavLink h={10}>WF</NavLink>
@@ -67,13 +68,12 @@ const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
 				</Box>
 
 				<AnimateSharedLayout type="crossfade">
-					<Visualization />
-
+					{router.pathname !== "/adventures" && <Visualization />}
 					<AnimatePresence exitBeforeEnter onExitComplete={handleExitComplete}>
-						<Component {...pageProps} err={err} key={router.route} />
+						<Component {...pageProps} key={router.route} err={err} />
 					</AnimatePresence>
 				</AnimateSharedLayout>
-			</Box>
+			</Flex>
 		</ChakraProvider>
 	)
 }

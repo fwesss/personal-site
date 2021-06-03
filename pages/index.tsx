@@ -1,11 +1,12 @@
 import Head from "next/head"
 import React from "react"
-import sanity from "../utils/sanity-client"
-import { Project as ProjectT } from "../studio/schema"
-import { Projects } from "../components/Projects/Projects"
-import { FadeBox } from "../components/MotionComponents"
+
 import { Contact } from "../components/Contact/Contact"
 import { Intro } from "../components/Intro/Intro"
+import { FadeBox } from "../components/MotionComponents"
+import { Projects } from "../components/Projects/Projects"
+import { Project as ProjectT } from "../studio/schema"
+import sanity from "../utils/sanity-client"
 
 type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
 type ProjectProps = UnwrapPromise<ReturnType<typeof getStaticProps>>["props"]
@@ -20,7 +21,7 @@ const Home: Home = ({ projects }) => {
 
 			<FadeBox as="main">
 				<Intro />
-				<Projects sectionName="Projects" projects={projects} />
+				<Projects projects={projects} sectionName="Projects" />
 				<Contact sectionName="Contact" />
 			</FadeBox>
 		</>

@@ -1,7 +1,8 @@
 import { extendTheme } from "@chakra-ui/react"
-import Link from "./components/link"
+
 import Container from "./components/container"
 import Heading from "./components/heading"
+import Link from "./components/link"
 // Global style overrides
 import styles from "./styles"
 

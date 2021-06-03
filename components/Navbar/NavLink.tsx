@@ -7,18 +7,18 @@ type Props = HTMLChakraProps<"a">
 export const NavLink = React.forwardRef<Ref, Props>((props, ref) => {
 	return (
 		<Link
-			fontWeight="medium"
-			display="flex"
-			alignItems="center"
-			justifyContent="center"
-			borderBottom="2px"
-			borderColor="transparent"
-			transition="all 0.2s"
 			_hover={{
 				borderColor: "currentcolor",
 				color: useColorModeValue("teal.600", "teal.200"),
 			}}
+			alignItems="center"
+			borderBottom="2px"
+			borderColor="transparent"
+			display="flex"
+			fontWeight="medium"
+			justifyContent="center"
 			pointerEvents="all"
+			transition="all 0.2s"
 			{...props}
 			ref={ref}
 		/>

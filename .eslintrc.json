@@ -26,7 +26,6 @@
 		"plugin:import/warnings",
 		"plugin:import/typescript",
 		"plugin:@asbjorn/groq/recommended",
-		// must be last
 		"plugin:prettier/recommended"
 	],
 	"env": {
@@ -36,6 +35,18 @@
 		"jest": true
 	},
 	"rules": {
+		"sort-vars": "error",
+		"import/order": [
+			"error",
+			{
+				"groups": ["builtin", "external", "parent", "sibling", "index"],
+				"newlines-between": "always",
+				"alphabetize": {
+					"order": "asc",
+					"caseInsensitive": true
+				}
+			}
+		],
 		"import/prefer-default-export": 0,
 		"react/jsx-props-no-spreading": 0,
 		"no-use-before-define": "off",
@@ -43,10 +54,20 @@
 		"react/jsx-filename-extension": 0,
 		"react/display-name": 0,
 		"react/prop-types": 0,
+		"react/jsx-sort-props": [
+			"error",
+			{
+				"callbacksLast": true,
+				"shorthandLast": true,
+				"reservedFirst": true,
+				"ignoreCase": true
+			}
+		],
 		"react/no-array-index-key": 0,
 		"no-underscore-dangle": 0,
 		"@typescript-eslint/explicit-member-accessibility": 0,
 		"@typescript-eslint/indent": 0,
+		"@typescript-eslint/require-await": 0,
 		"@typescript-eslint/member-delimiter-style": 0,
 		"@typescript-eslint/no-explicit-any": 0,
 		"@typescript-eslint/no-var-requires": 0,

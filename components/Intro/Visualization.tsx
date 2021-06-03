@@ -1,3 +1,4 @@
+import { Box, useInterval } from "@chakra-ui/react"
 import {
 	forceLink,
 	forceSimulation,
@@ -6,18 +7,18 @@ import {
 	forceManyBody,
 	ScaleQuantize,
 } from "d3"
+import { motion } from "framer-motion"
 import { FC, MutableRefObject, useEffect, useRef, useState } from "react"
 import useResizeObserver from "use-resize-observer"
-import { Box, useInterval } from "@chakra-ui/react"
-import { motion } from "framer-motion"
+
 import theme from "../../theme/index"
+
 import forceBound from "./forceBound"
 
 export const Visualization: FC = () => {
-	// const parentRef = useRef(null) as MutableRefObject<null | HTMLDivElement>
 	const canvasRef = useRef(null) as MutableRefObject<null | HTMLCanvasElement>
 
-	const getRandomInt = (min, max) =>
+	const getRandomInt = (min: number, max: number) =>
 		Math.floor(
 			Math.random() * (Math.floor(max) - Math.ceil(min)) + Math.ceil(min)
 		)
@@ -149,21 +150,21 @@ export const Visualization: FC = () => {
 	return (
 		<Box
 			ref={parentRef}
-			w="100%"
 			h="100%"
 			position="absolute"
 			top={0}
+			w="100%"
 			zIndex={-1}
 		>
 			<motion.canvas
-				id="vis"
-				width={width}
-				height={height}
 				ref={canvasRef}
-				exit={{ opacity: 0 }}
-				initial={{ opacity: 0 }}
 				animate={{ opacity: 1 }}
+				exit={{ opacity: 0 }}
+				height={height}
+				id="vis"
+				initial={{ opacity: 0 }}
 				transition={{ duration: 0.3 }}
+				width={width}
 			/>
 		</Box>
 	)

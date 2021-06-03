@@ -1,3 +1,4 @@
+import { SearchIcon } from "@chakra-ui/icons"
 import {
 	Box,
 	Center,
@@ -13,9 +14,9 @@ import {
 } from "@chakra-ui/react"
 import Image from "next/image"
 import React, { FC } from "react"
-import { SearchIcon } from "@chakra-ui/icons"
-import { urlFor } from "../utils/sanity-client"
+
 import { Project } from "../studio/schema"
+import { urlFor } from "../utils/sanity-client"
 
 interface ImageWithCaptionProps {
 	image: Project["mainImage"] | Project["screenshots"][0]
@@ -45,12 +46,17 @@ export const ImageWithCaption: FC<ImageWithCaptionProps> = ({
 									xl: "32rem",
 							  }
 					}
-					pos="relative"
-					shadow="xl"
-					rounded="xl"
 					overflow="hidden"
+					pos="relative"
+					rounded="xl"
+					shadow="xl"
 				>
 					<Center
+						_hover={{
+							opacity: 0.9,
+						}}
+						bg="gray.900"
+						flexDirection="column"
 						h={
 							size === "sm"
 								? "20vh"
@@ -62,22 +68,16 @@ export const ImageWithCaption: FC<ImageWithCaptionProps> = ({
 										xl: "32rem",
 								  }
 						}
-						w="100%"
-						bg="gray.900"
-						zIndex={1}
 						opacity={0}
-						_hover={{
-							opacity: 0.9,
-						}}
-						transition="200ms ease 200ms"
-						flexDirection="column"
-						py={{ base: 12 }}
 						px={{ base: 6 }}
+						py={{ base: 12 }}
+						transition="200ms ease 200ms"
+						w="100%"
+						zIndex={1}
 					>
 						<Text
-							textStyle="paragraph"
-							color="gray.50"
 							as="figcaption"
+							color="gray.50"
 							fontSize={{
 								base: "0.75rem",
 								sm: "1rem",
@@ -85,49 +85,50 @@ export const ImageWithCaption: FC<ImageWithCaptionProps> = ({
 								lg: "1rem",
 							}}
 							px={size === "sm" && { base: 0, sm: 4, md: 16 }}
+							textStyle="paragraph"
 						>
 							{image.caption}
 						</Text>
 						<IconButton
-							mt={{ base: 0 }}
-							isRound
-							fontSize="xl"
-							color="gray.50"
-							variant="ghost"
 							aria-label="Zoom"
+							color="gray.50"
+							fontSize="xl"
 							icon={<SearchIcon />}
+							mt={{ base: 0 }}
+							variant="ghost"
+							isRound
 							onClick={onOpen}
 						/>
 					</Center>
 					<Image
-						objectFit="cover"
-						layout="fill"
-						src={urlFor(image).url()}
 						alt={image.alt}
+						layout="fill"
+						objectFit="cover"
 						priority={priority}
+						src={urlFor(image).url()}
 					/>
 				</Center>
 			</Box>
 
-			<Modal isCentered size="6xl" isOpen={isOpen} onClose={onClose}>
+			<Modal isOpen={isOpen} size="6xl" isCentered onClose={onClose}>
 				<ModalOverlay />
 				<ModalContent>
 					<ModalBody minH="60vh" pos="relative">
 						<Image
-							src={urlFor(image).url()}
 							alt={`Zoomed ${image.alt}`}
-							quality={100}
 							layout="fill"
 							objectFit="cover"
+							quality={100}
+							src={urlFor(image).url()}
 						/>
 					</ModalBody>
 
 					<ModalFooter
-						py={4}
-						justifyContent="center"
 						alignItems="center"
 						bg={mode("white", "gray.900")}
 						borderBottomRadius="lg"
+						justifyContent="center"
+						py={4}
 					>
 						<Text mb={0} textStyle="paragraph">
 							{image.caption}
