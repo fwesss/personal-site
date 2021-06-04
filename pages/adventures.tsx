@@ -9,13 +9,15 @@ import {
 } from "@chakra-ui/react"
 import geoJson from "@mapbox/togeojson"
 import { easeCubic } from "d3"
-import { BBox, Feature } from "geojson"
-import * as React from "react"
-import { FC, SetStateAction, useEffect, useRef, useState } from "react"
+import type { FeatureCollection } from "geojson"
+import mapboxgl from "mapbox-gl"
+import type { FC, SetStateAction } from "react"
+import { useEffect, useRef, useState } from "react"
+import type { MapRef } from "react-map-gl"
 import ReactMapGL, { FlyToInterpolator, Layer, Source } from "react-map-gl"
 import { DOMParser } from "xmldom"
 
-import { Adventure } from "../studio/schema"
+import type { Adventure } from "../studio/schema"
 import theme from "../theme/index"
 import "mapbox-gl/dist/mapbox-gl.css"
 import sanity from "../utils/sanity-client"
@@ -40,21 +42,8 @@ interface SanityFileAsset {
 type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
 type AdventureProps = UnwrapPromise<ReturnType<typeof getStaticProps>>["props"]
 
-interface Track {
-  bbox?: BBox
-  features: {
-    properties: { [name: string]: any; name?: string }
-    geometry: {
-      [name: string]: any
-      type?: "Point" | "LineString" | "MultiLineString"
-    }
-  }[] &
-    Array<Feature>
-  type: "FeatureCollection"
-}
-
 const Map: FC<AdventureProps> = ({ token, style, tracks, adventures }) => {
-  const mapRef = useRef(null)
+  const mapRef = useRef<MapRef>(null)
   interface ViewPort {
     width: string
     height: string
@@ -115,14 +104,12 @@ const Map: FC<AdventureProps> = ({ token, style, tracks, adventures }) => {
   }
 
   const rotateCamera = () => {
-    const map = mapRef.current.getMap()
+    const map = mapRef.current.getMap() as mapboxgl.Map
     map.on("moveend", () => {
       const rotateNumber = map.getBearing()
       map.rotateTo(rotateNumber + 90, {
         duration: 24000,
-        easing(t) {
-          return t
-        },
+        easing: t => t,
       })
     })
   }
@@ -177,7 +164,6 @@ const Map: FC<AdventureProps> = ({ token, style, tracks, adventures }) => {
             <Source
               data={{
                 ...track,
-                // @ts-ignore
                 features: track.features.filter(feature =>
                   ["MultiLineString", "LineString"].includes(
                     feature.geometry.type
@@ -202,7 +188,6 @@ const Map: FC<AdventureProps> = ({ token, style, tracks, adventures }) => {
               <Source
                 data={{
                   ...track,
-                  // @ts-ignore
                   features: track.features.filter(
                     feature => feature.geometry.type === "Point"
                   ),
@@ -237,7 +222,7 @@ export const getStaticProps = async (): Promise<{
   props: {
     token: string
     style: string
-    tracks: Track[]
+    tracks: FeatureCollection[]
     adventures: Adventure[]
   }
 }> => {
@@ -262,7 +247,6 @@ export const getStaticProps = async (): Promise<{
     props: {
       token: process.env.MAPBOX_TOKEN,
       style: process.env.MAPBOX_STYLE,
-      // @ts-ignore
       tracks,
       adventures,
     },
