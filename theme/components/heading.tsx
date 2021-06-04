@@ -1,6 +1,6 @@
 export default {
-	baseStyle: {
-		letterSpacing: "tight",
-		lineHeight: "none",
-	},
+  baseStyle: {
+    letterSpacing: "tight",
+    lineHeight: "none",
+  },
 }

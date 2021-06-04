@@ -208,3 +208,12 @@ sketch
 next.config.js
 dist
 public
+
+# cypress
+cypress/tsconfig.json
+
+# studio
+studio/tsconfig.json
+
+# ts
+tsconfig.json

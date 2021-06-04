@@ -7,11 +7,11 @@ import Link from "./components/link"
 import styles from "./styles"
 
 const overrides = {
-	...styles,
-	components: {
-		Link,
-		Container,
-		Heading,
-	},
+  ...styles,
+  components: {
+    Link,
+    Container,
+    Heading,
+  },
 }
 export default extendTheme(overrides)

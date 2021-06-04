@@ -14,68 +14,68 @@ import { init } from "../utils/sentry"
 init()
 
 interface AppPropsErr extends AppProps {
-	err: Error
+  err: Error
 }
 
 const handleExitComplete = (): void => {
-	if (typeof window !== "undefined") {
-		const hashId = window.location.hash
-		if (hashId) {
-			const element = document.querySelector(hashId)
-			if (element) {
-				element.scrollIntoView()
-			}
-		}
-	}
+  if (typeof window !== "undefined") {
+    const hashId = window.location.hash
+    if (hashId) {
+      const element = document.querySelector(hashId)
+      if (element) {
+        element.scrollIntoView()
+      }
+    }
+  }
 }
 
 const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
-	const router = useRouter()
+  const router = useRouter()
 
-	return (
-		<ChakraProvider theme={theme}>
-			<Flex direction="column" pb={router.pathname !== "/adventures" && 50}>
-				<Box
-					background="transparent"
-					minHeight="16"
-					pointerEvents="none"
-					position="sticky"
-					top={0}
-					w="100%"
-					zIndex={1000}
-				>
-					<Box
-						height="16"
-						mx="auto"
-						pe={{ base: "5", md: "4" }}
-						ps={{ base: "6", md: "8" }}
-					>
-						<Flex
-							align="center"
-							aria-label="Site navigation"
-							as="nav"
-							fontFamily="mono"
-							fontSize={{ base: "md", sm: "lg", md: "xl" }}
-							height="100%"
-							justify="space-between"
-						>
-							<NextLink href="/" passHref>
-								<NavLink h={10}>WF</NavLink>
-							</NextLink>
-							<NavContent display="flex" />
-						</Flex>
-					</Box>
-				</Box>
+  return (
+    <ChakraProvider theme={theme}>
+      <Flex direction="column" pb={router.pathname !== "/adventures" && 50}>
+        <Box
+          background="transparent"
+          minHeight="16"
+          pointerEvents="none"
+          position="sticky"
+          top={0}
+          w="100%"
+          zIndex={1000}
+        >
+          <Box
+            height="16"
+            mx="auto"
+            pe={{ base: "5", md: "4" }}
+            ps={{ base: "6", md: "8" }}
+          >
+            <Flex
+              align="center"
+              aria-label="Site navigation"
+              as="nav"
+              fontFamily="mono"
+              fontSize={{ base: "md", sm: "lg", md: "xl" }}
+              height="100%"
+              justify="space-between"
+            >
+              <NextLink href="/" passHref>
+                <NavLink h={10}>WF</NavLink>
+              </NextLink>
+              <NavContent display="flex" />
+            </Flex>
+          </Box>
+        </Box>
 
-				<AnimateSharedLayout type="crossfade">
-					{router.pathname !== "/adventures" && <Visualization />}
-					<AnimatePresence exitBeforeEnter onExitComplete={handleExitComplete}>
-						<Component {...pageProps} key={router.route} err={err} />
-					</AnimatePresence>
-				</AnimateSharedLayout>
-			</Flex>
-		</ChakraProvider>
-	)
+        <AnimateSharedLayout type="crossfade">
+          {router.pathname !== "/adventures" && <Visualization />}
+          <AnimatePresence exitBeforeEnter onExitComplete={handleExitComplete}>
+            <Component {...pageProps} key={router.route} err={err} />
+          </AnimatePresence>
+        </AnimateSharedLayout>
+      </Flex>
+    </ChakraProvider>
+  )
 }
 
 export default MyApp
