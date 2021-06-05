@@ -176,17 +176,6 @@ const Map: FC<AdventureProps> = ({ token, style, tracks, adventures }) => {
     rotateCamera()
   }
 
-  useEffect(() => {
-    console.log(tracks[0])
-    console.log(
-      tracks[activeAdventure.index].features.filter(
-        feature =>
-          feature.geometry.type === "Point" &&
-          feature.properties.name.split(" ")[0] === "0"
-      )
-    )
-  }, [activeAdventure.index, tracks])
-
   return (
     <Box h="calc(100vh - 64px)">
       <Container
