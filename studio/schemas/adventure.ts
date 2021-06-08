@@ -37,24 +37,29 @@ export default {
       title: "Stories",
       type: "array",
       of: [
+        { type: "block" },
         {
-          type: "object",
+          type: "image",
+
           fields: [
             {
-              name: "headline",
-              title: "Headline",
-              type: "string",
-              codegen: { required: true },
-              validation: (rule: Rule): boolean => rule.required(),
+              name: "caption",
+              title: "Caption",
+              type: "text",
+              options: { isHighlighted: true },
             },
             {
-              name: "body",
-              title: "Body",
-              type: "text",
+              name: "alt",
+              title: "Alt",
+              type: "string",
+              options: { isHighlighted: true },
               codegen: { required: true },
               validation: (rule: Rule): boolean => rule.required(),
             },
           ],
+          options: {
+            hotspot: true,
+          },
         },
       ],
       description:

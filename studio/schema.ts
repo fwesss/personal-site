@@ -61,21 +61,27 @@ export interface Adventure extends SanityDocument {
    * Story for different points in the adventure. There should be 1 for each waypoint in the GPX file.
    */
   stories?: Array<
-    SanityKeyed<{
-      /**
-       * Headline — `string`
-       *
-       *
-       */
-      headline: string
+    | SanityKeyed<SanityBlock>
+    | SanityKeyed<{
+        _type: "image"
+        asset: SanityAsset
+        crop?: SanityImageCrop
+        hotspot?: SanityImageHotspot
 
-      /**
-       * Body — `text`
-       *
-       *
-       */
-      body: string
-    }>
+        /**
+         * Caption — `text`
+         *
+         *
+         */
+        caption?: string
+
+        /**
+         * Alt — `string`
+         *
+         *
+         */
+        alt: string
+      }>
   >
 }
 

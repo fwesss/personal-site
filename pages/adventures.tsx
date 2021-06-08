@@ -3,9 +3,13 @@ import {
   Button,
   Container,
   Heading,
+  HStack,
+  IconButton,
+  Link,
   ListItem,
-  Text,
   UnorderedList,
+  useBoolean,
+  useBreakpointValue,
   useColorModeValue,
 } from "@chakra-ui/react"
 import geoJson from "@mapbox/togeojson"
@@ -13,8 +17,10 @@ import type { FeatureCollection } from "geojson"
 import mapboxgl from "mapbox-gl"
 import type { FC } from "react"
 import { useCallback, useEffect, useRef, useState } from "react"
+import { FaExpand, FaWindowMinimize, FaArrowUp } from "react-icons/fa"
 import { DOMParser } from "xmldom"
 
+import Block from "../components/Block"
 import type { Adventure } from "../studio/schema"
 import theme from "../theme/index"
 import "mapbox-gl/dist/mapbox-gl.css"
@@ -37,18 +43,30 @@ interface SanityFileAsset {
   url: string
 }
 
+type Zoom = number
+type Bearing = number
+type Pitch = number
+type Longitude = number
+type Latitude = number
+
+export type Fly = ([zoom, bearing, pitch, longitude, latitude]) => void
+export type ParseViewport = (
+  view: string
+) => [Zoom, Bearing, Pitch, Latitude, Longitude]
+
 type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
 type AdventureProps = UnwrapPromise<ReturnType<typeof getStaticProps>>["props"]
 
-const Map: FC<AdventureProps> = ({ token, style, tracks, adventures }) => {
+const Map: FC<AdventureProps> = ({
+  dataset,
+  projectId,
+  token,
+  style,
+  tracks,
+  adventures,
+}) => {
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const [map, setMap] = useState<mapboxgl.Map>(null)
-
-  type Zoom = number
-  type Bearing = number
-  type Pitch = number
-  type Longitude = number
-  type Latitude = number
 
   const parseViewport = (
     view: string
@@ -153,12 +171,11 @@ const Map: FC<AdventureProps> = ({ token, style, tracks, adventures }) => {
   }, [style, token, tracks])
 
   useEffect(() => {
-    const stopRotation = () => {
-      map.off("moveend", rotate)
-      map.stop()
-    }
     if (map) {
-      map.on("mousedown", stopRotation)
+      map.on("mousedown", () => {
+        map.off("moveend", rotate)
+        map.stop()
+      })
     }
   }, [rotate, map])
 
@@ -176,6 +193,18 @@ const Map: FC<AdventureProps> = ({ token, style, tracks, adventures }) => {
     rotateCamera()
   }
 
+  const buttonHoverColor = useColorModeValue("teal.600", "teal.200")
+
+  const [minimized, setMinimized] = useBoolean(false)
+  const size = useBreakpointValue({
+    base: "base",
+    xs: "xs",
+    sm: "sm",
+    md: "md",
+    lg: "lg",
+    xl: "xl",
+  })
+
   return (
     <Box h="calc(100vh - 64px)">
       <Container
@@ -186,43 +215,57 @@ const Map: FC<AdventureProps> = ({ token, style, tracks, adventures }) => {
           ),
         }}
         bg={useColorModeValue(
-          `${theme.colors.gray["50"]}BB`,
-          `${theme.colors.gray["900"]}BB`
+          `${theme.colors.gray["50"]}AA`,
+          `${theme.colors.gray["900"]}AA`
         )}
-        left={8}
+        left={4}
+        maxH={minimized ? "3.5rem" : "88%"}
         maxW="3xl"
-        mt={8}
-        position="absolute"
+        my={4}
+        overflowY={minimized ? "hidden" : "auto"}
+        position={{ xl: "absolute" }}
         px={12}
+        py={minimized ? 2 : 8}
+        sx={{ backdropFilter: "blur(4px)" }}
+        transition="all 0.2s"
         zIndex={1000}
       >
-        <Heading as="h2">{activeAdventure.title}</Heading>
-        {activeAdventure.stories.map((story, storyIndex) => (
-          <div key={story._key}>
-            <Button
-              as="h3"
-              fontSize={28}
-              size="lg"
-              variant="link"
-              onClick={() =>
-                fly(
-                  parseViewport(
-                    tracks[activeAdventure.index].features
-                      .filter(feature => feature.geometry.type === "Point")
-                      .filter(
-                        feature =>
-                          Number(feature.properties.name.split(" ")[0]) ===
-                          storyIndex
-                      )[0].properties.cmt
-                  )
-                )
-              }
-            >
-              {story.headline}
-            </Button>
-            <Text>{story.body}</Text>
-          </div>
-        ))}
+        <HStack
+          justify="flex-end"
+          mt={-10}
+          position="sticky"
+          top={0}
+          zIndex={1000}
+        >
+          {size === "xl" &&
+            (minimized ? (
+              <IconButton
+                aria-label="Expand panel"
+                icon={<FaExpand />}
+                variant="ghost"
+                onClick={setMinimized.toggle}
+              />
+            ) : (
+              <IconButton
+                aria-label="Minimize panel"
+                icon={<FaWindowMinimize />}
+                variant="ghost"
+                onClick={setMinimized.toggle}
+              />
+            ))}
+        </HStack>
+        <Heading as="h2" id="top">
+          {activeAdventure.title}
+        </Heading>
+        <Block
+          activeAdventure={activeAdventure}
+          blocks={activeAdventure.stories}
+          dataset={dataset}
+          fly={fly}
+          parseViewport={parseViewport}
+          projectId={projectId}
+          tracks={tracks}
+        />
       </Container>
 
       <Container
@@ -232,22 +275,36 @@ const Map: FC<AdventureProps> = ({ token, style, tracks, adventures }) => {
             theme.colors.gray["900"]
           ),
         }}
+        align="center"
         bg={useColorModeValue(
-          `${theme.colors.gray["50"]}BB`,
-          `${theme.colors.gray["900"]}BB`
+          `${theme.colors.gray["50"]}AA`,
+          `${theme.colors.gray["900"]}AA`
         )}
-        maxW="xs"
-        mt={8}
+        maxW="12%"
+        my={4}
         position="absolute"
-        right={8}
+        px={0}
+        py={6}
+        right={4}
+        sx={{ backdropFilter: "blur(4px)" }}
+        transition="all 0.2s"
         zIndex={1000}
       >
         <UnorderedList listStyleType="none" marginInlineStart={0}>
           {adventures.map((adventure, adventureIndex) => (
             <ListItem key={adventure._id} mb={2}>
               <Button
+                _hover={{
+                  borderColor: "currentcolor",
+                  color: buttonHoverColor,
+                }}
+                borderBottom="2px"
+                borderColor="transparent"
+                borderRadius={0}
                 colorScheme="teal"
-                variant="ghost"
+                pointerEvents="all"
+                transition="all 0.2s"
+                variant="unstyled"
                 onClick={() => {
                   goToAdventure(adventure, adventureIndex)
                 }}
@@ -259,6 +316,20 @@ const Map: FC<AdventureProps> = ({ token, style, tracks, adventures }) => {
         </UnorderedList>
       </Container>
       <Box ref={mapContainerRef} height="100%" width="100%" />
+      {size !== "xl" && (
+        <IconButton
+          aria-label="Scroll up"
+          as={Link}
+          bottom={6}
+          colorScheme="teal"
+          href="#top"
+          icon={<FaArrowUp />}
+          position="fixed"
+          right={4}
+          zIndex={1000}
+          isRound
+        />
+      )}
     </Box>
   )
 }
@@ -267,8 +338,10 @@ export default Map
 
 export const getStaticProps = async (): Promise<{
   props: {
+    dataset: string
     token: string
     style: string
+    projectId: string
     tracks: FeatureCollection[]
     adventures: Adventure[]
   }
@@ -276,9 +349,9 @@ export const getStaticProps = async (): Promise<{
   const adventures = await sanity.getAll("adventure")
   const tracks = await Promise.all(
     adventures.map(async adventure => {
-      const expanded = (await sanity.expand<Adventure>(
+      const expanded = ((await sanity.expand<Adventure>(
         adventure.gpx.asset
-      )) as unknown as SanityFileAsset
+      )) as unknown) as SanityFileAsset
 
       const res = await fetch(expanded.url)
       const data = await res.blob()
@@ -292,7 +365,9 @@ export const getStaticProps = async (): Promise<{
 
   return {
     props: {
+      dataset: process.env.SANITY_STUDIO_API_DATASET,
       token: process.env.MAPBOX_TOKEN,
+      projectId: process.env.SANITY_STUDIO_API_PROJECT_ID,
       style: process.env.MAPBOX_STYLE,
       tracks,
       adventures,

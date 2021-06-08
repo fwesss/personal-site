@@ -1,5 +1,6 @@
 import {
   As,
+  Button,
   Code,
   Heading,
   Text,
@@ -9,15 +10,28 @@ import {
   StylesProvider,
   UnorderedList,
   useMultiStyleConfig,
+  useColorModeValue,
   Box,
 } from "@chakra-ui/react"
 import BlockContent, {
   BlockContentProps,
   WrappedComponent,
 } from "@sanity/block-content-to-react"
+import { FeatureCollection } from "geojson"
 import React, { ReactNode } from "react"
+import type { FC } from "react"
+import { FaSearchLocation } from "react-icons/fa"
+
+import type { Fly, ParseViewport } from "../pages/adventures"
+import { Project } from "../studio/schema"
+import type { Adventure } from "../studio/schema"
 
 import ExternalLink from "./ExternalLink"
+import { ImageWithCaption } from "./ImageWithCaption"
+
+interface ActiveAdventure extends Adventure {
+  index: number
+}
 
 const WrappedUnorderedList: WrappedComponent = ({ children }) => {
   const styles = useMultiStyleConfig("ul", {})
@@ -67,12 +81,17 @@ const WrappedContainer: WrappedComponent = ({ children }) => {
   )
 }
 
-type BlockRenderer = (props: {
+type BlockRenderer = (
+  fly: Fly,
+  parseViewport: ParseViewport,
+  tracks: FeatureCollection[],
+  activeAdventure: ActiveAdventure
+) => (props: {
   node: { style: string }
-  children: ReactNode
+  children: string
   size: string
 }) => JSX.Element
-const block: BlockRenderer = ({
+const block: BlockRenderer = (fly, parseViewport, tracks, activeAdventure) => ({
   node: { style = "normal" },
   children,
   size,
@@ -99,7 +118,7 @@ const block: BlockRenderer = ({
       }
     }
 
-    const convertTag = inTag => {
+    const convertTag = (inTag: As<any>) => {
       switch (inTag) {
         case "h1":
           return "h3"
@@ -112,7 +131,39 @@ const block: BlockRenderer = ({
       }
     }
 
-    return (
+    return children[0][0] === "@" ? (
+      <Button
+        _hover={{
+          borderColor: "currentcolor",
+          color: useColorModeValue("teal.600", "teal.200"),
+        }}
+        as="h3"
+        borderBottom="2px"
+        borderColor="transparent"
+        borderRadius={0}
+        colorScheme="teal"
+        fontSize={28}
+        pointerEvents="all"
+        rightIcon={<FaSearchLocation size="0.75em" />}
+        size="lg"
+        transition="all 0.2s"
+        variant="unstyled"
+        onClick={() =>
+          fly(
+            parseViewport(
+              tracks[activeAdventure.index].features
+                .filter(feature => feature.geometry.type === "Point")
+                .filter(
+                  feature =>
+                    feature.properties.name.split(" ")[0] === children[0][1]
+                )[0].properties.cmt
+            )
+          )
+        }
+      >
+        {children[0].slice(2)}
+      </Button>
+    ) : (
       <Heading as={convertTag(tag)} size={size || getSize(convertTag(tag)[1])}>
         {children}
       </Heading>
@@ -121,6 +172,13 @@ const block: BlockRenderer = ({
 
   return <Text textStyle="paragraph">{children}</Text>
 }
+
+interface ImageRendererProps {
+  node: Project["mainImage"]
+}
+const ImageRenderer: FC<ImageRendererProps> = ({ node }) => (
+  <ImageWithCaption image={node} size="md" />
+)
 
 const code: WrappedComponent = ({ children }) => <Code>{children}</Code>
 
@@ -133,12 +191,32 @@ const link: Link = ({ children, mark }) =>
     <ExternalLink display="inline-flex" href={mark.href} text={children} />
   )
 
-type Block = (props: BlockContentProps) => JSX.Element
-const Block: Block = ({ blocks }) => (
+interface CustomBlockContentProps extends BlockContentProps {
+  fly?: Fly
+  parseViewport?: ParseViewport
+  tracks?: FeatureCollection[]
+  activeAdventure?: ActiveAdventure
+}
+
+type Block = (props: CustomBlockContentProps) => JSX.Element
+const Block: Block = ({
+  blocks,
+  projectId,
+  dataset,
+  fly,
+  parseViewport,
+  tracks,
+  activeAdventure,
+}) => (
   <BlockContent
     blocks={blocks}
+    dataset={dataset}
+    projectId={projectId}
     serializers={{
-      types: { block },
+      types: {
+        block: block(fly, parseViewport, tracks, activeAdventure),
+        image: ImageRenderer,
+      },
       marks: { link, code },
       list: listType,
       listItem: WrappedListItem,
