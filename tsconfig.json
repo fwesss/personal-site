@@ -1,21 +1,27 @@
 {
-	"compilerOptions": {
-		"baseUrl": "http://localhost:3000",
-		"target": "es5",
-		"lib": ["dom", "dom.iterable", "esnext"],
-		"allowJs": true,
-		"skipLibCheck": true,
-		"strict": false,
-		"forceConsistentCasingInFileNames": true,
-		"noEmit": true,
-		"esModuleInterop": true,
-		"module": "esnext",
-		"moduleResolution": "node",
-		"resolveJsonModule": true,
-		"isolatedModules": true,
-		"jsx": "preserve"
-	},
-	"include": ["untyped.d.ts","next-env.d.ts", "**/*.ts", "**/*.tsx", "**/*.js"],
-	"exclude": ["node_modules", ".next", "out", "cypress"],
-	"files": ["./studio/@types/block-content-to-react.d.ts"]
+  "compilerOptions": {
+    "baseUrl": "http://localhost:3000",
+    "target": "es5",
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve"
+  },
+  "include": [
+    "untyped.d.ts",
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/*.js"
+  ],
+  "exclude": ["node_modules", ".next", "out", "cypress"],
+  "files": ["./studio/@types/block-content-to-react.d.ts"]
 }
