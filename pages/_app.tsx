@@ -1,4 +1,4 @@
-import { Box, ChakraProvider, Flex } from "@chakra-ui/react"
+import { Box, ChakraProvider, Flex, useDisclosure } from "@chakra-ui/react"
 import { AnimatePresence, AnimateSharedLayout } from "framer-motion"
 import { AppProps } from "next/app"
 import NextLink from "next/link"
@@ -31,10 +31,15 @@ const handleExitComplete = (): void => {
 
 const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
   const router = useRouter()
+  const { isOpen, onClose, onToggle } = useDisclosure()
 
   return (
     <ChakraProvider theme={theme}>
-      <Flex direction="column" pb={router.pathname !== "/adventures" && 50}>
+      <Flex
+        direction="column"
+        pb={router.pathname !== "/adventures" && 50}
+        onClick={isOpen ? onClose : undefined}
+      >
         <Box
           background="transparent"
           minHeight="16"
@@ -42,7 +47,7 @@ const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
           position="sticky"
           top={0}
           w="100%"
-          zIndex={1000}
+          zIndex={1001}
         >
           <Box
             height="16"
@@ -60,9 +65,14 @@ const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
               justify="space-between"
             >
               <NextLink href="/" passHref>
-                <NavLink h={10}>WF</NavLink>
+                <NavLink.Desktop h={10}>WF</NavLink.Desktop>
               </NextLink>
-              <NavContent display="flex" />
+              <NavContent.Desktop display={{ base: "none", md: "flex" }} />
+              <NavContent.Mobile
+                display={{ base: "flex", md: "none" }}
+                isOpen={isOpen}
+                onToggle={onToggle}
+              />
             </Flex>
           </Box>
         </Box>

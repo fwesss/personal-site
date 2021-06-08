@@ -1,6 +1,7 @@
 import {
   Box,
   Button,
+  Center,
   Container,
   Heading,
   HStack,
@@ -8,6 +9,7 @@ import {
   Link,
   ListItem,
   UnorderedList,
+  VStack,
   useBoolean,
   useBreakpointValue,
   useColorModeValue,
@@ -17,7 +19,7 @@ import type { FeatureCollection } from "geojson"
 import mapboxgl from "mapbox-gl"
 import type { FC } from "react"
 import { useCallback, useEffect, useRef, useState } from "react"
-import { FaExpand, FaWindowMinimize, FaArrowUp } from "react-icons/fa"
+import { FaExpand, FaWindowMinimize, FaArrowUp, FaRegMap } from "react-icons/fa"
 import { DOMParser } from "xmldom"
 
 import Block from "../components/Block"
@@ -206,7 +208,57 @@ const Map: FC<AdventureProps> = ({
   })
 
   return (
-    <Box h="calc(100vh - 64px)">
+    <Box h={{ xl: "calc(100vh - 64px)" }} id="top">
+      <Center
+        _hover={{
+          bg: useColorModeValue(
+            theme.colors.gray["50"],
+            theme.colors.gray["900"]
+          ),
+        }}
+        align="center"
+        background={useColorModeValue("white", "gray.800")}
+        bg={useColorModeValue(
+          `${theme.colors.gray["50"]}AA`,
+          `${theme.colors.gray["900"]}AA`
+        )}
+        borderRadius="xl"
+        boxShadow="xl"
+        my={{ base: 0, xl: 4 }}
+        position={{ xl: "absolute" }}
+        px={6}
+        py={{ base: 0, xl: 6 }}
+        right={4}
+        sx={{ backdropFilter: "blur(4px)" }}
+        transition="all 0.2s"
+        zIndex={1000}
+      >
+        <UnorderedList listStyleType="none" marginInlineStart={0}>
+          {adventures.map((adventure, adventureIndex) => (
+            <ListItem key={adventure._id} mb={2}>
+              <Button
+                _hover={{
+                  borderColor: "currentcolor",
+                  color: buttonHoverColor,
+                }}
+                borderBottom="2px"
+                borderColor={{ base: "teal.600", xl: "transparent" }}
+                borderRadius={0}
+                colorScheme="teal"
+                pointerEvents="all"
+                transition="all 0.2s"
+                variant="unstyled"
+                onClick={() => {
+                  goToAdventure(adventure, adventureIndex)
+                }}
+              >
+                {adventure.title}
+              </Button>
+            </ListItem>
+          ))}
+        </UnorderedList>
+      </Center>
+
       <Container
         _hover={{
           bg: useColorModeValue(
@@ -221,11 +273,11 @@ const Map: FC<AdventureProps> = ({
         left={4}
         maxH={minimized ? "3.5rem" : "88%"}
         maxW="3xl"
-        my={4}
+        my={{ base: 0, xl: 4 }}
         overflowY={minimized ? "hidden" : "auto"}
         position={{ xl: "absolute" }}
         px={12}
-        py={minimized ? 2 : 8}
+        py={{ base: 16, xl: minimized ? 2 : 8 }}
         sx={{ backdropFilter: "blur(4px)" }}
         transition="all 0.2s"
         zIndex={1000}
@@ -254,9 +306,7 @@ const Map: FC<AdventureProps> = ({
               />
             ))}
         </HStack>
-        <Heading as="h2" id="top">
-          {activeAdventure.title}
-        </Heading>
+        <Heading as="h2">{activeAdventure.title}</Heading>
         <Block
           activeAdventure={activeAdventure}
           blocks={activeAdventure.stories}
@@ -268,67 +318,32 @@ const Map: FC<AdventureProps> = ({
         />
       </Container>
 
-      <Container
-        _hover={{
-          bg: useColorModeValue(
-            theme.colors.gray["50"],
-            theme.colors.gray["900"]
-          ),
-        }}
-        align="center"
-        bg={useColorModeValue(
-          `${theme.colors.gray["50"]}AA`,
-          `${theme.colors.gray["900"]}AA`
-        )}
-        maxW="12%"
-        my={4}
-        position="absolute"
-        px={0}
-        py={6}
-        right={4}
-        sx={{ backdropFilter: "blur(4px)" }}
-        transition="all 0.2s"
-        zIndex={1000}
-      >
-        <UnorderedList listStyleType="none" marginInlineStart={0}>
-          {adventures.map((adventure, adventureIndex) => (
-            <ListItem key={adventure._id} mb={2}>
-              <Button
-                _hover={{
-                  borderColor: "currentcolor",
-                  color: buttonHoverColor,
-                }}
-                borderBottom="2px"
-                borderColor="transparent"
-                borderRadius={0}
-                colorScheme="teal"
-                pointerEvents="all"
-                transition="all 0.2s"
-                variant="unstyled"
-                onClick={() => {
-                  goToAdventure(adventure, adventureIndex)
-                }}
-              >
-                {adventure.title}
-              </Button>
-            </ListItem>
-          ))}
-        </UnorderedList>
-      </Container>
-      <Box ref={mapContainerRef} height="100%" width="100%" />
+      <Box
+        ref={mapContainerRef}
+        height={size !== "xl" ? "calc(100vh - 64px)" : "100%"}
+        id="map"
+        width="100%"
+      />
+
       {size !== "xl" && (
-        <IconButton
-          aria-label="Scroll up"
-          as={Link}
-          bottom={6}
-          colorScheme="teal"
-          href="#top"
-          icon={<FaArrowUp />}
-          position="fixed"
-          right={4}
-          zIndex={1000}
-          isRound
-        />
+        <VStack bottom={6} position="fixed" right={4} zIndex={1000}>
+          <IconButton
+            aria-label="Scroll to top"
+            as={Link}
+            colorScheme="teal"
+            href="#top"
+            icon={<FaArrowUp />}
+            isRound
+          />
+          <IconButton
+            aria-label="Scroll to map"
+            as={Link}
+            colorScheme="teal"
+            href="#map"
+            icon={<FaRegMap />}
+            isRound
+          />
+        </VStack>
       )}
     </Box>
   )
@@ -349,9 +364,9 @@ export const getStaticProps = async (): Promise<{
   const adventures = await sanity.getAll("adventure")
   const tracks = await Promise.all(
     adventures.map(async adventure => {
-      const expanded = ((await sanity.expand<Adventure>(
+      const expanded = (await sanity.expand<Adventure>(
         adventure.gpx.asset
-      )) as unknown) as SanityFileAsset
+      )) as unknown as SanityFileAsset
 
       const res = await fetch(expanded.url)
       const data = await res.blob()
