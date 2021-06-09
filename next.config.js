@@ -1,3 +1,4 @@
+const withPWA = require("next-pwa")
 // Use the SentryWebpack plugin to upload the source maps during build step
 const SentryWebpackPlugin = require("@sentry/webpack-plugin")
 const {
@@ -12,7 +13,10 @@ const {
 process.env.SENTRY_DSN = SENTRY_DSN
 const basePath = ""
 
-module.exports = {
+module.exports = withPWA({
+  pwa: {
+    dest: "public",
+  },
   productionBrowserSourceMaps: true,
   env: {
     // Make the COMMIT_SHA available to the client so that Sentry events can be
@@ -82,4 +86,4 @@ module.exports = {
   images: {
     domains: ["cdn.sanity.io"],
   },
-}
+})

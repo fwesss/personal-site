@@ -42,3 +42,6 @@ yarn-error.log*
 **/*/node_modules
 dist
 public/studio
+
+**/public/workbox-*.js
+**/public/sw.js
