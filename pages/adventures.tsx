@@ -208,7 +208,7 @@ const Map: FC<AdventureProps> = ({
   })
 
   return (
-    <Box h={{ xl: "calc(100vh - 64px)" }} id="top">
+    <Box h={{ base: "auto", xl: "calc(100vh - 64px)" }} id="top">
       <Center
         _hover={{
           bg: useColorModeValue(
@@ -318,12 +318,9 @@ const Map: FC<AdventureProps> = ({
         />
       </Container>
 
-      <Box
-        ref={mapContainerRef}
-        height={size !== "xl" ? "calc(100vh - 64px)" : "100%"}
-        id="map"
-        width="100%"
-      />
+      <Box h="calc(100vh - 64px)">
+        <Box ref={mapContainerRef} height="100%" id="map" width="100%" />
+      </Box>
 
       {size !== "xl" && (
         <VStack bottom={6} position="fixed" right={4} zIndex={1000}>
