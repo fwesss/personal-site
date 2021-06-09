@@ -131,7 +131,9 @@ const block: BlockRenderer = (fly, parseViewport, tracks, activeAdventure) => ({
       }
     }
 
-    return children[0][0] === "@" ? (
+    const [maybeAt, maybeNumber, maybeTitle] = children[0].split("_")
+
+    return maybeAt === "@" ? (
       <Button
         _hover={{
           borderColor: "currentcolor",
@@ -155,13 +157,13 @@ const block: BlockRenderer = (fly, parseViewport, tracks, activeAdventure) => ({
                 .filter(feature => feature.geometry.type === "Point")
                 .filter(
                   feature =>
-                    feature.properties.name.split(" ")[0] === children[0][1]
+                    feature.properties.name.split(" ")[0] === maybeNumber
                 )[0].properties.cmt
             )
           )
         }
       >
-        {children[0].slice(2)}
+        {maybeTitle}
       </Button>
     ) : (
       <Heading as={convertTag(tag)} size={size || getSize(convertTag(tag)[1])}>

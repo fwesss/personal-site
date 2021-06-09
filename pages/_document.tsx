@@ -9,7 +9,9 @@ import Document, {
 import React, { ReactElement, ReactFragment } from "react"
 
 class MyDocument extends Document {
-  static async getInitialProps(ctx: unknown): Promise<{
+  static async getInitialProps(
+    ctx: unknown
+  ): Promise<{
     head?: Array<JSX.Element | null>
     html: string
     styles?: ReactElement[] | ReactFragment
@@ -27,106 +29,102 @@ class MyDocument extends Document {
             href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@100;400;500;600&family=Inter:wght@400;500;600;700;800;900&display=swap"
             rel="stylesheet"
           />
+          <meta content="Westley Feller" name="application-name" />
+          <meta content="yes" name="apple-mobile-web-app-capable" />
           <meta
-            name="viewport"
-            content="minimum-scale=1, initial-scale=1, width=device-width, shrink-to-fit=no, user-scalable=no, viewport-fit=cover"
-          />
-          <meta name="application-name" content="Westley Feller" />
-          <meta name="apple-mobile-web-app-capable" content="yes" />
-          <meta
-            name="apple-mobile-web-app-status-bar-style"
             content="default"
+            name="apple-mobile-web-app-status-bar-style"
           />
-          <meta name="apple-mobile-web-app-title" content="Westley Feller" />
+          <meta content="Westley Feller" name="apple-mobile-web-app-title" />
           <meta
-            name="description"
             content="Portfolio and personal site for Westley Feller"
+            name="description"
           />
-          <meta name="format-detection" content="telephone=no" />
-          <meta name="mobile-web-app-capable" content="yes" />
-          <meta name="msapplication-config" content="/browserconfig.xml" />
-          <meta name="msapplication-TileColor" content="#8FBCBB" />
-          <meta name="msapplication-tap-highlight" content="no" />
-          <meta name="theme-color" content="#8FBCBB" />
+          <meta content="telephone=no" name="format-detection" />
+          <meta content="yes" name="mobile-web-app-capable" />
+          <meta content="/browserconfig.xml" name="msapplication-config" />
+          <meta content="#8FBCBB" name="msapplication-TileColor" />
+          <meta content="no" name="msapplication-tap-highlight" />
+          <meta content="#8FBCBB" name="theme-color" />
 
-          <link rel="apple-touch-icon" href="/touch-icon-iphone.png" />
+          <link href="/touch-icon-iphone.png" rel="apple-touch-icon" />
           <link
+            href="/touch-icon-ipad.png"
             rel="apple-touch-icon"
             sizes="152x152"
-            href="/touch-icon-ipad.png"
           />
           <link
+            href="/touch-icon-iphone-retina.png"
             rel="apple-touch-icon"
             sizes="180x180"
-            href="/touch-icon-iphone-retina.png"
           />
           <link
+            href="/touch-icon-ipad-retina.png"
             rel="apple-touch-icon"
             sizes="167x167"
-            href="/touch-icon-ipad-retina.png"
           />
 
           <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
             href="/favicon-32x32.png"
-          />
-          <link
             rel="icon"
+            sizes="32x32"
             type="image/png"
-            sizes="16x16"
+          />
+          <link
             href="/favicon-16x16.png"
+            rel="icon"
+            sizes="16x16"
+            type="image/png"
           />
-          <link rel="manifest" href="/manifest.json" />
-          <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5" />
-          <link rel="shortcut icon" href="/favicon.ico" />
+          <link href="/manifest.json" rel="manifest" />
+          <link color="#5bbad5" href="/safari-pinned-tab.svg" rel="mask-icon" />
+          <link href="/favicon.ico" rel="shortcut icon" />
 
-          <meta name="twitter:card" content="summary" />
-          <meta name="twitter:url" content="https://wesfeller.dev" />
-          <meta name="twitter:title" content="Westley Feller" />
+          <meta content="summary" name="twitter:card" />
+          <meta content="https://wesfeller.dev" name="twitter:url" />
+          <meta content="Westley Feller" name="twitter:title" />
           <meta
+            content="Portfolio and personal website for Westley Feller"
             name="twitter:description"
-            content="Portfolio and personal website for Westley Feller"
           />
           <meta
-            name="twitter:image"
             content="https://wesfeller.dev/static/android-chrome-192x192.png"
+            name="twitter:image"
           />
-          <meta name="twitter:creator" content="@FellerWestley" />
-          <meta property="og:type" content="website" />
-          <meta property="og:title" content="Westley Feller" />
+          <meta content="@FellerWestley" name="twitter:creator" />
+          <meta content="website" property="og:type" />
+          <meta content="Westley Feller" property="og:title" />
           <meta
-            property="og:description"
             content="Portfolio and personal website for Westley Feller"
+            property="og:description"
           />
-          <meta property="og:site_name" content="Westley Feller" />
-          <meta property="og:url" content="https://wesfeller.dev" />
+          <meta content="Westley Feller" property="og:site_name" />
+          <meta content="https://wesfeller.dev" property="og:url" />
           <meta
-            property="og:image"
             content="https://wesfeller.dev/static/apple-touch-icon.png"
+            property="og:image"
           />
 
           <link
+            href="/apple-touch-icon.png"
             rel="apple-touch-icon"
             sizes="180x180"
-            href="/apple-touch-icon.png"
           />
           <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
             href="/favicon-32x32.png"
+            rel="icon"
+            sizes="32x32"
+            type="image/png"
           />
           <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
             href="/favicon-16x16.png"
+            rel="icon"
+            sizes="16x16"
+            type="image/png"
           />
-          <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#8fbcbb" />
-          <meta name="msapplication-TileColor" content="#8fbcbb" />
-          <meta name="theme-color" content="#8fbcbb" />
+          <link color="#8fbcbb" href="/safari-pinned-tab.svg" rel="mask-icon" />
+          <meta content="#8fbcbb" name="msapplication-TileColor" />
+          <meta content="#8fbcbb" name="theme-color" />
         </Head>
         <body>
           <ColorModeScript initialColorMode="light" />

@@ -142,7 +142,7 @@ const Map: FC<AdventureProps> = ({
         })
 
         if (track.features.some(feature => feature.geometry.type === "Point")) {
-          initMap.addSource("points", {
+          initMap.addSource(`points${i}`, {
             type: "geojson",
             data: {
               ...track,
@@ -153,8 +153,8 @@ const Map: FC<AdventureProps> = ({
           })
 
           initMap.addLayer({
-            id: "points",
-            source: "points",
+            id: `points${i}`,
+            source: `points${i}`,
             type: "symbol",
             layout: { "icon-size": 2, "icon-image": "marker-11" },
             paint: {

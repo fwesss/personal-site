@@ -40,7 +40,6 @@ export default {
         { type: "block" },
         {
           type: "image",
-
           fields: [
             {
               name: "caption",
