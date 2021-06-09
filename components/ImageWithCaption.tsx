@@ -22,18 +22,20 @@ interface ImageWithCaptionProps {
   image: Project["mainImage"] | Project["screenshots"][0]
   size: string
   priority?: boolean
+  mb?: number
 }
 
 export const ImageWithCaption: FC<ImageWithCaptionProps> = ({
   image,
   size,
   priority = false,
+  mb,
 }) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
     <>
-      <Box as="figure">
+      <Box as="figure" mb={mb}>
         <Center
           h={
             size === "sm"

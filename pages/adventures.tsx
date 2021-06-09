@@ -219,8 +219,8 @@ const Map: FC<AdventureProps> = ({
         align="center"
         background={useColorModeValue("white", "gray.800")}
         bg={useColorModeValue(
-          `${theme.colors.gray["50"]}AA`,
-          `${theme.colors.gray["900"]}AA`
+          `${theme.colors.gray["50"]}CB`,
+          `${theme.colors.gray["900"]}CB`
         )}
         borderRadius="xl"
         boxShadow="xl"
@@ -267,12 +267,12 @@ const Map: FC<AdventureProps> = ({
           ),
         }}
         bg={useColorModeValue(
-          `${theme.colors.gray["50"]}AA`,
-          `${theme.colors.gray["900"]}AA`
+          `${theme.colors.gray["50"]}CB`,
+          `${theme.colors.gray["900"]}CB`
         )}
         left={4}
         maxH={minimized ? "3.5rem" : "88%"}
-        maxW="3xl"
+        maxW={{ base: "100vw", xl: "3xl" }}
         my={{ base: 0, xl: 4 }}
         overflowY={minimized ? "hidden" : "auto"}
         position={{ xl: "absolute" }}
@@ -361,9 +361,9 @@ export const getStaticProps = async (): Promise<{
   const adventures = await sanity.getAll("adventure")
   const tracks = await Promise.all(
     adventures.map(async adventure => {
-      const expanded = (await sanity.expand<Adventure>(
+      const expanded = ((await sanity.expand<Adventure>(
         adventure.gpx.asset
-      )) as unknown as SanityFileAsset
+      )) as unknown) as SanityFileAsset
 
       const res = await fetch(expanded.url)
       const data = await res.blob()

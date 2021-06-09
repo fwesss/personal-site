@@ -137,17 +137,17 @@ const block: BlockRenderer = (fly, parseViewport, tracks, activeAdventure) => ({
           borderColor: "currentcolor",
           color: useColorModeValue("teal.600", "teal.200"),
         }}
-        as="h3"
-        borderBottom="2px"
+        as={Link}
         borderColor="transparent"
         borderRadius={0}
         colorScheme="teal"
         fontSize={28}
+        href="#map"
         pointerEvents="all"
         rightIcon={<FaSearchLocation size="0.75em" />}
         size="lg"
         transition="all 0.2s"
-        variant="unstyled"
+        variant="link"
         onClick={() =>
           fly(
             parseViewport(
@@ -177,7 +177,7 @@ interface ImageRendererProps {
   node: Project["mainImage"]
 }
 const ImageRenderer: FC<ImageRendererProps> = ({ node }) => (
-  <ImageWithCaption image={node} size="md" />
+  <ImageWithCaption image={node} mb={4} size="md" />
 )
 
 const code: WrappedComponent = ({ children }) => <Code>{children}</Code>
