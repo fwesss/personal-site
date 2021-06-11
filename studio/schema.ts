@@ -35,6 +35,13 @@ export interface Adventure extends SanityDocument {
   _type: "adventure"
 
   /**
+   * Order — `number`
+   *
+   *
+   */
+  order?: number
+
+  /**
    * Title — `string`
    *
    * The name of the project.

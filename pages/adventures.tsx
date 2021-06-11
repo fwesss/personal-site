@@ -13,6 +13,7 @@ import {
   useBoolean,
   useBreakpointValue,
   useColorModeValue,
+  useColorMode,
 } from "@chakra-ui/react"
 import geoJson from "@mapbox/togeojson"
 import type { FeatureCollection } from "geojson"
@@ -20,6 +21,7 @@ import mapboxgl from "mapbox-gl"
 import type { FC } from "react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { FaExpand, FaWindowMinimize, FaArrowUp, FaRegMap } from "react-icons/fa"
+import { RiRotateLockFill } from "react-icons/ri"
 import { DOMParser } from "xmldom"
 
 import Block from "../components/Block"
@@ -87,11 +89,11 @@ const Map: FC<AdventureProps> = ({
     })
   }, [map])
 
-  const rotateCamera = () => {
+  const rotateCamera = useCallback(() => {
     if (map) {
       map.on("moveend", rotate)
     }
-  }
+  }, [map, rotate])
 
   const fly = ([zoom, bearing, pitch, longitude, latitude]: [
     Zoom,
@@ -108,18 +110,65 @@ const Map: FC<AdventureProps> = ({
     })
   }
 
+  const { colorMode } = useColorMode()
+
   useEffect(() => {
+    if (map) {
+      if (colorMode === "light") {
+        map.setPaintProperty("sky-day", "sky-opacity", 1)
+        map.setPaintProperty("sky-night", "sky-opacity", 0)
+        map.setFog({ color: "white" })
+      } else {
+        map.setPaintProperty("sky-day", "sky-opacity", 0)
+        map.setPaintProperty("sky-night", "sky-opacity", 1)
+        map.setFog({ color: "rgba(66, 88, 106, 1.0)" })
+      }
+    }
+  }, [colorMode, map])
+
+  useEffect(() => {
+    const [zoom, bearing, pitch, latitude, longitude] = parseViewport(
+      adventures[0].initialView
+    )
     const initMap = new mapboxgl.Map({
       container: mapContainerRef.current,
       style,
       accessToken: token,
-      center: [-118.063029, 35.790266],
-      zoom: 14.19,
-      pitch: 43.92,
-      bearing: 0,
+      center: [latitude, longitude],
+      zoom,
+      pitch,
+      bearing,
     })
 
     initMap.on("load", () => {
+      initMap.setFog({
+        range: [1, 12],
+        color: "white",
+        "horizon-blend": 0.1,
+      })
+
+      initMap.addLayer({
+        id: "sky-day",
+        type: "sky",
+        paint: {
+          "sky-type": "gradient",
+          "sky-opacity-transition": { duration: 400 },
+        },
+      })
+
+      initMap.addLayer({
+        id: "sky-night",
+        type: "sky",
+        paint: {
+          "sky-type": "atmosphere",
+          "sky-atmosphere-sun": [90, 0],
+          "sky-atmosphere-halo-color": "rgba(255, 255, 255, 0.5)",
+          "sky-atmosphere-color": "rgba(255, 255, 255, 0.2)",
+          "sky-opacity": 0,
+          "sky-opacity-transition": { duration: 400 },
+        },
+      })
+
       tracks.forEach((track, i) => {
         initMap.addSource(`line${i}`, {
           data: {
@@ -137,7 +186,7 @@ const Map: FC<AdventureProps> = ({
           type: "line",
           paint: {
             "line-color": theme.colors.cyan["600"],
-            "line-width": 2,
+            "line-width": 4,
           },
         })
 
@@ -156,21 +205,46 @@ const Map: FC<AdventureProps> = ({
             id: `points${i}`,
             source: `points${i}`,
             type: "symbol",
-            layout: { "icon-size": 2, "icon-image": "marker-11" },
+            layout: {
+              "icon-size": 2,
+              "icon-image": "marker-11",
+              "text-size": 14,
+              "text-field": ["get", "desc"],
+              "text-justify": "center",
+            },
             paint: {
               "icon-color": theme.colors.yellow["400"],
               "text-color": theme.colors.cyan["100"],
               "text-halo-color": theme.colors.cyan["700"],
+              "text-translate": [0, 20],
             },
           })
         }
+      })
+
+      initMap.rotateTo(initMap.getBearing() + 90, {
+        duration: 24000,
+        easing: t => t,
       })
 
       setMap(initMap)
     })
 
     return () => initMap.remove()
-  }, [style, token, tracks])
+  }, [style, token, tracks, adventures])
+
+  const [rotating, setRotate] = useState(true)
+
+  useEffect(() => {
+    if (map) {
+      if (rotating) {
+        rotate()
+      } else {
+        map.off("moveend", rotate)
+        map.stop()
+      }
+    }
+  }, [map, rotating, rotateCamera, rotate])
 
   useEffect(() => {
     if (map) {
@@ -322,7 +396,7 @@ const Map: FC<AdventureProps> = ({
         <Box ref={mapContainerRef} height="100%" id="map" width="100%" />
       </Box>
 
-      {size !== "xl" && (
+      {size !== "xl" ? (
         <VStack bottom={6} position="fixed" right={4} zIndex={1000}>
           <IconButton
             aria-label="Scroll to top"
@@ -340,7 +414,27 @@ const Map: FC<AdventureProps> = ({
             icon={<FaRegMap />}
             isRound
           />
+          <IconButton
+            aria-label="Toggle auto rotation"
+            colorScheme="teal"
+            icon={<RiRotateLockFill />}
+            isRound
+            onClick={() => setRotate(!rotating)}
+          />
         </VStack>
+      ) : (
+        <IconButton
+          aria-label="Toggle auto rotation"
+          bottom={6}
+          colorScheme="teal"
+          icon={<RiRotateLockFill />}
+          position="fixed"
+          right={4}
+          size="lg"
+          zIndex={1000}
+          isRound
+          onClick={() => setRotate(!rotating)}
+        />
       )}
     </Box>
   )
@@ -359,6 +453,8 @@ export const getStaticProps = async (): Promise<{
   }
 }> => {
   const adventures = await sanity.getAll("adventure")
+  adventures.sort((a, b) => (a.order > b.order ? 1 : -1))
+
   const tracks = await Promise.all(
     adventures.map(async adventure => {
       const expanded = ((await sanity.expand<Adventure>(

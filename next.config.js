@@ -16,6 +16,7 @@ const basePath = ""
 module.exports = withPWA({
   pwa: {
     dest: "public",
+    mode: "production",
   },
   productionBrowserSourceMaps: true,
   env: {
