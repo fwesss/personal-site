@@ -152,6 +152,7 @@ const Map: FC<AdventureProps> = ({
         type: "sky",
         paint: {
           "sky-type": "gradient",
+          //@ts-ignore
           "sky-opacity-transition": { duration: 400 },
         },
       })
@@ -165,6 +166,7 @@ const Map: FC<AdventureProps> = ({
           "sky-atmosphere-halo-color": "rgba(255, 255, 255, 0.5)",
           "sky-atmosphere-color": "rgba(255, 255, 255, 0.2)",
           "sky-opacity": 0,
+          //@ts-ignore
           "sky-opacity-transition": { duration: 400 },
         },
       })
@@ -457,9 +459,9 @@ export const getStaticProps = async (): Promise<{
 
   const tracks = await Promise.all(
     adventures.map(async adventure => {
-      const expanded = ((await sanity.expand<Adventure>(
+      const expanded = (await sanity.expand<Adventure>(
         adventure.gpx.asset
-      )) as unknown) as SanityFileAsset
+      )) as unknown as SanityFileAsset
 
       const res = await fetch(expanded.url)
       const data = await res.blob()
