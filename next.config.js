@@ -15,6 +15,9 @@ process.env.SENTRY_DSN = SENTRY_DSN
 const basePath = ""
 
 module.exports = withPWA({
+  eslint: {
+    ignoreDuringBuilds: true,
+  },
   pwa: {
     disable: prod ? false : true,
     dest: "public",
