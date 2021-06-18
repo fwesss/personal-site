@@ -1,4 +1,5 @@
 const withPWA = require("next-pwa")
+const prod = process.env.NODE_ENV === "production"
 // Use the SentryWebpack plugin to upload the source maps during build step
 const SentryWebpackPlugin = require("@sentry/webpack-plugin")
 const {
@@ -15,6 +16,7 @@ const basePath = ""
 
 module.exports = withPWA({
   pwa: {
+    disable: prod ? false : true,
     dest: "public",
     mode: "production",
   },
@@ -81,9 +83,6 @@ module.exports = withPWA({
   },
   basePath,
   reactStrictMode: true,
-  future: {
-    webpack5: true,
-  },
   images: {
     domains: ["cdn.sanity.io"],
   },
