@@ -157,7 +157,8 @@ const block: BlockRenderer = (fly, parseViewport, tracks, activeAdventure) => ({
                 .filter(feature => feature.geometry.type === "Point")
                 .filter(
                   feature =>
-                    feature.properties.name.split(" ")[0] === maybeNumber
+                    (feature.properties.name as string).split(" ")[0] ===
+                    maybeNumber
                 )[0].properties.cmt
             )
           )
