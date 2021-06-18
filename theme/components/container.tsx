@@ -1,7 +1,7 @@
 import type { ContainerProps } from "@chakra-ui/react"
 import { mode } from "@chakra-ui/theme-tools"
 
-export default {
+const container = {
   baseStyle: (props: ContainerProps) => ({
     py: { base: 6, md: 8, lg: 12 },
     px: { base: 8, md: 24 },
@@ -21,3 +21,5 @@ export default {
     },
   },
 }
+
+export default container

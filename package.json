@@ -20,7 +20,7 @@
     "prepare": "husky install",
     "check-types": "tsc --pretty --noEmit",
     "format": "npm run prettier -- --write",
-    "lint": "eslint --ignore-path .eslintignore \"**/*.+(js|jsx|json|ts|tsx)\" --fix",
+    "lint": "eslint_d --ignore-path .eslintignore \"**/*.+(js|jsx|json|ts|tsx)\" --fix",
     "prettier": "prettier --ignore-path .prettierignore \"**/*.+(js|json|ts|tsx|css|html|md)\" --write",
     "pretest:e2e:run": "npm run build",
     "test:e2e:run": "start-server-and-test start http://localhost:3000 cy:run",

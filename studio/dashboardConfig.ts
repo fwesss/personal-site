@@ -1,4 +1,4 @@
-export default {
+const dashboardConfig = {
   widgets: [
     {
       name: "vercel",
@@ -8,3 +8,5 @@ export default {
     },
   ],
 }
+
+export default dashboardConfig

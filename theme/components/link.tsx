@@ -1,4 +1,4 @@
-export default {
+const link = {
   baseStyle: {
     transition: "all 0.2s",
   },
@@ -12,7 +12,7 @@ export default {
         borderBottomColor: "currentcolor !important",
       },
     },
-    nonButton({ colorMode }) {
+    nonButton({ colorMode }: { colorMode: "light" | "dark" }) {
       return {
         _hover: {
           color: colorMode === "dark" ? "teal.200" : "teal.600",
@@ -22,3 +22,5 @@ export default {
     },
   },
 }
+
+export default link

@@ -1,6 +1,6 @@
 import { mode } from "@chakra-ui/theme-tools"
 
-export default {
+const styles = {
   fonts: {
     body: "Inter, sans-serif",
     heading: "Inter, sans-serif",
@@ -187,3 +187,5 @@ export default {
     }),
   },
 }
+
+export default styles

@@ -2,7 +2,8 @@ interface Rule {
   required?: () => boolean
   unique?: () => boolean
 }
-export default {
+
+const adventure = {
   name: "adventure",
   title: "Adventure",
   type: "document",
@@ -73,3 +74,5 @@ export default {
     },
   ],
 }
+
+export default adventure
