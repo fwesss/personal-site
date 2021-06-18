@@ -22,6 +22,7 @@ import type { FC } from "react"
 import { useCallback, useEffect, useRef, useState } from "react"
 import { FaExpand, FaWindowMinimize, FaArrowUp, FaRegMap } from "react-icons/fa"
 import { RiRotateLockFill } from "react-icons/ri"
+import SunCalc from "suncalc"
 import { DOMParser } from "xmldom"
 
 import Block from "../components/Block"
@@ -141,19 +142,42 @@ const Map: FC<AdventureProps> = ({
     })
 
     initMap.on("load", () => {
-      initMap.setFog({
-        range: [1, 12],
-        color: "white",
-        "horizon-blend": 0.1,
-      })
+      const sunTimes = SunCalc.getTimes(
+        new Date(Date.now()),
+        initMap.getCenter().lat,
+        initMap.getCenter().lng
+      )
+
+      const getSunPosition = () => {
+        const center = initMap.getCenter()
+        const sunPos = SunCalc.getPosition(
+          sunTimes.solarNoon,
+          center.lat,
+          center.lng
+        )
+        const sunAzimuth = 180 + (sunPos.azimuth * 180) / Math.PI
+        const sunAltitude = 90 - (sunPos.altitude * 180) / Math.PI
+        return [sunAzimuth, sunAltitude]
+      }
 
       initMap.addLayer({
         id: "sky-day",
         type: "sky",
         paint: {
-          "sky-type": "gradient",
-          //@ts-ignore
-          "sky-opacity-transition": { duration: 400 },
+          "sky-opacity": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            0,
+            0,
+            5,
+            0.3,
+            8,
+            1,
+          ],
+          "sky-type": "atmosphere",
+          "sky-atmosphere-sun": getSunPosition(),
+          "sky-atmosphere-sun-intensity": 5,
         },
       })
 
@@ -162,12 +186,21 @@ const Map: FC<AdventureProps> = ({
         type: "sky",
         paint: {
           "sky-type": "atmosphere",
-          "sky-atmosphere-sun": [90, 0],
           "sky-atmosphere-halo-color": "rgba(255, 255, 255, 0.5)",
           "sky-atmosphere-color": "rgba(255, 255, 255, 0.2)",
-          "sky-opacity": 0,
-          //@ts-ignore
-          "sky-opacity-transition": { duration: 400 },
+          "sky-opacity": [
+            "interpolate",
+            ["linear"],
+            ["zoom"],
+            0,
+            0,
+            5,
+            0.3,
+            8,
+            1,
+          ],
+          "sky-atmosphere-sun-intensity": 5,
+          "sky-atmosphere-sun": getSunPosition(),
         },
       })
 
@@ -313,6 +346,10 @@ const Map: FC<AdventureProps> = ({
           {adventures.map((adventure, adventureIndex) => (
             <ListItem key={adventure._id} mb={2}>
               <Button
+                _active={{
+                  borderColor: "currentcolor",
+                  color: buttonHoverColor,
+                }}
                 _hover={{
                   borderColor: "currentcolor",
                   color: buttonHoverColor,
@@ -459,9 +496,9 @@ export const getStaticProps = async (): Promise<{
 
   const tracks = await Promise.all(
     adventures.map(async adventure => {
-      const expanded = (await sanity.expand<Adventure>(
+      const expanded = ((await sanity.expand<Adventure>(
         adventure.gpx.asset
-      )) as unknown as SanityFileAsset
+      )) as unknown) as SanityFileAsset
 
       const res = await fetch(expanded.url)
       const data = await res.blob()
