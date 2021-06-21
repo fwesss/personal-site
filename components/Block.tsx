@@ -207,7 +207,6 @@ const Block: Block = ({
   projectId,
   dataset,
   fly,
-  parseViewport,
   tracks,
   activeAdventure,
 }) => (
@@ -217,7 +216,7 @@ const Block: Block = ({
     projectId={projectId}
     serializers={{
       types: {
-        block: block(fly, parseViewport, tracks, activeAdventure),
+        block: block(fly, tracks, activeAdventure),
         image: ImageRenderer,
       },
       marks: { link, code },
