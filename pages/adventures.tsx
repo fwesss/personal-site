@@ -1,31 +1,15 @@
-import {
-  Box,
-  Button,
-  Center,
-  Container,
-  Heading,
-  HStack,
-  IconButton,
-  Link,
-  ListItem,
-  UnorderedList,
-  VStack,
-  useBoolean,
-  useBreakpointValue,
-  useColorModeValue,
-  useColorMode,
-} from "@chakra-ui/react"
+import { Box, useBreakpointValue, useColorMode } from "@chakra-ui/react"
 import geoJson from "@mapbox/togeojson"
 import type { FeatureCollection } from "geojson"
 import mapboxgl from "mapbox-gl"
 import type { FC } from "react"
 import { useCallback, useEffect, useRef, useState } from "react"
-import { FaExpand, FaWindowMinimize, FaArrowUp, FaRegMap } from "react-icons/fa"
-import { RiRotateLockFill } from "react-icons/ri"
 import SunCalc from "suncalc"
 import { DOMParser } from "xmldom"
 
-import Block from "../components/Block"
+import { Controls } from "../components/Adventures/Controls"
+import { Navigation } from "../components/Adventures/Navigation"
+import { Story } from "../components/Adventures/Story"
 import type { Adventure } from "../studio/schema"
 import theme from "../theme/index"
 import "mapbox-gl/dist/mapbox-gl.css"
@@ -54,13 +38,30 @@ type Pitch = number
 type Longitude = number
 type Latitude = number
 
-export type Fly = ([zoom, bearing, pitch, longitude, latitude]) => void
+export interface IndexedAdventure extends Adventure {
+  index: number
+}
+
+export type Fly = ([zoom, bearing, pitch, longitude, latitude]: [
+  Zoom,
+  Bearing,
+  Pitch,
+  Longitude,
+  Latitude
+]) => void
+
+type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
+type AdventureProps = UnwrapPromise<ReturnType<typeof getStaticProps>>["props"]
+
 export type ParseViewport = (
   view: string
 ) => [Zoom, Bearing, Pitch, Latitude, Longitude]
 
-type UnwrapPromise<T> = T extends Promise<infer U> ? U : T
-type AdventureProps = UnwrapPromise<ReturnType<typeof getStaticProps>>["props"]
+export const parseViewport: ParseViewport = (view: string) => {
+  const parsed = view.split(" ")
+  const [zoom, bearing, pitch, latitude, longitude] = parsed.map(x => Number(x))
+  return [zoom, bearing, pitch, latitude, longitude]
+}
 
 const Map: FC<AdventureProps> = ({
   dataset,
@@ -72,16 +73,6 @@ const Map: FC<AdventureProps> = ({
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const [map, setMap] = useState<mapboxgl.Map>(null)
-
-  const parseViewport = (
-    view: string
-  ): [Zoom, Bearing, Pitch, Latitude, Longitude] => {
-    const parsed = view.split(" ")
-    const [zoom, bearing, pitch, latitude, longitude] = parsed.map(x =>
-      Number(x)
-    )
-    return [zoom, bearing, pitch, latitude, longitude]
-  }
 
   const rotate = useCallback(() => {
     map.rotateTo(map.getBearing() + 90, {
@@ -96,13 +87,7 @@ const Map: FC<AdventureProps> = ({
     }
   }, [map, rotate])
 
-  const fly = ([zoom, bearing, pitch, longitude, latitude]: [
-    Zoom,
-    Bearing,
-    Pitch,
-    Longitude,
-    Latitude
-  ]) => {
+  const fly: Fly = ([zoom, bearing, pitch, longitude, latitude]) => {
     map.flyTo({
       zoom,
       bearing,
@@ -295,19 +280,7 @@ const Map: FC<AdventureProps> = ({
     index: 0,
   })
 
-  const goToAdventure = (
-    adventure: Adventure,
-    adventureIndex: number
-  ): void => {
-    fly(parseViewport(adventure.initialView))
-    setActiveAdventure({ ...adventure, index: adventureIndex })
-    rotateCamera()
-  }
-
-  const buttonHoverColor = useColorModeValue("teal.600", "teal.200")
-
-  const [minimized, setMinimized] = useBoolean(false)
-  const size = useBreakpointValue({
+  const size: "base" | "xs" | "sm" | "md" | "lg" | "xl" = useBreakpointValue({
     base: "base",
     xs: "xs",
     sm: "sm",
@@ -318,163 +291,27 @@ const Map: FC<AdventureProps> = ({
 
   return (
     <Box h={{ base: "auto", xl: "calc(100vh - 64px)" }} id="top">
-      <Center
-        _hover={{
-          bg: useColorModeValue(
-            theme.colors.gray["50"],
-            theme.colors.gray["900"]
-          ),
-        }}
-        align="center"
-        background={useColorModeValue("white", "gray.800")}
-        bg={useColorModeValue(
-          `${theme.colors.gray["50"]}CB`,
-          `${theme.colors.gray["900"]}CB`
-        )}
-        borderRadius="xl"
-        boxShadow="xl"
-        my={{ base: 0, xl: 4 }}
-        position={{ xl: "absolute" }}
-        px={6}
-        py={{ base: 0, xl: 6 }}
-        right={4}
-        sx={{ backdropFilter: "blur(4px)" }}
-        transition="all 0.2s"
-        zIndex={1000}
-      >
-        <UnorderedList listStyleType="none" marginInlineStart={0}>
-          {adventures.map((adventure, adventureIndex) => (
-            <ListItem key={adventure._id} mb={2}>
-              <Button
-                _active={{
-                  borderColor: "currentcolor",
-                  color: buttonHoverColor,
-                }}
-                _hover={{
-                  borderColor: "currentcolor",
-                  color: buttonHoverColor,
-                }}
-                borderBottom="2px"
-                borderColor={{ base: "teal.600", xl: "transparent" }}
-                borderRadius={0}
-                colorScheme="teal"
-                pointerEvents="all"
-                transition="all 0.2s"
-                variant="unstyled"
-                onClick={() => {
-                  goToAdventure(adventure, adventureIndex)
-                }}
-              >
-                {adventure.title}
-              </Button>
-            </ListItem>
-          ))}
-        </UnorderedList>
-      </Center>
+      <Navigation
+        adventures={adventures}
+        fly={fly}
+        rotateCamera={rotateCamera}
+        setActiveAdventure={setActiveAdventure}
+      />
 
-      <Container
-        _hover={{
-          bg: useColorModeValue(
-            theme.colors.gray["50"],
-            theme.colors.gray["900"]
-          ),
-        }}
-        bg={useColorModeValue(
-          `${theme.colors.gray["50"]}CB`,
-          `${theme.colors.gray["900"]}CB`
-        )}
-        left={4}
-        maxH={minimized ? "3.5rem" : "88%"}
-        maxW={{ base: "100vw", xl: "3xl" }}
-        my={{ base: 0, xl: 4 }}
-        overflowY={minimized ? "hidden" : "auto"}
-        position={{ xl: "absolute" }}
-        px={12}
-        py={{ base: 16, xl: minimized ? 2 : 8 }}
-        sx={{ backdropFilter: "blur(4px)" }}
-        transition="all 0.2s"
-        zIndex={1000}
-      >
-        <HStack
-          justify="flex-end"
-          mt={-10}
-          position="sticky"
-          top={0}
-          zIndex={1000}
-        >
-          {size === "xl" &&
-            (minimized ? (
-              <IconButton
-                aria-label="Expand panel"
-                icon={<FaExpand />}
-                variant="ghost"
-                onClick={setMinimized.toggle}
-              />
-            ) : (
-              <IconButton
-                aria-label="Minimize panel"
-                icon={<FaWindowMinimize />}
-                variant="ghost"
-                onClick={setMinimized.toggle}
-              />
-            ))}
-        </HStack>
-        <Heading as="h2">{activeAdventure.title}</Heading>
-        <Block
-          activeAdventure={activeAdventure}
-          blocks={activeAdventure.stories}
-          dataset={dataset}
-          fly={fly}
-          parseViewport={parseViewport}
-          projectId={projectId}
-          tracks={tracks}
-        />
-      </Container>
+      <Story
+        activeAdventure={activeAdventure}
+        dataset={dataset}
+        fly={fly}
+        projectId={projectId}
+        size={size}
+        tracks={tracks}
+      />
 
       <Box h="calc(100vh - 64px)">
         <Box ref={mapContainerRef} height="100%" id="map" width="100%" />
       </Box>
 
-      {size !== "xl" ? (
-        <VStack bottom={6} position="fixed" right={4} zIndex={1000}>
-          <IconButton
-            aria-label="Scroll to top"
-            as={Link}
-            colorScheme="teal"
-            href="#top"
-            icon={<FaArrowUp />}
-            isRound
-          />
-          <IconButton
-            aria-label="Scroll to map"
-            as={Link}
-            colorScheme="teal"
-            href="#map"
-            icon={<FaRegMap />}
-            isRound
-          />
-          <IconButton
-            aria-label="Toggle auto rotation"
-            colorScheme="teal"
-            icon={<RiRotateLockFill />}
-            isRound
-            onClick={() => setRotate(!rotating)}
-          />
-        </VStack>
-      ) : (
-        <IconButton
-          aria-label="Toggle auto rotation"
-          bottom={6}
-          colorScheme="teal"
-          icon={<RiRotateLockFill />}
-          position="fixed"
-          right={4}
-          size="lg"
-          zIndex={1000}
-          isRound
-          onClick={() => setRotate(!rotating)}
-        />
-      )}
+      <Controls rotating={rotating} setRotate={setRotate} size={size} />
     </Box>
   )
 }

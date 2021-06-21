@@ -23,6 +23,7 @@ import type { FC } from "react"
 import { FaSearchLocation } from "react-icons/fa"
 
 import type { Fly, ParseViewport } from "../pages/adventures"
+import { parseViewport } from "../pages/adventures"
 import { Project } from "../studio/schema"
 import type { Adventure } from "../studio/schema"
 
@@ -83,7 +84,6 @@ const WrappedContainer: WrappedComponent = ({ children }) => {
 
 type BlockRenderer = (
   fly: Fly,
-  parseViewport: ParseViewport,
   tracks: FeatureCollection[],
   activeAdventure: ActiveAdventure
 ) => (props: {
@@ -91,7 +91,7 @@ type BlockRenderer = (
   children: string
   size: string
 }) => JSX.Element
-const block: BlockRenderer = (fly, parseViewport, tracks, activeAdventure) => ({
+const block: BlockRenderer = (fly, tracks, activeAdventure) => ({
   node: { style = "normal" },
   children,
   size,
