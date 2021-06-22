@@ -45,3 +45,4 @@ public/studio
 
 **/public/workbox-*.js
 **/public/sw.js
+*.map
