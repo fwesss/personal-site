@@ -12,7 +12,7 @@
     "cy:open": "cypress open",
     "dev": "next dev",
     "build": "yarn run build:sanity && pwd && npm run build:web",
-    "build:sanity": "cd studio && yarn sanity-codegen && sanity install && sanity build ../public/studio -y && cd ..",
+    "build:sanity": "cd studio && sanity install && sanity build ../public/studio -y && cd ..",
     "start:sanity": "cp .env.local ./studio/.env.development && cd studio && sanity start",
     "build:web": "next build",
     "start:web": "next start",
