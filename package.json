@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/fwesss/personal-site.git"
   },
-  "author": "Westley Feller <feller.westley@gmail.com>",
+  "author": "Westley Feller <wes@wesfeller.dev>",
   "scripts": {
     "cy:run": "cypress run",
     "cy:open": "cypress open",
