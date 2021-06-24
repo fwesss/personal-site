@@ -271,6 +271,7 @@ const Map: FC<AdventureProps> = ({
       map.on("mousedown", () => {
         map.off("moveend", rotate)
         map.stop()
+        setRotate(false)
       })
     }
   }, [rotate, map])
@@ -295,6 +296,7 @@ const Map: FC<AdventureProps> = ({
         adventures={adventures}
         fly={fly}
         rotateCamera={rotateCamera}
+        rotating={rotating}
         setActiveAdventure={setActiveAdventure}
       />
 

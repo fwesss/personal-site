@@ -17,6 +17,7 @@ interface NavigationProps {
   setActiveAdventure: Dispatch<SetStateAction<IndexedAdventure>>
   fly: Fly
   rotateCamera: () => void
+  rotating: boolean
 }
 
 export const Navigation: FC<NavigationProps> = ({
@@ -24,6 +25,7 @@ export const Navigation: FC<NavigationProps> = ({
   setActiveAdventure,
   fly,
   rotateCamera,
+  rotating,
 }) => {
   const buttonHoverColor = useColorModeValue("teal.600", "teal.200")
 
@@ -33,7 +35,9 @@ export const Navigation: FC<NavigationProps> = ({
   ): void => {
     fly(parseViewport(adventure.initialView))
     setActiveAdventure({ ...adventure, index: adventureIndex })
-    rotateCamera()
+    if (rotating) {
+      rotateCamera()
+    }
   }
 
   return (
