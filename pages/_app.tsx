@@ -6,7 +6,6 @@ import NextLink from "next/link"
 import { useRouter } from "next/router"
 import React, { FC } from "react"
 
-import { Visualization } from "../components/Intro/Visualization"
 import { NavContent } from "../components/Navbar/NavContent"
 import { NavLink } from "../components/Navbar/NavLink"
 import theme from "../theme/index"
@@ -87,7 +86,6 @@ const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
           </Box>
 
           <AnimateSharedLayout type="crossfade">
-            {router.pathname !== "/adventures" && <Visualization />}
             <AnimatePresence
               exitBeforeEnter
               onExitComplete={handleExitComplete}

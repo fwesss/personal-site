@@ -1,171 +1,174 @@
-import { Box, useInterval } from "@chakra-ui/react"
+import { Box, useBreakpointValue, useColorModeValue } from "@chakra-ui/react"
+import { ContactShadows } from "@react-three/drei"
+import { Canvas, useFrame } from "@react-three/fiber"
 import {
-  forceLink,
-  forceSimulation,
-  scaleQuantize,
-  forceCollide,
-  forceManyBody,
-  ScaleQuantize,
-} from "d3"
-import { motion } from "framer-motion"
-import { FC, MutableRefObject, useEffect, useRef, useState } from "react"
-import useResizeObserver from "use-resize-observer"
+  EffectComposer,
+  SSAO,
+  DepthOfField,
+  Bloom,
+  Noise,
+  Vignette,
+} from "@react-three/postprocessing"
+import React, { useRef, useMemo, useState, FC } from "react"
+import * as THREE from "three"
+import { InstancedMesh } from "three"
 
 import theme from "../../theme/index"
 
-import forceBound from "./forceBound"
+interface Particle {
+  t: number
+  factor: number
+  speed: number
+  xFactor: number
+  yFactor: number
+  zFactor: number
+  mx: number
+  my: number
+}
 
-export const Visualization: FC = () => {
-  const canvasRef = useRef(null) as MutableRefObject<null | HTMLCanvasElement>
+interface SwarmProps {
+  count: number
+  sphereColor: string
+  position: [number, number, number]
+}
 
-  const getRandomInt = (min: number, max: number) =>
-    Math.floor(
-      Math.random() * (Math.floor(max) - Math.ceil(min)) + Math.ceil(min)
-    )
+const Swarm: FC<SwarmProps> = ({ count, sphereColor, ...props }) => {
+  const mesh = useRef<InstancedMesh>()
+  const [dummy] = useState(() => new THREE.Object3D())
 
-  type CX = number
-  type CY = number
-  type R = number
-  type Id = number
-
-  type Node = { x: CX; y: CY; r: R; id: Id }
-  type Link = {
-    source: Node
-    target: Node
-    distance: number
-  }
-
-  const minRadius = 6
-  const maxRadius = 35
-  const density = (factor = 1) => factor * 200000
-
-  const [nodes, setNodes] = useState(undefined as Node[])
-  const {
-    ref: parentRef,
-    width = 1000,
-    height = 1000,
-  } = useResizeObserver<HTMLDivElement>()
-  const [relink, setRelink] = useState(false)
-
-  useEffect(() => {
-    if (width && height) {
-      type GenNodes = (amount: number) => Node[]
-      const genNodes: GenNodes = amount =>
-        Array.from(Array(amount).keys()).map((_, i) => ({
-          x: getRandomInt(1, width),
-          y: getRandomInt(1, height),
-          r: getRandomInt(minRadius, maxRadius),
-          id: i,
-        }))
-
-      setNodes(genNodes(Math.floor((width * height) / density(0.35))))
+  const particles = useMemo(() => {
+    const particle = [] as Particle[]
+    for (let i = 0; i < count; i++) {
+      const t = Math.random() * 100
+      const factor = 20 + Math.random() * 100
+      const speed = 0.01 + Math.random() / 200
+      const xFactor = -60 + Math.random() * 120
+      const yFactor = -25 + Math.random() * 50
+      const zFactor = -20 + Math.random() * 40
+      particle.push({
+        t,
+        factor,
+        speed,
+        xFactor,
+        yFactor,
+        zFactor,
+        mx: 0,
+        my: 0,
+      })
     }
-  }, [height, width])
 
-  // eslint-disable-next-line consistent-return
-  useEffect(() => {
-    if (nodes) {
-      let links: Link[] = []
+    return particle
+  }, [count])
 
-      type GenLinks = (amount: number) => Link[]
-      const genLinks: GenLinks = amount =>
-        Array.from(Array(amount).keys()).map(() => {
-          const source = nodes[Math.floor(Math.random() * nodes.length)]
-          const target = nodes[Math.floor(Math.random() * nodes.length)]
-          const distance = getRandomInt(150, width * 0.6)
-
-          return { source, target, distance }
-        })
-
-      links = genLinks(Math.floor((width * height) / density(1)))
-      setRelink(false)
-
-      const colors = (scaleQuantize()
-        .domain([minRadius, maxRadius])
-        .range(
-          (Object.values(theme.colors.teal)
-            .reverse()
-            .slice(2, 8) as unknown) as number[]
-        ) as unknown) as ScaleQuantize<string | never>
-
-      const canvas = canvasRef.current
-      const context = canvas.getContext("2d")
-
-      type DrawLink = (d: Link) => void
-      const drawLink: DrawLink = d => {
-        context.moveTo(d.source.x, d.source.y)
-        context.lineTo(d.target.x, d.target.y)
-      }
-
-      type DrawNode = (d: Node) => void
-      const drawNode: DrawNode = d => {
-        context.moveTo(d.x + d.r, d.y)
-        context.arc(d.x, d.y, d.r, 0, 2 * Math.PI)
-      }
-
-      const ticked = () => {
-        context.clearRect(0, 0, width, height)
-
-        context.beginPath()
-        links.forEach(drawLink)
-        context.strokeStyle = `${theme.colors.gray["200"]}88`
-        context.stroke()
-
-        nodes.forEach(node => {
-          context.beginPath()
-          drawNode(node)
-          context.fillStyle = colors(node.r)
-          context.fill()
-          context.strokeStyle = colors(node.r)
-        })
-        context.stroke()
-      }
-
-      const simulation = forceSimulation(nodes)
-        .force(
-          "link",
-          forceLink(links)
-            .distance(d => d.distance)
-            .strength(0.0004)
-        )
-        .force("collide", forceCollide().strength(0.1).iterations(1).radius(50))
-        .force("charge", forceManyBody().strength(-2))
-        .force("bound", forceBound(0.1, 50, 0, width, 0, height))
-        .velocityDecay(0.2)
-        .alphaDecay(0)
-
-      simulation.on("tick", ticked)
-
-      return () => {
-        simulation.on("tick", null)
-        simulation.stop()
-      }
-    }
-  }, [height, nodes, relink, width])
-
-  useInterval(() => {
-    setRelink(true)
-  }, 7500)
+  useFrame(state => {
+    particles.forEach((particle, i) => {
+      const { factor, speed, xFactor, yFactor, zFactor } = particle
+      let { t } = particle
+      t = particle.t += speed / 2
+      const a = Math.cos(t) + Math.sin(t * 1) / 10
+      const b = Math.sin(t) + Math.cos(t * 2) / 10
+      const s = Math.max(1.5, Math.cos(t) * 5)
+      particle.mx += (state.mouse.x * state.viewport.width - particle.mx) * 0.02
+      particle.my +=
+        (state.mouse.y * state.viewport.height - particle.my) * 0.02
+      dummy.position.set(
+        (particle.mx / 10) * a +
+          xFactor +
+          Math.cos((t / 10) * factor) +
+          (Math.sin(t * 1) * factor) / 10,
+        (particle.my / 10) * b +
+          yFactor +
+          Math.sin((t / 10) * factor) +
+          (Math.cos(t * 2) * factor) / 10,
+        (particle.my / 10) * b +
+          zFactor +
+          Math.cos((t / 10) * factor) +
+          (Math.sin(t * 3) * factor) / 10
+      )
+      dummy.scale.set(s, s, s)
+      dummy.updateMatrix()
+      mesh.current.setMatrixAt(i, dummy.matrix)
+    })
+    mesh.current.instanceMatrix.needsUpdate = true
+  })
 
   return (
-    <Box
-      ref={parentRef}
-      h="100%"
-      position="absolute"
-      top={0}
-      w="100%"
-      zIndex={-1}
+    <instancedMesh
+      ref={mesh}
+      args={[null, null, count]}
+      castShadow
+      receiveShadow
+      {...props}
     >
-      <motion.canvas
-        ref={canvasRef}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        height={height}
-        id="vis"
-        initial={{ opacity: 0 }}
-        transition={{ duration: 0.3 }}
-        width={width}
-      />
+      <sphereBufferGeometry args={[1, 32, 32]} />
+      <meshStandardMaterial color={sphereColor} roughness={0} />
+    </instancedMesh>
+  )
+}
+
+export const Visualization: FC = () => {
+  const sphereColor = useColorModeValue(
+    theme.colors.gray["800"],
+    theme.colors.gray["900"]
+  )
+
+  const sphereCount = useBreakpointValue({
+    base: 95,
+    sm: 110,
+    md: 125,
+    lg: 135,
+    xl: 150,
+  })
+
+  return (
+    <Box h="100vh" position="absolute" top={0} w="100%" zIndex={2}>
+      <Canvas
+        camera={{ fov: 75, position: [0, 0, 60], near: 10, far: 150 }}
+        gl={{ alpha: true, antialias: true }}
+        shadows
+      >
+        <fog args={[theme.colors.teal["500"], 30, 120]} attach="fog" />
+        <ambientLight intensity={1.5} />
+        <pointLight intensity={20} position={[100, 10, -50]} castShadow />
+        <pointLight
+          color={theme.colors.teal["500"]}
+          intensity={10}
+          position={[-100, -100, -100]}
+        />
+        <Swarm
+          count={sphereCount}
+          position={[0, 5, 0]}
+          sphereColor={sphereColor}
+        />
+        <ContactShadows
+          blur={0.6}
+          far={40}
+          height={130}
+          opacity={0.1}
+          position={[0, -30, 0]}
+          rotation={[Math.PI / 2, 0, 0]}
+          width={260}
+        />
+        <EffectComposer disableNormalPass={false} multisampling={0}>
+          <SSAO
+            // @ts-ignore
+            color={sphereColor}
+            intensity={2}
+            luminanceInfluence={0.1}
+            radius={0.6}
+            samples={20}
+          />
+          <DepthOfField
+            bokehScale={2}
+            focalLength={0.3}
+            focusDistance={0}
+            height={480}
+          />
+          <Bloom height={30} intensity={0.6} opacity={0.3} />
+          <Noise opacity={0.05} />
+          <Vignette darkness={0.7} eskil={false} offset={0.1} />
+        </EffectComposer>
+      </Canvas>
     </Box>
   )
 }

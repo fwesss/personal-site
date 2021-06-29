@@ -1,5 +1,7 @@
-import { Box, Flex, Heading, Text } from "@chakra-ui/react"
+import { Box, Flex, Heading, useColorModeValue, Text } from "@chakra-ui/react"
 import { FC } from "react"
+
+import theme from "../../theme/index"
 
 export const Intro: FC = () => (
   <>
@@ -7,11 +9,25 @@ export const Intro: FC = () => (
       align="center"
       bottom="4rem"
       h="calc(100vh - 4rem)"
-      pe={{ base: "7", md: "6", lg: "12", xl: "24" }}
+      pe={{ base: "0", md: "6", lg: "12", xl: "24" }}
       position="relative"
-      ps={{ base: "8", md: "24", lg: "32", xl: "48" }}
+      ps={{ base: "0", md: "24", lg: "32", xl: "48" }}
     >
-      <Box>
+      <Box
+        bg={useColorModeValue(
+          `${theme.colors.gray["50"]}CB`,
+          `${theme.colors.gray["900"]}CB`
+        )}
+        boxShadow="xl"
+        p={{ base: 8 }}
+        rounded={{ base: "0", lg: "xl" }}
+        sx={{ backdropFilter: "blur(12px)" }}
+        width={{
+          base: "clamp(30ch, 100%, 40ch)",
+          sm: "clamp(45ch, 100%, 120ch)",
+        }}
+        zIndex={3}
+      >
         <Text
           fontSize={{
             base: "lg",

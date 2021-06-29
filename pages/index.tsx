@@ -3,6 +3,7 @@ import React from "react"
 
 import { Contact } from "../components/Contact/Contact"
 import { Intro } from "../components/Intro/Intro"
+import { Visualization } from "../components/Intro/Visualization"
 import { FadeBox } from "../components/MotionComponents"
 import { Projects } from "../components/Projects/Projects"
 import { Project as ProjectT } from "../studio/schema"
@@ -20,6 +21,7 @@ const Home: Home = ({ projects }) => {
       </Head>
 
       <FadeBox as="main">
+        <Visualization />
         <Intro />
         <Projects projects={projects} sectionName="Projects" />
         <Contact sectionName="Contact" />
