@@ -3,7 +3,6 @@ import { ContactShadows } from "@react-three/drei"
 import { Canvas, useFrame } from "@react-three/fiber"
 import {
   EffectComposer,
-  SSAO,
   DepthOfField,
   Bloom,
   Noise,
@@ -125,6 +124,7 @@ export const Visualization: FC = () => {
       <Canvas
         camera={{ fov: 75, position: [0, 0, 60], near: 10, far: 150 }}
         gl={{ alpha: true, antialias: true }}
+        mode="concurrent"
         shadows
       >
         <fog args={[theme.colors.teal["500"], 30, 120]} attach="fog" />
@@ -150,22 +150,14 @@ export const Visualization: FC = () => {
           width={260}
         />
         <EffectComposer disableNormalPass={false} multisampling={0}>
-          <SSAO
-            // @ts-ignore
-            color={sphereColor}
-            intensity={2}
-            luminanceInfluence={0.1}
-            radius={0.6}
-            samples={20}
-          />
           <DepthOfField
             bokehScale={2}
             focalLength={0.3}
             focusDistance={0}
             height={480}
           />
-          <Bloom height={30} intensity={0.6} opacity={0.3} />
-          <Noise opacity={0.05} />
+          <Bloom height={30} intensity={0.3} opacity={0.3} />
+          <Noise opacity={0.005} />
           <Vignette darkness={0.7} eskil={false} offset={0.1} />
         </EffectComposer>
       </Canvas>
