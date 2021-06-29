@@ -1,5 +1,15 @@
-import { Box, ChakraProvider, Flex, useDisclosure } from "@chakra-ui/react"
-import { AnimatePresence, AnimateSharedLayout } from "framer-motion"
+import {
+  Box,
+  ChakraProvider,
+  Flex,
+  useDisclosure,
+  usePrefersReducedMotion,
+} from "@chakra-ui/react"
+import {
+  AnimatePresence,
+  AnimateSharedLayout,
+  MotionConfig,
+} from "framer-motion"
 import { AppProps } from "next/app"
 import Head from "next/head"
 import NextLink from "next/link"
@@ -32,6 +42,7 @@ const handleExitComplete = (): void => {
 const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
   const router = useRouter()
   const { isOpen, onClose, onToggle } = useDisclosure()
+  const prefersReducedMotion = usePrefersReducedMotion()
 
   return (
     <>
@@ -43,57 +54,59 @@ const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
       </Head>
 
       <ChakraProvider theme={theme}>
-        <Flex
-          direction="column"
-          pb={router.pathname !== "/adventures" && 50}
-          onClick={isOpen ? onClose : undefined}
-        >
-          <Box
-            background="transparent"
-            minHeight="16"
-            pointerEvents="none"
-            position="sticky"
-            top={0}
-            w="100%"
-            zIndex={1001}
+        <MotionConfig transition={{ duration: prefersReducedMotion && 0 }}>
+          <Flex
+            direction="column"
+            pb={router.pathname !== "/adventures" && 50}
+            onClick={isOpen ? onClose : undefined}
           >
             <Box
-              height="16"
-              mx="auto"
-              pe={{ base: "5", md: "4" }}
-              ps={{ base: "6", md: "8" }}
+              background="transparent"
+              minHeight="16"
+              pointerEvents="none"
+              position="sticky"
+              top={0}
+              w="100%"
+              zIndex={1001}
             >
-              <Flex
-                align="center"
-                aria-label="Site navigation"
-                as="nav"
-                fontFamily="mono"
-                fontSize={{ base: "md", sm: "lg", md: "xl" }}
-                height="100%"
-                justify="space-between"
+              <Box
+                height="16"
+                mx="auto"
+                pe={{ base: "5", md: "4" }}
+                ps={{ base: "6", md: "8" }}
               >
-                <NextLink href="/" passHref>
-                  <NavLink.Desktop h={10}>WF</NavLink.Desktop>
-                </NextLink>
-                <NavContent.Desktop display={{ base: "none", md: "flex" }} />
-                <NavContent.Mobile
-                  display={{ base: "flex", md: "none" }}
-                  isOpen={isOpen}
-                  onToggle={onToggle}
-                />
-              </Flex>
+                <Flex
+                  align="center"
+                  aria-label="Site navigation"
+                  as="nav"
+                  fontFamily="mono"
+                  fontSize={{ base: "md", sm: "lg", md: "xl" }}
+                  height="100%"
+                  justify="space-between"
+                >
+                  <NextLink href="/" passHref>
+                    <NavLink.Desktop h={10}>WF</NavLink.Desktop>
+                  </NextLink>
+                  <NavContent.Desktop display={{ base: "none", md: "flex" }} />
+                  <NavContent.Mobile
+                    display={{ base: "flex", md: "none" }}
+                    isOpen={isOpen}
+                    onToggle={onToggle}
+                  />
+                </Flex>
+              </Box>
             </Box>
-          </Box>
 
-          <AnimateSharedLayout type="crossfade">
-            <AnimatePresence
-              exitBeforeEnter
-              onExitComplete={handleExitComplete}
-            >
-              <Component {...pageProps} key={router.route} err={err} />
-            </AnimatePresence>
-          </AnimateSharedLayout>
-        </Flex>
+            <AnimateSharedLayout type="crossfade">
+              <AnimatePresence
+                exitBeforeEnter
+                onExitComplete={handleExitComplete}
+              >
+                <Component {...pageProps} key={router.route} err={err} />
+              </AnimatePresence>
+            </AnimateSharedLayout>
+          </Flex>
+        </MotionConfig>
       </ChakraProvider>
     </>
   )
