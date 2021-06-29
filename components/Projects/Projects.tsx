@@ -18,7 +18,7 @@ export const Projects: FC<ProjectsProps> = ({ projects, sectionName }) => {
       <SectionDivider sectionName={sectionName} />
 
       <Grid>
-        <Container maxW="7xl">
+        <Container maxW="7xl" rounded={{ base: "0", xl: "xl" }}>
           <VStack spacing={8}>
             {projects
               .filter(project => project.featured)

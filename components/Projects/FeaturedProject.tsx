@@ -210,7 +210,7 @@ export const FeaturedProject: FC<FeaturedProjectProps> = ({
       {reversed && <Box h="1px" w={{ base: "0", xl: "50%" }} />}
       <Heading
         as="h3"
-        fontSize="7xl"
+        fontSize={{ base: "4xl", xl: "7xl" }}
         fontWeight="extrabold"
         letterSpacing="tight"
         w={{ base: "100%", xl: "50%" }}
