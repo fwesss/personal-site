@@ -25,7 +25,6 @@ const ToggleMotionButton = (): JSX.Element => {
           }.`,
           status: "info",
           duration: 4000,
-          variant: "subtle",
         })
       }}
     />
