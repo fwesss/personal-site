@@ -127,7 +127,7 @@ class MyDocument extends Document {
           <meta content="#8fbcbb" name="theme-color" />
         </Head>
         <body>
-          <ColorModeScript initialColorMode="light" />
+          <ColorModeScript initialColorMode="dark" />
           <Main />
           <NextScript />
         </body>
