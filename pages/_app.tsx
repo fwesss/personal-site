@@ -1,24 +1,19 @@
 import {
   Box,
-  ChakraProvider,
   Flex,
   useDisclosure,
   usePrefersReducedMotion,
 } from "@chakra-ui/react"
-import {
-  AnimatePresence,
-  AnimateSharedLayout,
-  MotionConfig,
-} from "framer-motion"
+import { AnimatePresence, AnimateSharedLayout } from "framer-motion"
 import { AppProps } from "next/app"
 import Head from "next/head"
 import NextLink from "next/link"
 import { useRouter } from "next/router"
-import React, { FC } from "react"
+import React, { createContext, FC, useState } from "react"
 
+import { Chakra } from "../components/Chakra"
 import { NavContent } from "../components/Navbar/NavContent"
 import { NavLink } from "../components/Navbar/NavLink"
-import theme from "../theme/index"
 import { init } from "../utils/sentry"
 
 init()
@@ -39,10 +34,25 @@ const handleExitComplete = (): void => {
   }
 }
 
+export const MotionContext = createContext<
+  | {
+      motionPref: boolean
+      update: (data: { motionPref: boolean }) => void
+    }
+  | undefined
+>(undefined)
+
 const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
   const router = useRouter()
   const { isOpen, onClose, onToggle } = useDisclosure()
   const prefersReducedMotion = usePrefersReducedMotion()
+
+  const [state, setState] = useState({
+    motionPref: !prefersReducedMotion,
+    update: (data: { motionPref: boolean }) => {
+      setState(Object.assign({}, state, data))
+    },
+  })
 
   return (
     <>
@@ -53,8 +63,9 @@ const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
         />
       </Head>
 
-      <ChakraProvider theme={theme}>
-        <MotionConfig transition={{ duration: prefersReducedMotion && 0 }}>
+      {/* eslint-disable-next-line */}
+      <Chakra cookies={pageProps.cookies}>
+        <MotionContext.Provider value={state}>
           <Flex
             direction="column"
             pb={router.pathname !== "/adventures" && 50}
@@ -106,10 +117,12 @@ const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
               </AnimatePresence>
             </AnimateSharedLayout>
           </Flex>
-        </MotionConfig>
-      </ChakraProvider>
+        </MotionContext.Provider>
+      </Chakra>
     </>
   )
 }
+
+export { getServerSideProps } from "../components/Chakra"
 
 export default MyApp

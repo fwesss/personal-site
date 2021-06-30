@@ -2,14 +2,15 @@ import { Box, useBreakpointValue, useColorMode } from "@chakra-ui/react"
 import geoJson from "@mapbox/togeojson"
 import type { FeatureCollection } from "geojson"
 import mapboxgl from "mapbox-gl"
+import { useContext, useCallback, useEffect, useRef, useState } from "react"
 import type { FC } from "react"
-import { useCallback, useEffect, useRef, useState } from "react"
 import SunCalc from "suncalc"
 import { DOMParser } from "xmldom"
 
 import { Controls } from "../components/Adventures/Controls"
 import { Navigation } from "../components/Adventures/Navigation"
 import { Story } from "../components/Adventures/Story"
+import { MotionContext } from "../pages/_app"
 import type { Adventure } from "../studio/schema"
 import theme from "../theme/index"
 import "mapbox-gl/dist/mapbox-gl.css"
@@ -73,6 +74,7 @@ const Map: FC<AdventureProps> = ({
 }) => {
   const mapContainerRef = useRef<HTMLDivElement>(null)
   const [map, setMap] = useState<mapboxgl.Map>(null)
+  const { motionPref } = useContext(MotionContext)
 
   const rotate = useCallback(() => {
     map.rotateTo(map.getBearing() + 90, {
@@ -88,12 +90,19 @@ const Map: FC<AdventureProps> = ({
   }, [map, rotate])
 
   const fly: Fly = ([zoom, bearing, pitch, longitude, latitude]) => {
-    map.flyTo({
-      zoom,
-      bearing,
-      pitch,
-      center: [longitude, latitude],
-    })
+    motionPref
+      ? map.flyTo({
+          zoom,
+          bearing,
+          pitch,
+          center: [longitude, latitude],
+        })
+      : map.jumpTo({
+          zoom,
+          bearing,
+          pitch,
+          center: [longitude, latitude],
+        })
   }
 
   const { colorMode } = useColorMode()
@@ -242,18 +251,30 @@ const Map: FC<AdventureProps> = ({
         }
       })
 
-      initMap.rotateTo(initMap.getBearing() + 90, {
-        duration: 24000,
-        easing: t => t,
-      })
+      motionPref &&
+        initMap.rotateTo(initMap.getBearing() + 90, {
+          duration: 24000,
+          easing: t => t,
+        })
 
       setMap(initMap)
     })
 
     return () => initMap.remove()
+    /* eslint-disable-next-line */
   }, [style, token, tracks, adventures])
 
   const [rotating, setRotate] = useState(true)
+
+  useEffect(() => {
+    if (map) {
+      if (!motionPref) {
+        map.off("moveend", rotate)
+        map.stop()
+        setRotate(false)
+      }
+    }
+  }, [map, rotate, motionPref])
 
   useEffect(() => {
     if (map) {

@@ -8,10 +8,11 @@ import {
   Noise,
   Vignette,
 } from "@react-three/postprocessing"
-import React, { useRef, useMemo, useState, FC } from "react"
+import React, { useRef, useMemo, useState, FC, useContext } from "react"
 import * as THREE from "three"
 import { InstancedMesh } from "three"
 
+import { MotionContext } from "../../pages/_app"
 import theme from "../../theme/index"
 
 interface Particle {
@@ -26,12 +27,18 @@ interface Particle {
 }
 
 interface SwarmProps {
+  motionPref: boolean
   count: number
   sphereColor: string
   position: [number, number, number]
 }
 
-const Swarm: FC<SwarmProps> = ({ count, sphereColor, ...props }) => {
+const Swarm: FC<SwarmProps> = ({
+  motionPref,
+  count,
+  sphereColor,
+  ...props
+}) => {
   const mesh = useRef<InstancedMesh>()
   const [dummy] = useState(() => new THREE.Object3D())
 
@@ -60,34 +67,37 @@ const Swarm: FC<SwarmProps> = ({ count, sphereColor, ...props }) => {
   }, [count])
 
   useFrame(state => {
-    particles.forEach((particle, i) => {
-      const { factor, speed, xFactor, yFactor, zFactor } = particle
-      let { t } = particle
-      t = particle.t += speed / 2
-      const a = Math.cos(t) + Math.sin(t * 1) / 10
-      const b = Math.sin(t) + Math.cos(t * 2) / 10
-      const s = Math.max(1.5, Math.cos(t) * 5)
-      particle.mx += (state.mouse.x * state.viewport.width - particle.mx) * 0.02
-      particle.my +=
-        (state.mouse.y * state.viewport.height - particle.my) * 0.02
-      dummy.position.set(
-        (particle.mx / 10) * a +
-          xFactor +
-          Math.cos((t / 10) * factor) +
-          (Math.sin(t * 1) * factor) / 10,
-        (particle.my / 10) * b +
-          yFactor +
-          Math.sin((t / 10) * factor) +
-          (Math.cos(t * 2) * factor) / 10,
-        (particle.my / 10) * b +
-          zFactor +
-          Math.cos((t / 10) * factor) +
-          (Math.sin(t * 3) * factor) / 10
-      )
-      dummy.scale.set(s, s, s)
-      dummy.updateMatrix()
-      mesh.current.setMatrixAt(i, dummy.matrix)
-    })
+    motionPref &&
+      particles.forEach((particle, i) => {
+        const { factor, speed, xFactor, yFactor, zFactor } = particle
+        let { t } = particle
+        t = particle.t += speed / 2
+        const a = Math.cos(t) + Math.sin(t * 1) / 10
+        const b = Math.sin(t) + Math.cos(t * 2) / 10
+        const s = Math.max(1.5, Math.cos(t) * 5)
+        particle.mx +=
+          (state.mouse.x * state.viewport.width - particle.mx) * 0.02
+        particle.my +=
+          (state.mouse.y * state.viewport.height - particle.my) * 0.02
+        dummy.position.set(
+          (particle.mx / 10) * a +
+            xFactor +
+            Math.cos((t / 10) * factor) +
+            (Math.sin(t * 1) * factor) / 10,
+          (particle.my / 10) * b +
+            yFactor +
+            Math.sin((t / 10) * factor) +
+            (Math.cos(t * 2) * factor) / 10,
+          (particle.my / 10) * b +
+            zFactor +
+            Math.cos((t / 10) * factor) +
+            (Math.sin(t * 3) * factor) / 10
+        )
+        dummy.scale.set(s, s, s)
+        dummy.updateMatrix()
+        mesh.current.setMatrixAt(i, dummy.matrix)
+      })
+
     mesh.current.instanceMatrix.needsUpdate = true
   })
 
@@ -110,6 +120,7 @@ export const Visualization: FC = () => {
     theme.colors.gray["800"],
     theme.colors.gray["900"]
   )
+  const { motionPref } = useContext(MotionContext)
 
   const sphereCount = useBreakpointValue({
     base: 95,
@@ -137,6 +148,7 @@ export const Visualization: FC = () => {
         />
         <Swarm
           count={sphereCount}
+          motionPref={motionPref}
           position={[0, 5, 0]}
           sphereColor={sphereColor}
         />

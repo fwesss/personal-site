@@ -14,6 +14,7 @@ import { FC } from "react"
 import { HiOutlineMenu, HiX } from "react-icons/hi"
 
 import ColorModeButton from "../ColorModeButton"
+import ToggleMotionButton from "../ToggleMotionButton"
 
 import { NavLink } from "./NavLink"
 import { NavList } from "./NavList"
@@ -69,6 +70,7 @@ const MobileNavContent = ({
           ))}
         </Stack>
       </NavList>
+      <ToggleMotionButton />
       <ColorModeButton />
     </HStack>
   )
@@ -82,6 +84,7 @@ const DesktopNavContent: FC<StackProps> = props => {
           <NavLink.Desktop>{link.label}</NavLink.Desktop>
         </NextLink>
       ))}
+      <ToggleMotionButton />
       <ColorModeButton />
     </HStack>
   )
