@@ -34,6 +34,7 @@
     "sanity-plugin-order-documents": "^0.0.16"
   },
   "devDependencies": {
-    "prettier": "^2.2.1"
+    "prettier": "^2.2.1",
+    "sanity-codegen": "^0.9.3"
   }
 }
