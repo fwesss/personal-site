@@ -21,7 +21,7 @@ export const Intro: FC = () => (
         boxShadow="xl"
         p={{ base: 8 }}
         rounded={{ base: "0", lg: "xl" }}
-        sx={{ backdropFilter: "blur(12px)" }}
+        sx={{ backdropFilter: "blur(6px)" }}
         width={{
           base: "clamp(30ch, 100%, 40ch)",
           sm: "clamp(45ch, 100%, 120ch)",
