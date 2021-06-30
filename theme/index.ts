@@ -14,4 +14,5 @@ const overrides = {
     Heading,
   },
 }
+
 export default extendTheme(overrides)
