@@ -1,10 +1,10 @@
+import { Box } from "@chakra-ui/react"
 import Head from "next/head"
 import React from "react"
 
 import { Contact } from "../components/Contact/Contact"
 import { Intro } from "../components/Intro/Intro"
 import { Visualization } from "../components/Intro/Visualization"
-import { FadeBox } from "../components/MotionComponents"
 import { Projects } from "../components/Projects/Projects"
 import { Project as ProjectT } from "../studio/schema"
 import sanity from "../utils/sanity-client"
@@ -20,12 +20,12 @@ const Home: Home = ({ projects }) => {
         <title>Wes Feller | Web Dev</title>
       </Head>
 
-      <FadeBox as="main">
+      <Box as="main">
         <Visualization />
         <Intro />
         <Projects projects={projects} sectionName="Projects" />
         <Contact sectionName="Contact" />
-      </FadeBox>
+      </Box>
     </>
   )
 }
