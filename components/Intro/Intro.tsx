@@ -20,6 +20,7 @@ export const Intro: FC = () => (
         )}
         boxShadow="xl"
         p={{ base: 8 }}
+        pointerEvents="none"
         rounded={{ base: "0", lg: "xl" }}
         sx={{ backdropFilter: "blur(6px)" }}
         width={{
