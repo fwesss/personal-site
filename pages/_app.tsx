@@ -4,19 +4,20 @@ import {
   useDisclosure,
   usePrefersReducedMotion,
 } from "@chakra-ui/react"
+import { init as commandBarInit } from "commandbar"
 import { AnimatePresence, AnimateSharedLayout } from "framer-motion"
 import { AppProps } from "next/app"
 import Head from "next/head"
 import NextLink from "next/link"
 import { useRouter } from "next/router"
-import React, { createContext, FC, useState } from "react"
+import React, { createContext, FC, useEffect, useState } from "react"
 
 import { Chakra } from "../components/Chakra"
 import { NavContent } from "../components/Navbar/NavContent"
 import { NavLink } from "../components/Navbar/NavLink"
-import { init } from "../utils/sentry"
+import { init as sentryInit } from "../utils/sentry"
 
-init()
+sentryInit()
 
 interface AppPropsErr extends AppProps {
   err: Error
@@ -41,18 +42,29 @@ export const MotionContext = createContext<
     }
   | undefined
 >(undefined)
+export const WindowContext = createContext<boolean>(false)
 
 const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
   const router = useRouter()
   const { isOpen, onClose, onToggle } = useDisclosure()
   const prefersReducedMotion = usePrefersReducedMotion()
 
+  const [windowState, setWindowState] = useState(false)
   const [state, setState] = useState({
     motionPref: !prefersReducedMotion,
     update: (data: { motionPref: boolean }) => {
       setState(Object.assign({}, state, data))
     },
   })
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      commandBarInit("78efb29f")
+      const loggedInUserId = "1"
+      window.CommandBar.boot(loggedInUserId)
+      setWindowState(true)
+    }
+  }, [])
 
   return (
     <>
@@ -65,59 +77,63 @@ const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
 
       {/* eslint-disable-next-line */}
       <Chakra cookies={pageProps.cookies}>
-        <MotionContext.Provider value={state}>
-          <Flex
-            direction="column"
-            pb={router.pathname !== "/adventures" && 50}
-            onClick={isOpen ? onClose : undefined}
-          >
-            <Box
-              background="transparent"
-              minHeight="16"
-              pointerEvents="none"
-              position="sticky"
-              top={0}
-              w="100%"
-              zIndex={1001}
+        <WindowContext.Provider value={windowState}>
+          <MotionContext.Provider value={state}>
+            <Flex
+              direction="column"
+              pb={router.pathname !== "/adventures" && 50}
+              onClick={isOpen ? onClose : undefined}
             >
               <Box
-                height="16"
-                mx="auto"
-                pe={{ base: "5", md: "4" }}
-                ps={{ base: "6", md: "8" }}
+                background="transparent"
+                minHeight="16"
+                pointerEvents="none"
+                position="sticky"
+                top={0}
+                w="100%"
+                zIndex={1001}
               >
-                <Flex
-                  align="center"
-                  aria-label="Site navigation"
-                  as="nav"
-                  fontFamily="mono"
-                  fontSize={{ base: "md", sm: "lg", md: "xl" }}
-                  height="100%"
-                  justify="space-between"
+                <Box
+                  height="16"
+                  mx="auto"
+                  pe={{ base: "5", md: "4" }}
+                  ps={{ base: "6", md: "8" }}
                 >
-                  <NextLink href="/" passHref>
-                    <NavLink.Desktop h={10}>WF</NavLink.Desktop>
-                  </NextLink>
-                  <NavContent.Desktop display={{ base: "none", md: "flex" }} />
-                  <NavContent.Mobile
-                    display={{ base: "flex", md: "none" }}
-                    isOpen={isOpen}
-                    onToggle={onToggle}
-                  />
-                </Flex>
+                  <Flex
+                    align="center"
+                    aria-label="Site navigation"
+                    as="nav"
+                    fontFamily="mono"
+                    fontSize={{ base: "md", sm: "lg", md: "xl" }}
+                    height="100%"
+                    justify="space-between"
+                  >
+                    <NextLink href="/" passHref>
+                      <NavLink.Desktop h={10}>WF</NavLink.Desktop>
+                    </NextLink>
+                    <NavContent.Desktop
+                      display={{ base: "none", md: "flex" }}
+                    />
+                    <NavContent.Mobile
+                      display={{ base: "flex", md: "none" }}
+                      isOpen={isOpen}
+                      onToggle={onToggle}
+                    />
+                  </Flex>
+                </Box>
               </Box>
-            </Box>
 
-            <AnimateSharedLayout type="crossfade">
-              <AnimatePresence
-                exitBeforeEnter
-                onExitComplete={handleExitComplete}
-              >
-                <Component {...pageProps} key={router.route} err={err} />
-              </AnimatePresence>
-            </AnimateSharedLayout>
-          </Flex>
-        </MotionContext.Provider>
+              <AnimateSharedLayout type="crossfade">
+                <AnimatePresence
+                  exitBeforeEnter
+                  onExitComplete={handleExitComplete}
+                >
+                  <Component {...pageProps} key={router.route} err={err} />
+                </AnimatePresence>
+              </AnimateSharedLayout>
+            </Flex>
+          </MotionContext.Provider>
+        </WindowContext.Provider>
       </Chakra>
     </>
   )
