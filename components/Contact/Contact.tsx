@@ -43,7 +43,7 @@ export const Contact: FC<ContactProps> = ({ sectionName }) => (
           variant="link"
           isExternal
         >
-          (909) 553-7529
+          (840) 888-7237
         </Button>
       </VStack>
 
