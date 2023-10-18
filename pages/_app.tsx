@@ -62,9 +62,12 @@ const MyApp: FC<AppPropsErr> = ({ Component, pageProps, err }) => {
       commandBarInit("78efb29f")
       const loggedInUserId = "1"
       window.CommandBar.boot(loggedInUserId)
+      window.CommandBar.addRouter(route => {
+        void router.push(route)
+      })
       setWindowState(true)
     }
-  }, [])
+  }, [router])
 
   return (
     <>
