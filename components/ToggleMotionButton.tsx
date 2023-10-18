@@ -1,5 +1,5 @@
 import { IconButton, useToast } from "@chakra-ui/react"
-import { useEffect, useContext } from "react"
+import { useEffect, useContext, useCallback } from "react"
 import { FaRegPauseCircle, FaPlayCircle } from "react-icons/fa"
 
 import { WindowContext, MotionContext } from "../pages/_app"
@@ -10,7 +10,7 @@ const ToggleMotionButton = (): JSX.Element => {
   const SwitchIcon = motionPref ? FaRegPauseCircle : FaPlayCircle
   const toast = useToast()
 
-  const toggleMotion = () => {
+  const toggleMotion = useCallback(() => {
     update({ motionPref: !motionPref })
     toast({
       title: `Motion ${motionPref ? "disabled" : "enabled"}.`,
@@ -20,13 +20,13 @@ const ToggleMotionButton = (): JSX.Element => {
       status: "info",
       duration: 4000,
     })
-  }
+  }, [motionPref, toast, update])
 
   useEffect(() => {
     if (windowState) {
       window.CommandBar.addCallback("toggleMotion", toggleMotion)
     }
-  }, [windowState, motionPref])
+  }, [toggleMotion, windowState])
 
   return (
     <IconButton
